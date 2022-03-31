@@ -139,7 +139,14 @@ def register_blueprints(app: Flask):
     * app - The Flask application.
     """
 
-    pass
+    from application.routes.users import users_routes
+    from application.routes.contests import contests_routes
+    from application.routes.problems import problems_routes
+
+    # Register the blueprints
+    app.register_blueprint(users_routes, url_prefix="/users")
+    app.register_blueprint(contests_routes, url_prefix="/contests")
+    app.register_blueprint(problems_routes, url_prefix="/problems")
 
 
 def create_app(config_filename: str):
@@ -156,6 +163,9 @@ def create_app(config_filename: str):
 
     # Load the configuration class depending on the mode, from config.py
     app.config.from_object(config_filename)
+
+    # Makes app treat route URLs with and without trailing slashes the same
+    app.url_map.strict_slashes = False
 
     # Initialize the logger
     init_logger()

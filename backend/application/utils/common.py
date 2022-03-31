@@ -4,6 +4,8 @@ Contains common utility functions required for the application.
 
 from datetime import date, datetime
 
+from application.models.orm import db
+
 
 def convert_timestamp_to_datetime(timestamp: int):
     """
@@ -30,3 +32,23 @@ def convert_datestring_to_datetime(datestring: str):
     """
 
     return datetime.strptime(datestring, "%Y-%m-%d")
+
+
+def row_to_dict(row: db.Model):
+    """
+    Converts an SQLAlchemy row/object to a dictionary.
+
+    Arguments:
+    * row - The SQLAlchemy row/object to convert.
+    """
+    return {c.name: getattr(row, c.name) for c in row.__table__.columns}
+
+
+def get_all_rows_as_dict(rows: list[db.Model]):
+    """
+    Returns all SQLAlchemy rows/objects as a list of dictionaries.
+
+    Arguments:
+    * rows - The list of SQLAlchemy rows/objects to convert.
+    """
+    return [row_to_dict(row) for row in rows]
