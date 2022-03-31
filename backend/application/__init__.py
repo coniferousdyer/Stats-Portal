@@ -3,6 +3,8 @@ The main application package. The application is created and configured here.
 """
 
 from flask import Flask
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 from os import environ, path, mkdir
@@ -90,6 +92,18 @@ def init_logger():
     )
 
 
+def init_sentry():
+    """
+    Initializes the Sentry client.
+    """
+
+    sentry_sdk.init(
+        dsn=environ.get("SENTRY_DSN"),
+        integrations=[FlaskIntegration()],
+        traces_sample_rate=1.0,
+    )
+
+
 def init_db(app: Flask):
     """
     Initializes the database and creates the tables.
@@ -170,6 +184,9 @@ def create_app(config_filename: str):
     # Initialize the logger
     init_logger()
 
+    # Initialize the Sentry client
+    init_sentry()
+
     # Register the blueprints
     register_blueprints(app)
 
@@ -180,3 +197,6 @@ def create_app(config_filename: str):
     init_scheduler(app)
 
     return app
+
+
+# TODO: Search for an alternative to passing the app around to the database functions
