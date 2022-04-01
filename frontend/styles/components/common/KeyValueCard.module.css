@@ -1,0 +1,33 @@
+.card_container {
+    width: 24.5%;
+}
+
+.card {
+    height: 100%;
+}
+
+.card_key {
+    font-size: 1vw;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card_value {
+    font-size: 1.6vw;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+}
+
+@media screen and (max-width: 600px) {
+    .card_container {
+        width: 49.5%;
+        margin-top: 1vw;
+    }
+
+    .card_key {
+        font-size: 3vw;
+    }
+
+    .card_value {
+        font-size: 4vw;
+    }
+}

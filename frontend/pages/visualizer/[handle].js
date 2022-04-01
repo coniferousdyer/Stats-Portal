@@ -1,6 +1,9 @@
 import Head from "next/head";
 import axios from "axios";
 import UserInformationTable from "../../components/tables/UserInformationTable";
+import KeyValueCard from "../../components/common/KeyValueCard";
+import TagDonutChart from "../../components/charts/TagDonutChart";
+import ProblemBarChart from "../../components/charts/ProblemBarChart";
 import styles from "../../styles/visualizer/UserVisualizer.module.css";
 
 const UserVisualizer = ({ information, contests, problems }) => {
@@ -14,15 +17,59 @@ const UserVisualizer = ({ information, contests, problems }) => {
 
       <div className={styles.stats_container}>
         {/* Heading */}
-        <h1 className={styles.heading_prefix}>statistics for</h1>
-        <h1 className={styles.heading_name}>{information["handle"]}</h1>
+        <div className={styles.heading_container}>
+          <h1 className={styles.heading_prefix}>statistics for</h1>
+          <h1 className={styles.heading_name}>{information["handle"]}</h1>
+        </div>
 
-        {/* Information table */}
-        <div className={styles.information_table_container}>
-          <UserInformationTable
-            primaryUser={information}
-            secondaryUser={null}
+        {/* User Information Cards */}
+        <div className={styles.user_information_container}>
+          <KeyValueCard
+            cardKey={"User Since"}
+            cardValue={information["creation_date"]
+              .split(" ")
+              .slice(1, 4)
+              .join(" ")}
           />
+          <KeyValueCard cardKey={"Rank"} cardValue={information["rank"]} />
+          <KeyValueCard cardKey={"Rating"} cardValue={information["rating"]} />
+          <KeyValueCard
+            cardKey={"Maximum Rating"}
+            cardValue={information["max_rating"]}
+          />
+        </div>
+
+        <div className={styles.problems_stats_container}>
+          {/* Tag Distribution Donut Chart */}
+          {/* <div className={styles.tag_distribution_container}>
+            <TagDonutChart
+              title={`Problem Tags Solved by ${information["handle"]}`}
+              tags={problems["tags"]}
+            />
+          </div> */}
+          {/* Tag Distribution Donut Chart */}
+          <div className={styles.tag_distribution_container}>
+            <TagDonutChart
+              title={`Problem Tags Solved by ${information["handle"]}`}
+              tags={problems["tags"]}
+            />
+          </div>
+          {/* Index Distribution Bar Chart */}
+          <div className={styles.index_distribution_container}>
+            <ProblemBarChart
+              title={`Problem Indexes Solved by ${information["handle"]}`}
+              data={problems["indexes"]}
+              color={"#ff1744"}
+            />
+          </div>
+          {/* Ratings Distribution Bar Chart */}
+          <div className={styles.ratings_distribution_container}>
+            <ProblemBarChart
+              title={`Problem Ratings Solved by ${information["handle"]}`}
+              data={problems["ratings"]}
+              color={"#2196f3"}
+            />
+          </div>
         </div>
       </div>
     </div>
