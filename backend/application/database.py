@@ -10,7 +10,7 @@ from application.models.models import (
     Problem,
     User,
     ContestParticipant,
-    ProblemCount,
+    ProblemStatistics,
     ProblemIndexes,
     ProblemRatings,
     ProblemTags,
@@ -36,7 +36,7 @@ def clear_db_tables(app: Flask):
         Problem.query.delete()
         User.query.delete()
         ContestParticipant.query.delete()
-        ProblemCount.query.delete()
+        ProblemStatistics.query.delete()
         ProblemIndexes.query.delete()
         ProblemRatings.query.delete()
         ProblemTags.query.delete()
@@ -139,7 +139,7 @@ def add_problems_statistics_to_db(app: Flask, problems_statistics: list[dict]):
     with app.app_context():
         for problem_statistics in problems_statistics:
             # Add the problem statistics to the database
-            db.session.add(ProblemCount(**problem_statistics["solved_count"]))
+            db.session.add(ProblemStatistics(**problem_statistics["submission_statistics"]))
             db.session.add(ProblemTags(**problem_statistics["tags"]))
             db.session.add(ProblemIndexes(**problem_statistics["indexes"]))
             db.session.add(ProblemRatings(**problem_statistics["ratings"]))

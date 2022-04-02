@@ -1,13 +1,13 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
-import styles from "../../styles/components/charts/ProblemBarChart.module.css";
+import styles from "../../styles/components/charts/BarChart.module.css";
 
 // Dynamic import that fixes the "ReferenceError: window is not defined" error
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 // The data passed in, i.e. "data", must be of the form { name_1: value_1, name_2: value_2, ... }
-const ProblemBarChart = ({ title, data, color }) => {
+const BarChart = ({ title, data, color }) => {
   // The data series supplied to the chart
   const [series, setSeries] = useState([]);
   // The chart configuration options
@@ -25,21 +25,21 @@ const ProblemBarChart = ({ title, data, color }) => {
       enabled: false,
     },
     colors: [color],
-    // responsive: [
-    //   {
-    //     breakpoint: 480,
-    //     options: {
-    //       plotOptions: {
-    //         bar: {
-    //           horizontal: true,
-    //         },
-    //       },
-    //       title: {
-    //         text: "Problem Ratings Solved",
-    //       },
-    //     },
-    //   },
-    // ],
+    responsive: [
+      {
+        breakpoint: 600,
+        options: {
+          chart: {
+            height: 350,
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true,
+            },
+          },
+        },
+      },
+    ],
   });
 
   // Modify the passed data into a format that ApexCharts can understand
@@ -65,7 +65,7 @@ const ProblemBarChart = ({ title, data, color }) => {
     // Update the series
     setSeries([{ name: "Problems Solved", data: values }]);
 
-    // Update the chart configuration with the new names and values
+    // Update the chart configuration with the new names
     setOptions({
       ...options,
       xaxis: {
@@ -75,13 +75,11 @@ const ProblemBarChart = ({ title, data, color }) => {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <Paper elevation={5}>
-        <h1 className={styles.title}>{title.toUpperCase()}</h1>
-        <Chart options={options} series={series} type="bar" />
-      </Paper>
-    </div>
+    <Paper elevation={5} style={{ height: "100%" }}>
+      <h1 className={styles.title}>{title.toUpperCase()}</h1>
+      <Chart options={options} series={series} type="bar" />
+    </Paper>
   );
 };
 
-export default ProblemBarChart;
+export default BarChart;

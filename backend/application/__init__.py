@@ -7,6 +7,7 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
+from datetime import datetime
 from os import environ, path, mkdir
 from dotenv import load_dotenv
 from logging import basicConfig, INFO
@@ -62,7 +63,7 @@ def perform_update(app: Flask):
 
     # Obtain the problems statistics of the users
     users_problems = get_organization_users_problems(handles)
-    app.logger.info(f"{len(users_information)} USERS' PROBLEMS RETRIEVED.")
+    app.logger.info(f"{len(users_problems)} USERS' PROBLEMS RETRIEVED.")
 
     # 3. Update the database with the retrieved data.
     update_db(

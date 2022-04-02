@@ -16,7 +16,8 @@ def get_user_contest_statistics(
     """
     Returns the contest participation statistics for a single user.
     * Total number of contests given.
-    * Highest rating change.
+    * Highest and lowest rating change.
+    * Best and worst contest ranks.
     * Rating change history (if rating_history is True).
 
     Arguments:
@@ -27,16 +28,35 @@ def get_user_contest_statistics(
 
     contest_statistics = {}
 
-    # Finding the user's highest rating change
+    # Finding the user's highest and lowest rating change
     contest_statistics["highest_rating_change"] = max(
         [
             contest_participated["rating_change"]
             for contest_participated in contests_participated
         ]
     )
+    contest_statistics["lowest_rating_change"] = min(
+        [
+            contest_participated["rating_change"]
+            for contest_participated in contests_participated
+        ]
+    )
+
+    # The goal of lowest rating change is basically to find the highest rating decrease.
+    # If the user's lowest rating change is positive, then the user's highest rating decrease is 0.
+    if contest_statistics["lowest_rating_change"] > 0:
+        contest_statistics["lowest_rating_change"] = "None"
 
     # Finding total number of contests participated
     contest_statistics["total_number_participated"] = len(contests_participated)
+
+    # Finding the best and worst rank of the user
+    contest_statistics["best_rank"] = min(
+        [contest_participated["rank"] for contest_participated in contests_participated]
+    )
+    contest_statistics["worst_rank"] = max(
+        [contest_participated["rank"] for contest_participated in contests_participated]
+    )
 
     if rating_history:
         # Finding the date of the user's first contest. We need this to find the user's initial rating.

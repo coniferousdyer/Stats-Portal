@@ -1,0 +1,20 @@
+.title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1vw;
+    padding: 2vw;
+    font-weight: 700;
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+    .title {
+        font-size: 2vw;
+        padding: 4vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .title {
+        font-size: 2.9vw;
+        padding: 5vw;
+    }
+}

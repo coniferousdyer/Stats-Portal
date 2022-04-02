@@ -6,7 +6,7 @@ under the /users blueprint.
 from flask import Blueprint, jsonify
 
 from application.models.models import (
-    ProblemCount,
+    ProblemStatistics,
     ProblemIndexes,
     ProblemRatings,
     ProblemTags,
@@ -133,7 +133,7 @@ def get_all_users_problems_solved():
     """
 
     # Obtaining the problem solved statistics for all users
-    solved_counts = get_all_rows_as_dict(ProblemCount.query.all())
+    submission_statistics = get_all_rows_as_dict(ProblemStatistics.query.all())
     tags = get_all_rows_as_dict(ProblemTags.query.all())
     ratings = get_all_rows_as_dict(ProblemRatings.query.all())
     indexes = get_all_rows_as_dict(ProblemIndexes.query.all())
@@ -142,7 +142,7 @@ def get_all_users_problems_solved():
     # We do this by summing up the value of each attribute for the metric
     # across all users.
     problem_statistics = get_all_users_problem_statistics(
-        solved_counts, tags, ratings, indexes
+        submission_statistics, tags, ratings, indexes
     )
 
     return jsonify(problem_statistics), 200
@@ -170,7 +170,7 @@ def get_user_problems_solved(handle: str):
 
     # Obtaining problem solved statistics for the user from the database
     problem_statistics = {
-        "solved_count": row_to_dict(ProblemCount.query.get(handle))["count"],
+        "submission_statistics": row_to_dict(ProblemStatistics.query.get(handle)),
         "tags": row_to_dict(ProblemTags.query.get(handle)),
         "indexes": row_to_dict(ProblemIndexes.query.get(handle)),
         "ratings": row_to_dict(ProblemRatings.query.get(handle)),

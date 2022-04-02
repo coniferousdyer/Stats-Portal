@@ -11,6 +11,7 @@ from application.utils.constants import (
     MAX_PROBLEM_RATING,
     MIN_PROBLEM_RATING,
     TAGS,
+    VERDICTS,
 )
 
 
@@ -132,25 +133,27 @@ less database space, but it also decreases frontend load times.
 """
 
 
-class ProblemCount(db.Model):
+class ProblemStatistics(db.Model):
     """
-    Model for the count of problems solved by a user.
+    Model for the statistics of problem submission verdicts made by a user.
+    Attributes are dynamically generated from VERDICTS in constants.py.
     """
 
-    __tablename__ = "problem_count"
+    __tablename__ = "problem_statistics"
 
     # Codeforces handle of the user
     handle = db.Column(db.String(50), db.ForeignKey("user.handle"), primary_key=True)
-    # Count of problems solved by the user
-    count = db.Column(db.Integer, nullable=False)
+    # Number of problems solved by the user
+    solved_count = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return f"<ProblemCount: {self.handle} - {self.count}>"
+        return f"<ProblemStatistics: {self.handle} - {self.solved_count}>"
 
 
 class ProblemTags(db.Model):
     """
     Number of problems of each tag that a user has solved.
+    Attributes are dynamically generated from TAGS in constants.py.
     """
 
     __tablename__ = "problem_tags"
@@ -164,6 +167,7 @@ class ProblemTags(db.Model):
 class ProblemRatings(db.Model):
     """
     Number of problems of each rating that a user has solved.
+    Attributes are dynamically generated from [MIN_PROBLEM_RATING, ..., MAX_PROBLEM_RATING] in constants.py.
     """
 
     __tablename__ = "problem_ratings"
@@ -177,6 +181,7 @@ class ProblemRatings(db.Model):
 class ProblemIndexes(db.Model):
     """
     Number of problems of each contest index that a user has solved.
+    Attributes are dynamically generated from INDEXES in constants.py.
     """
 
     __tablename__ = "problem_indexes"
@@ -234,4 +239,12 @@ def create_model_attrs():
             ProblemTags,
             tag,
             db.Column(tag, db.Integer, nullable=False),
+        )
+
+    # An attribute for each possible verdict
+    for verdict in VERDICTS:
+        setattr(
+            ProblemStatistics,
+            verdict,
+            db.Column(verdict, db.Integer, nullable=False),
         )

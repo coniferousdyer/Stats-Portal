@@ -82,3 +82,20 @@ MAX_PROBLEM_RATING = 3500
 
 # The string of possible indexes for a problem
 PROBLEM_INDEXES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+# All possible verdicts for a Codeforces submission
+VERDICTS = [
+    "OK",
+    "COMPILATION_ERROR",
+    "RUNTIME_ERROR",
+    "WRONG_ANSWER",
+    "TIME_LIMIT_EXCEEDED",
+    "MEMORY_LIMIT_EXCEEDED",
+    "IDLENESS_LIMIT_EXCEEDED",
+    "CHALLENGED",
+    "SKIPPED",
+    "PARTIAL",
+    "CRASHED",
+    "FAILED",
+    "REJECTED",
+]

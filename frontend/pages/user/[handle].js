@@ -1,12 +1,33 @@
 import Head from "next/head";
 import axios from "axios";
-import UserInformationTable from "../../components/tables/UserInformationTable";
 import KeyValueCard from "../../components/common/KeyValueCard";
-import TagDonutChart from "../../components/charts/TagDonutChart";
-import ProblemBarChart from "../../components/charts/ProblemBarChart";
-import styles from "../../styles/visualizer/UserVisualizer.module.css";
+import DonutChart from "../../components/charts/DonutChart";
+import BarChart from "../../components/charts/BarChart";
+import LineChart from "../../components/charts/LineChart";
+import InformationTable from "../../components/tables/InformationTable";
+import styles from "../../styles/pages/user/User.module.css";
 
-const UserVisualizer = ({ information, contests, problems }) => {
+const User = ({ information, contests, problems }) => {
+  // Extract the information necessary for the contests information table
+  const getContestInformation = (contests) => {
+    // Rename all keys to be more readable and order them
+    const contestInformation = Object.fromEntries([
+      ["Total Number of Contests", contests["total_number_participated"]],
+      ["Best Rank", contests["best_rank"]],
+      ["Worst Rank", contests["worst_rank"]],
+      ["Highest Rating Change", contests["highest_rating_change"]],
+      ["Lowest Rating Change", contests["lowest_rating_change"]],
+    ]);
+
+    return contestInformation;
+  };
+
+  // Extract the information necessary for the verdict distribution donut chart
+  const getVerdictDistribution = (problems) => {
+    const { ["solved_count"]: _, ...verdictDistribution } = problems;
+    return verdictDistribution;
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -40,34 +61,47 @@ const UserVisualizer = ({ information, contests, problems }) => {
         </div>
 
         <div className={styles.problems_stats_container}>
-          {/* Tag Distribution Donut Chart */}
-          {/* <div className={styles.tag_distribution_container}>
-            <TagDonutChart
-              title={`Problem Tags Solved by ${information["handle"]}`}
-              tags={problems["tags"]}
+          {/* Verdict Distribution Donut Chart */}
+          <div className={styles.half_chart_container}>
+            <DonutChart
+              title={`Submission Verdicts for ${information["handle"]}`}
+              data={getVerdictDistribution(problems["submission_statistics"])}
             />
-          </div> */}
+          </div>
           {/* Tag Distribution Donut Chart */}
-          <div className={styles.tag_distribution_container}>
-            <TagDonutChart
+          <div className={styles.half_chart_container}>
+            <DonutChart
               title={`Problem Tags Solved by ${information["handle"]}`}
-              tags={problems["tags"]}
+              data={problems["tags"]}
             />
           </div>
           {/* Index Distribution Bar Chart */}
-          <div className={styles.index_distribution_container}>
-            <ProblemBarChart
+          <div className={styles.half_chart_container}>
+            <BarChart
               title={`Problem Indexes Solved by ${information["handle"]}`}
               data={problems["indexes"]}
               color={"#ff1744"}
             />
           </div>
           {/* Ratings Distribution Bar Chart */}
-          <div className={styles.ratings_distribution_container}>
-            <ProblemBarChart
+          <div className={styles.half_chart_container}>
+            <BarChart
               title={`Problem Ratings Solved by ${information["handle"]}`}
               data={problems["ratings"]}
               color={"#2196f3"}
+            />
+          </div>
+          {/* Rating History Line Chart */}
+          <div className={styles.full_chart_container}>
+            <LineChart
+              title={`Rating History for ${information["handle"]}`}
+              data={contests["rating_history"]}
+            />
+          </div>
+          <div className={styles.half_chart_container}>
+            <InformationTable
+              title={`Contests Given by ${information["handle"]}`}
+              data={getContestInformation(contests)}
             />
           </div>
         </div>
@@ -126,4 +160,4 @@ export const getStaticPaths = async () => {
   };
 };
 
-export default UserVisualizer;
+export default User;

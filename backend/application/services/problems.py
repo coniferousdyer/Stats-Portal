@@ -10,20 +10,20 @@ from collections import defaultdict
 
 
 def get_all_users_problem_statistics(
-    solved_counts: list[dict],
+    submission_statistics: list[dict],
     tags: list[dict],
     ratings: list[dict],
     indexes: list[dict],
 ):
     """
     Returns the problem statistics for all users.
-    * Total number of problems solved for the entire organization.
+    * Total number of submissions per verdict for the entire organization.
     * Number of problems solved per tag for the entire organization.
     * Number of problems solved per index for the entire organization.
     * Number of problems solved per rating for the entire organization.
 
     Arguments:
-    * solved_counts - List of problem solved counts for all users.
+    * submission_statistics - List of problem submission statistics for all users.
     * tags - List of problem solved counts per tag for all users.
     * ratings - List of problem solved counts per rating for all users.
     * indexes - List of problem solved counts per index for all users.
@@ -31,13 +31,16 @@ def get_all_users_problem_statistics(
 
     problem_statistics = {}
 
-    # Number of problems solved by each user in the form {handle: count}
-    problem_statistics["solved_count"] = {
-        row["handle"]: row["count"] for row in solved_counts
-    }
-
     # For each metric, we sum the values for each attribute across all users
     # and store the resultant dictionary.
+
+    # Submission statistics in the form {verdict: count}
+    problem_statistics["submission_statistics"] = defaultdict(int)
+    for row in submission_statistics:
+        for key, value in row.items():
+            if key == "handle":
+                continue
+            problem_statistics["submission_statistics"][key] += value
 
     # Tags in the form {tag: count}
     problem_statistics["tags"] = defaultdict(int)

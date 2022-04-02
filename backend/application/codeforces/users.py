@@ -12,6 +12,7 @@ from application.utils.constants import (
     MIN_PROBLEM_RATING,
     PROBLEM_INDEXES,
     TAGS,
+    VERDICTS,
 )
 from application.utils.common import convert_timestamp_to_datetime
 
@@ -34,17 +35,18 @@ def get_user_problems(handle: str):
         except requests.exceptions.RequestException:
             sleep(1)
 
-    # Filter out submissions that are not solved problems and sorting them by
-    # the time of submission (from oldest to newest, so that we count only the
-    # first submission in case of duplicates).
-    result = filter(lambda x: x["verdict"] == "OK", response.json()["result"][::-1])
+    # We sort the submissions by the time of submission (from oldest to newest,
+    # so that we count only the first submission in case of duplicates)
+    result = response.json()["result"][::-1]
 
     # Ensuring that if the user has solved the same problem twice, the second
     # submission is not counted.
     already_solved = {}
 
     # Initializing the dictionaries
-    solved_count = {"handle": handle, "count": 0}  # Number of solved problems
+    submission_statistics = {
+        verdict: 0 for verdict in VERDICTS
+    }  # Submission statistics
     tags = {tag: 0 for tag in TAGS}  # Number of solved problems for each tag
     ratings = {
         str(rating): 0
@@ -55,44 +57,56 @@ def get_user_problems(handle: str):
     }  # Number of solved problems for each index
 
     # Adding the handle to the dictionaries
+    submission_statistics["handle"] = handle
     tags["handle"] = handle
     ratings["handle"] = handle
     indexes["handle"] = handle
 
+    # Initalizing the solved_count attribute of submission_statistics.
+    # We need the total number of problems solved as well.
+    submission_statistics["solved_count"] = 0
+
     for problem in result:
-        # For each problem, contest ID + index of the problem in the contest is
-        # its unique identifier.
-        if "contestId" in problem["problem"]:
-            problem_id = (
-                str(problem["problem"]["contestId"]) + problem["problem"]["index"]
-            )
+        # Storing the submission verdict. We do not need to check duplicates
+        # for this, because we are interested in all SUBMISSIONS.
+        if problem["verdict"] in VERDICTS:
+            submission_statistics[problem["verdict"]] += 1
 
-        # If the problem was not part of a contest or was already solved before, we skip it
-        if "contestId" not in problem["problem"] or problem_id in already_solved:
-            continue
+        # If the submission was accepted
+        if problem["verdict"] == "OK":
+            # For each problem, contest ID + index of the problem in the contest is
+            # its unique identifier.
+            if "contestId" in problem["problem"]:
+                problem_id = (
+                    str(problem["problem"]["contestId"]) + problem["problem"]["index"]
+                )
 
-        # Else, we add it to the list of solved problems
-        already_solved[problem_id] = True
+            # If the problem was not part of a contest or was already solved before, we skip it
+            if "contestId" not in problem["problem"] or problem_id in already_solved:
+                continue
 
-        # Updating statistics
-        solved_count["count"] += 1
+            # Else, we add it to the list of solved problems
+            already_solved[problem_id] = True
 
-        if "rating" in problem["problem"]:
-            ratings[str(problem["problem"]["rating"])] += 1
+            # Updating statistics
+            submission_statistics["solved_count"] += 1
 
-        if (
-            "index" in problem["problem"]
-            and problem["problem"]["index"][0] in PROBLEM_INDEXES
-        ):
-            indexes[problem["problem"]["index"][0]] += 1
+            if "rating" in problem["problem"]:
+                ratings[str(problem["problem"]["rating"])] += 1
 
-        if "tags" in problem["problem"]:
-            for tag in problem["problem"]["tags"]:
-                tags[tag] += 1
+            if (
+                "index" in problem["problem"]
+                and problem["problem"]["index"][0] in PROBLEM_INDEXES
+            ):
+                indexes[problem["problem"]["index"][0]] += 1
+
+            if "tags" in problem["problem"]:
+                for tag in problem["problem"]["tags"]:
+                    tags[tag] += 1
 
     return {
         "handle": handle,
-        "solved_count": solved_count,
+        "submission_statistics": submission_statistics,
         "tags": tags,
         "ratings": ratings,
         "indexes": indexes,
