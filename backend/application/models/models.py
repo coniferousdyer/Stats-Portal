@@ -4,13 +4,9 @@ Contains the models for the database.
 
 from application.models.orm import db
 from application.utils.constants import (
-    PROBLEM_INDEXES,
     PROFILE_BASE_URL,
     CONTEST_BASE_URL,
     PROBLEM_BASE_URL,
-    MAX_PROBLEM_RATING,
-    MIN_PROBLEM_RATING,
-    TAGS,
     VERDICTS,
 )
 
@@ -109,7 +105,7 @@ class Problem(db.Model):
         db.Integer, db.ForeignKey("contest.contest_id"), primary_key=True
     )
     # Index of problem in the contest
-    index = db.Column(db.String(50), primary_key=True)
+    index = db.Column(db.String(5), primary_key=True)
     # Problem name
     name = db.Column(db.String(50), nullable=False)
     # Problem rating
@@ -125,71 +121,46 @@ class Problem(db.Model):
         return f"{PROBLEM_BASE_URL}{self.contest_id}/{self.index}"
 
 
-"""
-NOTE: Here, according to the convention, we should have made a ProblemSolved class
-instead. However, since a user may have solved a huge number of problems, for
-performance reasons, we have adopted this structure. Not only does it require
-less database space, but it also decreases frontend load times.
-"""
-
-
-class ProblemStatistics(db.Model):
+class ProblemSolved(db.Model):
     """
-    Model for the statistics of problem submission verdicts made by a user.
-    Attributes are dynamically generated from VERDICTS in constants.py.
+    Model describing a problem solved by a user.
     """
 
-    __tablename__ = "problem_statistics"
+    __tablename__ = "problem_solved"
+
+    # Unique ID assigned to the relation
+    id = db.Column(db.Integer, primary_key=True)
+    # Codeforces handle of the user
+    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), nullable=False)
+    # Codeforces contest ID
+    contest_id = db.Column(
+        db.Integer, db.ForeignKey("contest.contest_id"), nullable=False
+    )
+    # Index of the problem in the contest
+    index = db.Column(db.String(5), nullable=False)
+    # Problem rating
+    rating = db.Column(db.Integer, nullable=False)
+    # Tags of the problem (stored as a string to store in the database)
+    tags = db.Column(db.String(200), nullable=False)
+    # Problem solved time
+    solved_time = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return f"<ProblemSolved: {self.handle} - {self.contest_id}-{self.index}>"
+
+
+class SubmissionStatistics(db.Model):
+    """
+    Model describing the submission statistics (i.e. problem verdicts) for a user.
+    """
+
+    __tablename__ = "submission_statistics"
 
     # Codeforces handle of the user
-    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), primary_key=True)
-    # Number of problems solved by the user
-    solved_count = db.Column(db.Integer, nullable=False)
+    handle = db.Column(db.String(50), primary_key=True)
 
     def __repr__(self):
-        return f"<ProblemStatistics: {self.handle} - {self.solved_count}>"
-
-
-class ProblemTags(db.Model):
-    """
-    Number of problems of each tag that a user has solved.
-    Attributes are dynamically generated from TAGS in constants.py.
-    """
-
-    __tablename__ = "problem_tags"
-
-    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), primary_key=True)
-
-    def __repr__(self):
-        return f"<ProblemTags: {self.handle}>"
-
-
-class ProblemRatings(db.Model):
-    """
-    Number of problems of each rating that a user has solved.
-    Attributes are dynamically generated from [MIN_PROBLEM_RATING, ..., MAX_PROBLEM_RATING] in constants.py.
-    """
-
-    __tablename__ = "problem_ratings"
-
-    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), primary_key=True)
-
-    def __repr__(self):
-        return f"<ProblemRatings: {self.handle}>"
-
-
-class ProblemIndexes(db.Model):
-    """
-    Number of problems of each contest index that a user has solved.
-    Attributes are dynamically generated from INDEXES in constants.py.
-    """
-
-    __tablename__ = "problem_indexes"
-
-    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), primary_key=True)
-
-    def __repr__(self):
-        return f"<ProblemIndexes: {self.handle}>"
+        return f"<SubmissionStatistics: {self.handle}>"
 
 
 """
@@ -222,29 +193,13 @@ Model-related functions.
 
 def create_model_attrs():
     """
-    Dynamically creates the attributes for the models.
+    Dynamically creates the attributes for the models that require them.
     """
-
-    # An attribute for each possible index
-    for char in PROBLEM_INDEXES:
-        setattr(ProblemIndexes, char, db.Column(char, db.Integer, nullable=False))
-
-    # An attribute for each possible rating
-    for i in range(MIN_PROBLEM_RATING, MAX_PROBLEM_RATING + 1, 100):
-        setattr(ProblemRatings, str(i), db.Column(str(i), db.Integer, nullable=False))
-
-    # An attribute for each possible tag
-    for tag in TAGS:
-        setattr(
-            ProblemTags,
-            tag,
-            db.Column(tag, db.Integer, nullable=False),
-        )
 
     # An attribute for each possible verdict
     for verdict in VERDICTS:
         setattr(
-            ProblemStatistics,
+            SubmissionStatistics,
             verdict,
             db.Column(verdict, db.Integer, nullable=False),
         )

@@ -26,64 +26,15 @@ Application-specific constants.
 # as the Codeforces API allows only <= 5 requests per second. 4 is optimal.
 MAX_WORKER_THREADS = 4
 
-# Number of top users to be displayed on leaderboards, etc.
-TOP_N = 10
-
 
 """
 Codeforces-specific constants.
 """
 
 
-# All possible tags for a Codeforces problem
-TAGS = [
-    "2-sat",
-    "binary search",
-    "bitmasks",
-    "brute force",
-    "chinese remainder theorem",
-    "combinatorics",
-    "constructive algorithms",
-    "data structures",
-    "dfs and similar",
-    "divide and conquer",
-    "dp",
-    "dsu",
-    "expression parsing",
-    "fft",
-    "flows",
-    "games",
-    "geometry",
-    "graph matchings",
-    "graphs",
-    "greedy",
-    "hashing",
-    "implementation",
-    "interactive",
-    "math",
-    "matrices",
-    "meet-in-the-middle",
-    "number theory",
-    "probabilities",
-    "schedules",
-    "shortest paths",
-    "sortings",
-    "string suffix structures",
-    "strings",
-    "ternary search",
-    "trees",
-    "two pointers",
-    "*special",
-]
-
-# The minimum and maximum rating a problem can have
-MIN_PROBLEM_RATING = 800
-MAX_PROBLEM_RATING = 3500
-
-# The string of possible indexes for a problem
-PROBLEM_INDEXES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-# All possible verdicts for a Codeforces submission
+# All possible verdicts for a Codeforces submission.
+# Required for dynamically initializing the SubmissionStatistics model and counting
+# submission statistics (see models/models.py and codeforces/users.py).
 VERDICTS = [
     "OK",
     "COMPILATION_ERROR",

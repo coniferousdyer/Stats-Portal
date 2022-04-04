@@ -32,7 +32,7 @@ def get_all_problems():
         rating = problem.get("rating", 0)
 
         # Join the tags into a single string
-        tags = ";".join(problem["tags"])
+        tags = ";".join(problem.get("tags", []))
 
         problems.append(
             {

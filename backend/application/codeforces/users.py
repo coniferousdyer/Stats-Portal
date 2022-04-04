@@ -6,14 +6,7 @@ import requests
 from time import sleep
 from datetime import datetime
 
-from application.utils.constants import (
-    API_BASE_URL,
-    MAX_PROBLEM_RATING,
-    MIN_PROBLEM_RATING,
-    PROBLEM_INDEXES,
-    TAGS,
-    VERDICTS,
-)
+from application.utils.constants import API_BASE_URL, VERDICTS
 from application.utils.common import convert_timestamp_to_datetime
 
 
@@ -43,28 +36,12 @@ def get_user_problems(handle: str):
     # submission is not counted.
     already_solved = {}
 
-    # Initializing the dictionaries
-    submission_statistics = {
-        verdict: 0 for verdict in VERDICTS
-    }  # Submission statistics
-    tags = {tag: 0 for tag in TAGS}  # Number of solved problems for each tag
-    ratings = {
-        str(rating): 0
-        for rating in range(MIN_PROBLEM_RATING, MAX_PROBLEM_RATING + 1, 100)
-    }  # Number of solved problems for each rating
-    indexes = {
-        index: 0 for index in PROBLEM_INDEXES
-    }  # Number of solved problems for each index
-
-    # Adding the handle to the dictionaries
+    # We require the submission statistics, which we can get from the above list
+    # of submissions.
+    submission_statistics = {verdict: 0 for verdict in VERDICTS}
     submission_statistics["handle"] = handle
-    tags["handle"] = handle
-    ratings["handle"] = handle
-    indexes["handle"] = handle
 
-    # Initalizing the solved_count attribute of submission_statistics.
-    # We need the total number of problems solved as well.
-    submission_statistics["solved_count"] = 0
+    problems = []  # List of problems
 
     for problem in result:
         # Storing the submission verdict. We do not need to check duplicates
@@ -72,7 +49,7 @@ def get_user_problems(handle: str):
         if problem["verdict"] in VERDICTS:
             submission_statistics[problem["verdict"]] += 1
 
-        # If the submission was accepted
+        # If the submission was accepted, meaning the problem was solved
         if problem["verdict"] == "OK":
             # For each problem, contest ID + index of the problem in the contest is
             # its unique identifier.
@@ -88,28 +65,27 @@ def get_user_problems(handle: str):
             # Else, we add it to the list of solved problems
             already_solved[problem_id] = True
 
-            # Updating statistics
-            submission_statistics["solved_count"] += 1
+            # Obtaining rating and tags
+            rating = problem["problem"].get("rating", 0)
+            tags = ";".join(problem["problem"].get("tags", []))
 
-            if "rating" in problem["problem"]:
-                ratings[str(problem["problem"]["rating"])] += 1
+            # Obtaining contest creation time in DateTime format
+            solved_time = convert_timestamp_to_datetime(problem["creationTimeSeconds"])
 
-            if (
-                "index" in problem["problem"]
-                and problem["problem"]["index"][0] in PROBLEM_INDEXES
-            ):
-                indexes[problem["problem"]["index"][0]] += 1
-
-            if "tags" in problem["problem"]:
-                for tag in problem["problem"]["tags"]:
-                    tags[tag] += 1
+            problems.append(
+                {
+                    "handle": handle,
+                    "contest_id": problem["problem"]["contestId"],
+                    "index": problem["problem"]["index"],
+                    "rating": rating,
+                    "tags": tags,
+                    "solved_time": solved_time,
+                }
+            )
 
     return {
-        "handle": handle,
+        "problems_solved": problems,
         "submission_statistics": submission_statistics,
-        "tags": tags,
-        "ratings": ratings,
-        "indexes": indexes,
     }
 
 

@@ -8,12 +8,10 @@ from application.models.orm import db
 from application.models.models import (
     Contest,
     Problem,
+    ProblemSolved,
+    SubmissionStatistics,
     User,
     ContestParticipant,
-    ProblemStatistics,
-    ProblemIndexes,
-    ProblemRatings,
-    ProblemTags,
     Metadata,
 )
 
@@ -36,10 +34,8 @@ def clear_db_tables(app: Flask):
         Problem.query.delete()
         User.query.delete()
         ContestParticipant.query.delete()
-        ProblemStatistics.query.delete()
-        ProblemIndexes.query.delete()
-        ProblemRatings.query.delete()
-        ProblemTags.query.delete()
+        ProblemSolved.query.delete()
+        SubmissionStatistics.query.delete()
 
 
 """
@@ -87,7 +83,7 @@ def add_contests_to_db(app: Flask, contests: list[dict]):
             db.session.commit()
 
 
-def add_contest_participants_to_db(app: Flask, contest_participants: list[dict]):
+def add_contest_participants_to_db(app: Flask, contest_participants: list[list[dict]]):
     """
     Add the contest participants to the database.
 
@@ -127,22 +123,30 @@ def add_problems_to_db(app: Flask, problems: list[dict]):
             db.session.commit()
 
 
-def add_problems_statistics_to_db(app: Flask, problems_statistics: list[dict]):
+def add_problems_solved_to_db(app: Flask, problems_solved: list[dict]):
     """
     Add the problems statistics to the database.
 
     Arguments:
     * app - The Flask application.
-    * problems_statistics - List of problems statistics to add to the database.
+    * problems_solved - List of problems solved statistics to add to the database.
     """
 
     with app.app_context():
-        for problem_statistics in problems_statistics:
+        for problem_solved in problems_solved:
             # Add the problem statistics to the database
-            db.session.add(ProblemStatistics(**problem_statistics["submission_statistics"]))
-            db.session.add(ProblemTags(**problem_statistics["tags"]))
-            db.session.add(ProblemIndexes(**problem_statistics["indexes"]))
-            db.session.add(ProblemRatings(**problem_statistics["ratings"]))
+            db.session.add(
+                SubmissionStatistics(**problem_solved["submission_statistics"])
+            )
+
+            for problem in problem_solved["problems_solved"]:
+                # Convert the datestring to datetime object
+                problem["solved_time"] = convert_datestring_to_datetime(
+                    problem["solved_time"]
+                )
+
+                db.session.add(ProblemSolved(**problem))
+
             db.session.commit()
 
 
@@ -151,9 +155,9 @@ Metadata-related functions.
 """
 
 
-def get_last_update_time(app: Flask):
+def store_last_update_time(app: Flask):
     """
-    Gets/stores the last time the database was updated.
+    Stores the last time the database was updated.
 
     Arguments:
     * app - The Flask application.
@@ -187,7 +191,7 @@ def update_db(
     contests: list[dict],
     problems: list[dict],
     users_information: list[dict],
-    users_contests: list[dict],
+    users_contests: list[list[dict]],
     users_problems: list[dict],
 ):
     """
@@ -210,7 +214,7 @@ def update_db(
     add_problems_to_db(app, problems)
     add_users_to_db(app, users_information)
     add_contest_participants_to_db(app, users_contests)
-    add_problems_statistics_to_db(app, users_problems)
+    add_problems_solved_to_db(app, users_problems)
 
     # Update the last database update time
-    get_last_update_time(app)
+    store_last_update_time(app)

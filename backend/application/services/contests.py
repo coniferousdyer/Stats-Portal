@@ -8,86 +8,153 @@ services/contests.py contains contest-related service functions.
 from datetime import datetime
 
 
-def get_user_contest_statistics(
-    contests_participated: list[dict],
-    rating_history: bool = False,
-    user_creation_date: any = None,
+def summarize_contest_information(
+    contest_participants: list[dict],
+    rating_history: bool,
+    user_creation_date: any,
 ):
     """
-    Returns the contest participation statistics for a single user.
+    Given the list of contests given, returns:
     * Total number of contests given.
     * Highest and lowest rating change.
     * Best and worst contest ranks.
     * Rating change history (if rating_history is True).
 
     Arguments:
-    * contests_participated - List of contest participation statistics for the user.
+    * contest_participants - List of contest participation statistics.
     * rating_history - Boolean flag indicating whether the rating history of the user should be returned.
     * user_creation_date - User's account creation date. Relevant only if rating_history is True.
     """
 
-    contest_statistics = {}
+    statistics = {}
 
-    # Finding the user's highest and lowest rating change
-    contest_statistics["highest_rating_change"] = max(
-        [
-            contest_participated["rating_change"]
-            for contest_participated in contests_participated
-        ]
-    )
-    contest_statistics["lowest_rating_change"] = min(
-        [
-            contest_participated["rating_change"]
-            for contest_participated in contests_participated
-        ]
-    )
+    # Total number of contests participated
+    statistics["total_number_participated"] = len(contest_participants)
 
-    # The goal of lowest rating change is basically to find the highest rating decrease.
-    # If the user's lowest rating change is positive, then the user's highest rating decrease is 0.
-    if contest_statistics["lowest_rating_change"] > 0:
-        contest_statistics["lowest_rating_change"] = "None"
+    # If the user did not participate in any contest, then there is no need to continue
+    if contest_participants:
+        # Highest and lowest rating change
+        statistics["highest_rating_change"] = max(
+            contest["rating_change"] for contest in contest_participants
+        )
+        statistics["lowest_rating_change"] = min(
+            contest["rating_change"] for contest in contest_participants
+        )
 
-    # Finding total number of contests participated
-    contest_statistics["total_number_participated"] = len(contests_participated)
+        # The goal of lowest rating change is basically to find the highest rating decrease.
+        # If the user's lowest rating change is positive, then the user's highest rating decrease is "None".
+        if statistics["lowest_rating_change"] > 0:
+            statistics["lowest_rating_change"] = "None"
 
-    # Finding the best and worst rank of the user
-    contest_statistics["best_rank"] = min(
-        [contest_participated["rank"] for contest_participated in contests_participated]
-    )
-    contest_statistics["worst_rank"] = max(
-        [contest_participated["rank"] for contest_participated in contests_participated]
-    )
+        # Best and worst contest ranks
+        statistics["best_rank"] = min(
+            contest["rank"] for contest in contest_participants
+        )
+        statistics["worst_rank"] = max(
+            contest["rank"] for contest in contest_participants
+        )
 
-    if rating_history:
-        # Finding the date of the user's first contest. We need this to find the user's initial rating.
-        first_contest_date = contests_participated[0]["rating_update_time"]
-        initial_rating = 1500 if first_contest_date < datetime(2020, 6, 1) else 0
+        # Rating change history
+        if rating_history:
+            # Finding the date of the user's first contest. We need this to find the user's initial rating.
+            first_contest_date = contest_participants[0]["rating_update_time"]
+            initial_rating = 1500 if first_contest_date < datetime(2020, 6, 1) else 0
 
-        # Initializing the rating history list. We will append to it as we go.
-        # We store it in this format because:
-        # - ApexCharts expects it in this format for its time series plot.
-        # - It is regardless a clear format with only the naming being a slight issue.
-        ratings_list = [
-            {"x": user_creation_date.strftime("%Y-%m-%d"), "y": initial_rating}
-        ]
-
-        for contest_participated in contests_participated:
-            rating_update_time = contest_participated["rating_update_time"]
-            previous_contest_rating = ratings_list[-1]["y"]
-
-            # Appending the rating change to the rating history list
-            ratings_list.append(
+            # Initializing the rating history list. We will append to it as we go.
+            # We store it in the format of [{"date": datetime, "rating": int}, ...]
+            ratings_list = [
                 {
-                    "x": rating_update_time.strftime("%Y-%m-%d"),
-                    "y": previous_contest_rating
-                    + contest_participated["rating_change"],
+                    "date": user_creation_date.strftime("%Y-%m-%d"),
+                    "rating": initial_rating,
                 }
+            ]
+
+            for contest_participated in contest_participants:
+                rating_update_time = contest_participated["rating_update_time"]
+                previous_contest_rating = ratings_list[-1]["rating"]
+
+                # Appending the rating change to the rating history list
+                ratings_list.append(
+                    {
+                        "date": rating_update_time.strftime("%Y-%m-%d"),
+                        "rating": previous_contest_rating
+                        + contest_participated["rating_change"],
+                    }
+                )
+
+            # Adding the rating history to the contest statistics
+            statistics["rating_history"] = ratings_list
+
+    return statistics
+
+
+def get_user_contest_statistics(
+    contests: list[dict],
+    contest_participants: list[dict],
+    rating_history: bool = False,
+    user_creation_date: any = None,
+):
+    """
+    Extracts the relevant statistics (all-time, this month, this week, today) from
+    the given list of contest participants.
+
+    Arguments:
+    * contests - List of contests.
+    * contest_participants - List of contest participation statistics.
+    * rating_history - Boolean flag indicating whether the rating history of the user should be returned.
+    * user_creation_date - User's account creation date. Relevant only if rating_history is True.
+    """
+
+    this_month_contests, this_week_contests, today_contests = [], [], []
+
+    for contest_participant in contest_participants:
+        # Finding the date of the contest
+        contest_date = next(
+            (
+                contest["date"]
+                for contest in contests
+                if contest["contest_id"] == contest_participant["contest_id"]
             )
+        )
 
-        # Adding the rating history to the contest statistics
-        contest_statistics["rating_history"] = ratings_list
+        # If contest was in this month
+        if (
+            contest_date.month == datetime.now().month
+            and contest_date.year == datetime.now().year
+        ):
+            this_month_contests.append(contest_participant)
+        # If contest was in this week
+        if (
+            contest_date.isocalendar()[1] == datetime.now().isocalendar()[1]
+            and contest_date.year == datetime.now().year
+        ):
+            this_week_contests.append(contest_participant)
+        # If contest was today
+        if (
+            contest_date.day == datetime.now().day
+            and contest_date.month == datetime.now().month
+            and contest_date.year == datetime.now().year
+        ):
+            today_contests.append(contest_participant)
 
-    return contest_statistics
+    # We call summarize_problems_information to obtain the statistics. At each turn,
+    # we filter the list of contests given according to the time period we are interested in.
+    statistics = {
+        "all_time": summarize_contest_information(
+            contest_participants, rating_history, user_creation_date
+        ),
+        "this_month": summarize_contest_information(
+            this_month_contests, rating_history, user_creation_date
+        ),
+        "this_week": summarize_contest_information(
+            this_week_contests, rating_history, user_creation_date
+        ),
+        "today": summarize_contest_information(
+            today_contests, rating_history, user_creation_date
+        ),
+    }
+
+    return statistics
 
 
 def sort_contest_participants(contest_participants: list[dict]):
