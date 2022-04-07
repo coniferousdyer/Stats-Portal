@@ -113,11 +113,6 @@ def init_db(app: Flask):
     * app - The Flask application.
     """
 
-    from application.models.models import create_model_attrs
-
-    # Add the dynamically created attributes to the models
-    create_model_attrs()
-
     db.init_app(app)
     db.create_all(app=app)
 
@@ -200,4 +195,10 @@ def create_app(config_filename: str):
     return app
 
 
-# TODO: Search for an alternative to passing the app around to the database functions
+# TODO: Take care of ContentType errors (and other errors)
+# TODO: Make tasks (or services or whatever)
+# TODO: __init__.py in every package perhaps?
+# TODO: Edit config (try bringing host and port to config.py)
+# TODO: Look into flask extensions
+# TODO: Check for db update conflicts and how to resolve them
+# TODO: Check if job is removed on error

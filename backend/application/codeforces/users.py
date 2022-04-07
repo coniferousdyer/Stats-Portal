@@ -6,7 +6,7 @@ import requests
 from time import sleep
 from datetime import datetime
 
-from application.utils.constants import API_BASE_URL, VERDICTS
+from application.utils.constants import API_BASE_URL
 from application.utils.common import convert_timestamp_to_datetime
 
 
@@ -28,65 +28,52 @@ def get_user_problems(handle: str):
         except requests.exceptions.RequestException:
             sleep(1)
 
-    # We sort the submissions by the time of submission (from oldest to newest,
-    # so that we count only the first submission in case of duplicates)
-    result = response.json()["result"][::-1]
+    # Filter out submissions that are not solved problems and sorting them by
+    # the time of submission (from oldest to newest, so that we count only the
+    # first submission in case of duplicates).
+    result = filter(lambda x: x["verdict"] == "OK", response.json()["result"][::-1])
 
     # Ensuring that if the user has solved the same problem twice, the second
     # submission is not counted.
     already_solved = {}
 
-    # We require the submission statistics, which we can get from the above list
-    # of submissions.
-    submission_statistics = {verdict: 0 for verdict in VERDICTS}
-    submission_statistics["handle"] = handle
-
     problems = []  # List of problems
 
     for problem in result:
-        # Storing the submission verdict. We do not need to check duplicates
-        # for this, because we are interested in all SUBMISSIONS.
-        if problem["verdict"] in VERDICTS:
-            submission_statistics[problem["verdict"]] += 1
-
-        # If the submission was accepted, meaning the problem was solved
-        if problem["verdict"] == "OK":
-            # For each problem, contest ID + index of the problem in the contest is
-            # its unique identifier.
-            if "contestId" in problem["problem"]:
-                problem_id = (
-                    str(problem["problem"]["contestId"]) + problem["problem"]["index"]
-                )
-
-            # If the problem was not part of a contest or was already solved before, we skip it
-            if "contestId" not in problem["problem"] or problem_id in already_solved:
-                continue
-
-            # Else, we add it to the list of solved problems
-            already_solved[problem_id] = True
-
-            # Obtaining rating and tags
-            rating = problem["problem"].get("rating", 0)
-            tags = ";".join(problem["problem"].get("tags", []))
-
-            # Obtaining contest creation time in DateTime format
-            solved_time = convert_timestamp_to_datetime(problem["creationTimeSeconds"])
-
-            problems.append(
-                {
-                    "handle": handle,
-                    "contest_id": problem["problem"]["contestId"],
-                    "index": problem["problem"]["index"],
-                    "rating": rating,
-                    "tags": tags,
-                    "solved_time": solved_time,
-                }
+        # For each problem, contest ID + index of the problem in the contest is
+        # its unique identifier.
+        if "contestId" in problem["problem"]:
+            problem_id = (
+                str(problem["problem"]["contestId"]) + problem["problem"]["index"]
             )
 
-    return {
-        "problems_solved": problems,
-        "submission_statistics": submission_statistics,
-    }
+        # If the problem was not part of a contest or was already solved before, we skip it
+        if "contestId" not in problem["problem"] or problem_id in already_solved:
+            continue
+
+        # Else, we add it to the list of solved problems
+        already_solved[problem_id] = True
+
+        # Obtaining rating and tags
+        rating = problem["problem"].get("rating", 0)
+        tags = ";".join(problem["problem"].get("tags", []))
+
+        # Obtaining contest creation time in DateTime format
+        solved_time = convert_timestamp_to_datetime(problem["creationTimeSeconds"])
+
+        problems.append(
+            {
+                "handle": handle,
+                "contest_id": problem["problem"]["contestId"],
+                "index": problem["problem"]["index"],
+                "rating": rating,
+                "tags": tags,
+                "language": problem["programmingLanguage"],
+                "solved_time": solved_time,
+            }
+        )
+
+    return problems
 
 
 def get_user_contests(handle: str):
@@ -110,11 +97,12 @@ def get_user_contests(handle: str):
     # The information we need is in the "result" field of the response.
     result = response.json()["result"]
 
-    # Before July 1, 2020, the initial rating of users was 1500, after which
+    # Before May 23, 2020, the initial rating of users was 1500, after which
     # it changed to the current initial rating of 0. For accounts that gave their
-    # first contest before July 1, 2020, we set the initial rating to 1500.
+    # first contest before May 23, 2020, we set the initial rating to 1500.
+    # Check https://codeforces.com/blog/entry/77890.
     date = datetime.fromtimestamp(result[0]["ratingUpdateTimeSeconds"])
-    if date < datetime(2020, 6, 1):
+    if date < datetime(2020, 5, 23):
         result[0]["oldRating"] = 1500
 
     contests = []  # List of contests
@@ -130,7 +118,8 @@ def get_user_contests(handle: str):
                 "handle": handle,
                 "contest_id": contest["contestId"],
                 "rank": contest["rank"],
-                "rating_change": contest["newRating"] - contest["oldRating"],
+                "old_rating": contest["oldRating"],
+                "new_rating": contest["newRating"],
                 "rating_update_time": rating_update_time,
             }
         )

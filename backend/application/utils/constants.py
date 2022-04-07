@@ -25,28 +25,3 @@ Application-specific constants.
 # Affects the speed of the periodic database updates. Do not increase above 5
 # as the Codeforces API allows only <= 5 requests per second. 4 is optimal.
 MAX_WORKER_THREADS = 4
-
-
-"""
-Codeforces-specific constants.
-"""
-
-
-# All possible verdicts for a Codeforces submission.
-# Required for dynamically initializing the SubmissionStatistics model and counting
-# submission statistics (see models/models.py and codeforces/users.py).
-VERDICTS = [
-    "OK",
-    "COMPILATION_ERROR",
-    "RUNTIME_ERROR",
-    "WRONG_ANSWER",
-    "TIME_LIMIT_EXCEEDED",
-    "MEMORY_LIMIT_EXCEEDED",
-    "IDLENESS_LIMIT_EXCEEDED",
-    "CHALLENGED",
-    "SKIPPED",
-    "PARTIAL",
-    "CRASHED",
-    "FAILED",
-    "REJECTED",
-]

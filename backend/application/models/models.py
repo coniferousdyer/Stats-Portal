@@ -7,7 +7,6 @@ from application.utils.constants import (
     PROFILE_BASE_URL,
     CONTEST_BASE_URL,
     PROBLEM_BASE_URL,
-    VERDICTS,
 )
 
 
@@ -84,8 +83,10 @@ class ContestParticipant(db.Model):
     )
     # Rank of the user in the contest
     rank = db.Column(db.Integer, nullable=False)
-    # Rating change of the user in the contest
-    rating_change = db.Column(db.Integer, nullable=False)
+    # Old rating (before the contest)
+    old_rating = db.Column(db.Integer, nullable=False)
+    # New rating (after the contest)
+    new_rating = db.Column(db.Integer, nullable=False)
     # Rating update time
     rating_update_time = db.Column(db.DateTime, nullable=False)
 
@@ -142,25 +143,13 @@ class ProblemSolved(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     # Tags of the problem (stored as a string to store in the database)
     tags = db.Column(db.String(200), nullable=False)
+    # Programming language the problem was solved in
+    language = db.Column(db.String(50), nullable=False)
     # Problem solved time
     solved_time = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
         return f"<ProblemSolved: {self.handle} - {self.contest_id}-{self.index}>"
-
-
-class SubmissionStatistics(db.Model):
-    """
-    Model describing the submission statistics (i.e. problem verdicts) for a user.
-    """
-
-    __tablename__ = "submission_statistics"
-
-    # Codeforces handle of the user
-    handle = db.Column(db.String(50), primary_key=True)
-
-    def __repr__(self):
-        return f"<SubmissionStatistics: {self.handle}>"
 
 
 """
@@ -184,22 +173,3 @@ class Metadata(db.Model):
 
     def __repr__(self):
         return f"<{self.key}: {self.value}>"
-
-
-"""
-Model-related functions.
-"""
-
-
-def create_model_attrs():
-    """
-    Dynamically creates the attributes for the models that require them.
-    """
-
-    # An attribute for each possible verdict
-    for verdict in VERDICTS:
-        setattr(
-            SubmissionStatistics,
-            verdict,
-            db.Column(verdict, db.Integer, nullable=False),
-        )

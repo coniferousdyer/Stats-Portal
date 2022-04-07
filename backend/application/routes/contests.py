@@ -6,7 +6,7 @@ under the /contests blueprint.
 from flask import Blueprint, jsonify
 
 from application.models.models import Contest, ContestParticipant
-from application.services.contests import sort_contest_participants
+from application.helpers.contests import sort_contest_participants
 from application.utils.common import get_all_rows_as_dict, row_to_dict
 
 

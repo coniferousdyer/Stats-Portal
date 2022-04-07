@@ -9,7 +9,6 @@ from application.models.models import (
     Contest,
     Problem,
     ProblemSolved,
-    SubmissionStatistics,
     User,
     ContestParticipant,
     Metadata,
@@ -35,7 +34,6 @@ def clear_db_tables(app: Flask):
         User.query.delete()
         ContestParticipant.query.delete()
         ProblemSolved.query.delete()
-        SubmissionStatistics.query.delete()
 
 
 """
@@ -135,11 +133,7 @@ def add_problems_solved_to_db(app: Flask, problems_solved: list[dict]):
     with app.app_context():
         for problem_solved in problems_solved:
             # Add the problem statistics to the database
-            db.session.add(
-                SubmissionStatistics(**problem_solved["submission_statistics"])
-            )
-
-            for problem in problem_solved["problems_solved"]:
+            for problem in problem_solved:
                 # Convert the datestring to datetime object
                 problem["solved_time"] = convert_datestring_to_datetime(
                     problem["solved_time"]

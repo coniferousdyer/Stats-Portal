@@ -8,12 +8,11 @@ from flask import Blueprint, jsonify
 from application.models.models import (
     Contest,
     ProblemSolved,
-    SubmissionStatistics,
     User,
     ContestParticipant,
 )
-from application.services.contests import get_user_contest_statistics
-from application.services.problems import get_user_problems_statistics
+from application.helpers.contests import get_contest_statistics
+from application.helpers.problems import get_problems_statistics
 from application.utils.common import row_to_dict, get_all_rows_as_dict
 
 
@@ -66,20 +65,20 @@ def get_all_users_contests_participated():
     Returns statistics of contests given by all users in the organization.
     """
 
-    # Getting all users and contests
+    # Getting all users, contests and contest statistics
     users = get_all_rows_as_dict(User.query.all())
     contests = get_all_rows_as_dict(Contest.query.all())
 
     contest_statistics = {}
 
     for user in users:
-        # Getting contest participation statistics for all users from database
+        # Finding the contests participated by the user
         contests_participated = get_all_rows_as_dict(
             ContestParticipant.query.filter_by(handle=user["handle"]).all()
         )
 
-        # Parsing the data to extract the important statistics
-        contest_statistics[user["handle"]] = get_user_contest_statistics(
+        # Adding the date of the contest to the contest statistics
+        contest_statistics[user["handle"]] = get_contest_statistics(
             contests, contests_participated
         )
 
@@ -110,12 +109,10 @@ def get_user_contests_participated(handle: str):
         ContestParticipant.query.filter_by(handle=handle).all()
     )
 
-    # Parsing the data to extract the important statistics
-    contest_statistics = get_user_contest_statistics(
-        contests,
-        contests_participated,
-        rating_history=True,
-        user_creation_date=user["creation_date"],
+    # Adding the date of the contest to the contest statistics.
+    # For single users, we do require the rating history.
+    contest_statistics = get_contest_statistics(
+        contests, contests_participated, rating_history=True
     )
 
     return jsonify(contest_statistics), 200
@@ -132,29 +129,21 @@ def get_all_users_problems_solved():
     Returns statistics of problems solved and submissions made by all users in the organization.
     """
 
-    # Getting all users
+    # Getting all users and problems solved
     users = get_all_rows_as_dict(User.query.all())
 
-    # Obtaining the problem solved statistics for all users
     problem_statistics = {}
 
     for user in users:
+        # Finding the problems solved by the user
         problems_solved = get_all_rows_as_dict(
             ProblemSolved.query.filter_by(handle=user["handle"]).all()
         )
-        problem_statistics[user["handle"]] = get_user_problems_statistics(
-            problems_solved
-        )
 
-    # Obtaining the submission statistics for all users
-    submission_statistics = get_all_rows_as_dict(SubmissionStatistics.query.all())
+        # Obtaining the problem statistics for the user
+        problem_statistics[user["handle"]] = get_problems_statistics(problems_solved)
 
-    statistics = {
-        "problem_statistics": problem_statistics,
-        "submission_statistics": submission_statistics,
-    }
-
-    return jsonify(statistics), 200
+    return jsonify(problem_statistics), 200
 
 
 @users_routes.route("/<handle>/problems-solved", methods=["GET"])
@@ -173,16 +162,12 @@ def get_user_problems_solved(handle: str):
     else:
         user = row_to_dict(user)
 
-    # Obtaining problem solved and submission statistics for the user from the database
+    # Obtaining problems solved by the user from the database
     problems_solved = get_all_rows_as_dict(
         ProblemSolved.query.filter_by(handle=handle).all()
     )
-    problem_statistics = get_user_problems_statistics(problems_solved)
-    submission_statistics = row_to_dict(SubmissionStatistics.query.get(handle))
 
-    statistics = {
-        "problem_statistics": problem_statistics,
-        "submission_statistics": submission_statistics,
-    }
+    # Obtaining the problem statistics for the user
+    problem_statistics = get_problems_statistics(problems_solved)
 
-    return jsonify(statistics), 200
+    return jsonify(problem_statistics), 200
