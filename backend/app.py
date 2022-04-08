@@ -8,16 +8,22 @@ from application import create_app
 load_dotenv()
 
 
-# Create the application. To run it in development or production mode,
-# change the name of the config class in the create_app function.
-# 1. Development mode: application.config.DevelopmentConfig
-# 2. Production mode: application.config.ProductionConfig
-app = create_app("application.config.DevelopmentConfig")
+# The configuration class is inferred from the environment variable FLASK_ENV.
+# The configuration is either "development" or "production". If neither of these
+# is supplied, the configuration defaults to "development".
+configuration_class = (
+    "application.config.ProductionConfig"
+    if environ.get("FLASK_ENV", "development") == "production"
+    else "application.config.DevelopmentConfig"
+)
+
+# Create the application with the supplied configuration
+app = create_app(configuration_class)
 
 # Run the app
 if __name__ == "__main__":
     app.run(
-        host=environ.get("APPLICATION_HOST"),
-        port=int(environ.get("APPLICATION_PORT")),
+        host=environ.get("APPLICATION_HOST", "0.0.0.0"),
+        port=int(environ.get("APPLICATION_PORT", "5000")),
         use_reloader=False,
     )

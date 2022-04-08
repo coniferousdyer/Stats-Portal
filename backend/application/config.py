@@ -2,7 +2,7 @@
 Configuration for the Flask backend.
 """
 
-from os import environ
+from os import environ, urandom
 from dotenv import load_dotenv
 
 
@@ -15,10 +15,12 @@ class Config:
     Base configuration.
     """
 
-    SECRET_KEY = environ.get("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")
+    SECRET_KEY = environ.get("SECRET_KEY", urandom(16).hex())
+    SQLALCHEMY_DATABASE_URI = (
+        f"sqlite:///{environ.get('SQLALCHEMY_DATABASE_URI', 'stats.db')}"
+    )
     SQLALCHEMY_BINDS = {
-        "metadata": environ.get("SQLALCHEMY_METADATA_URI"),
+        "metadata": f"sqlite:///{environ.get('SQLALCHEMY_METADATA_URI', 'metadata.db')}",
     }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -30,7 +32,7 @@ class DevelopmentConfig(Config):
 
     FLASK_ENV = "development"
     DEBUG = True
-    TESTING = True
+    TESTING = False
 
 
 class ProductionConfig(Config):
@@ -41,3 +43,23 @@ class ProductionConfig(Config):
     FLASK_ENV = "production"
     DEBUG = False
     TESTING = False
+
+
+# Since this is purely for testing purposes, we should not use any environment
+# variables for the testing configuration. They should be supplied from within.
+# That is the reason we do not use Config as the base class.
+class TestingConfig:
+    """
+    Testing configuration.
+    """
+
+    SECRET_KEY = urandom(16).hex()
+
+    # We use an in-memory SQLite database for the tests
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    SQLALCHEMY_BINDS = {"metadata": "sqlite:///:memory:"}
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    FLASK_ENV = "development"
+    DEBUG = True
+    TESTING = True

@@ -164,13 +164,13 @@ def store_last_update_time(app: Flask):
         if metadata_last_update_time is None:
             metadata = Metadata(
                 key="last_update_time",
-                value=datetime.now(timezone(environ.get("TIMEZONE"))),
+                value=datetime.now(timezone(environ.get("TIMEZONE", "Asia/Kolkata"))),
             )
             db.session.add(metadata)
             db.session.commit()
         else:
             metadata_last_update_time.value = datetime.now(
-                timezone(environ.get("TIMEZONE"))
+                timezone(environ.get("TIMEZONE", "Asia/Kolkata"))
             )
             db.session.commit()
 

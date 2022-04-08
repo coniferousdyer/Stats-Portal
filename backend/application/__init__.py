@@ -2,7 +2,7 @@
 The main application package. The application is created and configured here.
 """
 
-from flask import Flask
+from flask import Flask, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -40,7 +40,7 @@ def perform_update(app: Flask):
     # 1. List of handles of users of the organization
     handles = get_organization_user_handles()
     app.logger.info(
-        f"{len(handles)} HANDLES FOUND IN {environ.get('ORGANIZATION_NAME')}."
+        f"{len(handles)} HANDLES FOUND IN {environ.get('ORGANIZATION_NAME', '')}."
     )
 
     # 2. Get the required information from the Codeforces API.
@@ -72,6 +72,38 @@ def perform_update(app: Flask):
     app.logger.info("UPDATED DATABASE.")
 
 
+def register_error_handlers(app: Flask):
+    """
+    Registers the error handlers.
+
+    Arguments:
+    * app - The Flask application.
+    """
+
+    # 404 - Page not found
+    @app.errorhandler(404)
+    def page_not_found(error):
+        """
+        Handles 404 (page not found) errors.
+        """
+
+        app.logger.error(f"404 ERROR: {error}")
+        return jsonify({"error": "Page not found"}), 404
+
+    # 500 - Internal server error
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        """
+        Handles 500 (internal server errors) errors.
+        """
+
+        # Roll back any database changes
+        db.session.rollback()
+
+        app.logger.error(f"500 ERROR: {error}")
+        return jsonify({"error": "Internal server error"}), 500
+
+
 def init_logger():
     """
     Initializes the logger for the application.
@@ -99,7 +131,7 @@ def init_sentry():
     """
 
     sentry_sdk.init(
-        dsn=environ.get("SENTRY_DSN"),
+        dsn=environ.get("SENTRY_DSN", ""),
         integrations=[FlaskIntegration()],
         traces_sample_rate=1.0,
     )
@@ -159,12 +191,12 @@ def register_blueprints(app: Flask):
     app.register_blueprint(problems_routes, url_prefix="/problems")
 
 
-def create_app(config_filename: str):
+def create_app(config_class: str):
     """
     Creates the application and configures it.
 
     Arguments:
-    * config_filename - The name of the configuration class in config.py.
+    * config_class - The name of the configuration class in config.py.
     eg. "application.config.DevelopmentConfig", "application.config.ProductionConfig"
     """
 
@@ -172,13 +204,16 @@ def create_app(config_filename: str):
     app = Flask(__name__)
 
     # Load the configuration class depending on the mode, from config.py
-    app.config.from_object(config_filename)
+    app.config.from_object(config_class)
 
     # Makes app treat route URLs with and without trailing slashes the same
     app.url_map.strict_slashes = False
 
     # Initialize the logger
     init_logger()
+
+    # Register the error handlers
+    register_error_handlers(app)
 
     # Initialize the Sentry client
     init_sentry()
@@ -196,9 +231,11 @@ def create_app(config_filename: str):
 
 
 # TODO: Take care of ContentType errors (and other errors)
-# TODO: Make tasks (or services or whatever)
-# TODO: __init__.py in every package perhaps?
-# TODO: Edit config (try bringing host and port to config.py)
 # TODO: Look into flask extensions
 # TODO: Check for db update conflicts and how to resolve them
 # TODO: Check if job is removed on error
+# TODO: Add tests
+# TODO: Use List, Dict, Union from typing
+
+# TODO: Consider adding tasks to queue using Celery
+# TODO: Create API documentation

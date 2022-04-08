@@ -30,15 +30,14 @@ class User(db.Model):
     # Codeforces rating of the user
     rating = db.Column(db.Integer, nullable=False)
     # The maximum rating of the user
-    max_rating = db.Column(db.String(50), nullable=False)
+    max_rating = db.Column(db.Integer, nullable=False)
     # "rank" refers to the Title of the user in official terminology
     rank = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         return f"<User: {self.handle}>"
 
-    @staticmethod
-    def __url__(self):
+    def url(self):
         return f"{PROFILE_BASE_URL}{self.handle}"
 
 
@@ -61,8 +60,7 @@ class Contest(db.Model):
     def __repr__(self):
         return f"<Contest: {self.contest_id} - {self.name}>"
 
-    @staticmethod
-    def __url__(self):
+    def url(self):
         return f"{CONTEST_BASE_URL}{self.contest_id}"
 
 
@@ -117,8 +115,7 @@ class Problem(db.Model):
     def __repr__(self):
         return f"<Problem: {self.contest_id}-{self.index}: {self.name}>"
 
-    @staticmethod
-    def __url__(self):
+    def url(self):
         return f"{PROBLEM_BASE_URL}{self.contest_id}/{self.index}"
 
 

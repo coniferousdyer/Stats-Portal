@@ -74,9 +74,7 @@ def get_organization_user_handles():
     )
 
     while True:
-        url = (
-            f"{ORGANIZATION_BASE_URL}{environ.get('ORGANIZATION_NUMBER')}/page/{str(i)}"
-        )
+        url = f"{ORGANIZATION_BASE_URL}{environ.get('ORGANIZATION_NUMBER', '')}/page/{str(i)}"
         response = None
 
         # Send the request to the Codeforces API and retry if it fails
