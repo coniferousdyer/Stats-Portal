@@ -168,7 +168,7 @@ def init_scheduler(app: Flask):
         hours=12,
         misfire_grace_time=3600,
         # next_run_time=datetime.now(),
-    )  # TODO: Decide upon the optimal interval time and misfire_grace_time
+    )
     scheduler.start()
 
     # Shut down the scheduler when exiting the app
@@ -230,12 +230,3 @@ def create_app(config_class: str):
     init_scheduler(app)
 
     return app
-
-
-# TODO: Take care of ContentType errors
-# TODO: Look into flask extensions
-# TODO: Check for db update conflicts and how to resolve them
-
-# TODO: Consider adding tasks to queue using Celery
-# TODO: Create API documentation
-# TODO: Try to write tests for Codeforces functions
