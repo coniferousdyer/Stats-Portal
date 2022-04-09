@@ -59,7 +59,13 @@ def add_users_to_db(app: Flask, users: list[dict]):
 
             # Add the user to the database
             db.session.add(User(**user))
-            db.session.commit()
+
+            # Commit the change; if there is an error, roll back the change
+            try:
+                db.session.commit()
+            except Exception as e:
+                app.logger.error(e)
+                db.session.rollback()
 
 
 def add_contests_to_db(app: Flask, contests: list[dict]):
@@ -78,7 +84,13 @@ def add_contests_to_db(app: Flask, contests: list[dict]):
 
             # Add the contest to the database
             db.session.add(Contest(**contest))
-            db.session.commit()
+
+            # Commit the change; if there is an error, roll back the change
+            try:
+                db.session.commit()
+            except Exception as e:
+                app.logger.error(e)
+                db.session.rollback()
 
 
 def add_contest_participants_to_db(app: Flask, contest_participants: list[list[dict]]):
@@ -102,7 +114,13 @@ def add_contest_participants_to_db(app: Flask, contest_participants: list[list[d
 
                 # Add the contest participant to the database
                 db.session.add(ContestParticipant(**contest))
-                db.session.commit()
+
+                # Commit the change; if there is an error, roll back the change
+                try:
+                    db.session.commit()
+                except Exception as e:
+                    app.logger.error(e)
+                    db.session.rollback()
 
 
 def add_problems_to_db(app: Flask, problems: list[dict]):
@@ -118,7 +136,13 @@ def add_problems_to_db(app: Flask, problems: list[dict]):
         for problem in problems:
             # Add the problem to the database
             db.session.add(Problem(**problem))
-            db.session.commit()
+
+            # Commit the change; if there is an error, roll back the change
+            try:
+                db.session.commit()
+            except Exception as e:
+                app.logger.error(e)
+                db.session.rollback()
 
 
 def add_problems_solved_to_db(app: Flask, problems_solved: list[dict]):
@@ -141,7 +165,12 @@ def add_problems_solved_to_db(app: Flask, problems_solved: list[dict]):
 
                 db.session.add(ProblemSolved(**problem))
 
-            db.session.commit()
+                # Commit the change; if there is an error, roll back the change
+                try:
+                    db.session.commit()
+                except Exception as e:
+                    app.logger.error(e)
+                    db.session.rollback()
 
 
 """
@@ -157,6 +186,9 @@ def store_last_update_time(app: Flask):
     * app - The Flask application.
     """
 
+    # Obtaining the pytz timezone string from the .env file
+    time_zone = environ.get("TIMEZONE", "Asia/Kolkata")
+
     with app.app_context():
         metadata_last_update_time = Metadata.query.get("last_update_time")
 
@@ -164,15 +196,18 @@ def store_last_update_time(app: Flask):
         if metadata_last_update_time is None:
             metadata = Metadata(
                 key="last_update_time",
-                value=datetime.now(timezone(environ.get("TIMEZONE", "Asia/Kolkata"))),
+                value=datetime.now(timezone(time_zone)),
             )
             db.session.add(metadata)
-            db.session.commit()
         else:
-            metadata_last_update_time.value = datetime.now(
-                timezone(environ.get("TIMEZONE", "Asia/Kolkata"))
-            )
+            metadata_last_update_time.value = datetime.now(timezone(time_zone))
+
+        # Commit the change; if there is an error, roll back the change
+        try:
             db.session.commit()
+        except Exception as e:
+            app.logger.error(e)
+            db.session.rollback()
 
 
 """

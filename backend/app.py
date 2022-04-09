@@ -11,9 +11,10 @@ load_dotenv()
 # The configuration class is inferred from the environment variable FLASK_ENV.
 # The configuration is either "development" or "production". If neither of these
 # is supplied, the configuration defaults to "development".
+environment = environ.get("FLASK_ENV", "development")
 configuration_class = (
     "application.config.ProductionConfig"
-    if environ.get("FLASK_ENV", "development") == "production"
+    if environment == "production"
     else "application.config.DevelopmentConfig"
 )
 

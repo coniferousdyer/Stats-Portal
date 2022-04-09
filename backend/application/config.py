@@ -2,7 +2,7 @@
 Configuration for the Flask backend.
 """
 
-from os import environ, urandom
+from os import environ, urandom, path
 from dotenv import load_dotenv
 
 
@@ -16,11 +16,9 @@ class Config:
     """
 
     SECRET_KEY = environ.get("SECRET_KEY", urandom(16).hex())
-    SQLALCHEMY_DATABASE_URI = (
-        f"sqlite:///{environ.get('SQLALCHEMY_DATABASE_URI', 'stats.db')}"
-    )
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{path.join(environ.get('SQLALCHEMY_DATABASE_DIR', '.'), '../stats.db')}"
     SQLALCHEMY_BINDS = {
-        "metadata": f"sqlite:///{environ.get('SQLALCHEMY_METADATA_URI', 'metadata.db')}",
+        "metadata": f"sqlite:///{path.join(environ.get('SQLALCHEMY_METADATA_DIR', '.'), '../metadata.db')}",
     }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

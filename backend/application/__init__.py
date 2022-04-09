@@ -109,15 +109,17 @@ def init_logger():
     Initializes the logger for the application.
     """
 
+    log_dir = environ.get("LOG_DIR", "./logs")
+
     # Creating a directory to store logs
-    if not path.exists("application/logs"):
-        mkdir("application/logs")
+    if not path.exists(log_dir):
+        mkdir(log_dir)
 
     # Create and configure logger
     basicConfig(
         handlers=[
             RotatingFileHandler(
-                "application/logs/status.log", maxBytes=100000, backupCount=10
+                path.join(log_dir, "status.log"), maxBytes=100000, backupCount=10
             )
         ],
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -230,12 +232,10 @@ def create_app(config_class: str):
     return app
 
 
-# TODO: Take care of ContentType errors (and other errors)
+# TODO: Take care of ContentType errors
 # TODO: Look into flask extensions
 # TODO: Check for db update conflicts and how to resolve them
-# TODO: Check if job is removed on error
-# TODO: Add tests
-# TODO: Use List, Dict, Union from typing
 
 # TODO: Consider adding tasks to queue using Celery
 # TODO: Create API documentation
+# TODO: Try to write tests for Codeforces functions

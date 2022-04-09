@@ -64,7 +64,7 @@ def get_organization_users_information(handles: list[str]):
 def get_organization_user_handles():
     """
     Obtains list of all Codeforces users of the organization and information about them.
-    This information is scraped from https://codeforces.com/ratings/organization/<ORGANIZATION_NUMBER>.
+    This information is scraped from https://codeforces.com/ratings/organization/<ORGANIZATION_NUMBER>/page/<i>.
     """
 
     i = 1  # Page number
