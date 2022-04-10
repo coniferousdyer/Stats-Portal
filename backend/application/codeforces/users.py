@@ -30,8 +30,13 @@ def get_user_problems(handle: str):
 
     # Filter out submissions that are not solved problems and sorting them by
     # the time of submission (from oldest to newest, so that we count only the
-    # first submission in case of duplicates).
-    result = filter(lambda x: x["verdict"] == "OK", response.json()["result"][::-1])
+    # first submission in case of duplicates). "verdict" in x is necessary because
+    # the verdict of the submission is not present if the contest of the problem is
+    # undergoing system testing.
+    result = filter(
+        lambda x: "verdict" in x and x["verdict"] == "OK",
+        response.json()["result"][::-1],
+    )
 
     # Ensuring that if the user has solved the same problem twice, the second
     # submission is not counted.

@@ -20,20 +20,16 @@ Database deletion functions.
 """
 
 
-def clear_db_tables(app: Flask):
+def clear_db_tables():
     """
-    Clears all tables in the database.
-
-    Arguments:
-    * app - The Flask application.
+    Clears all tables in the database (except Metadata).
     """
 
-    with app.app_context():
-        Contest.query.delete()
-        Problem.query.delete()
-        User.query.delete()
-        ContestParticipant.query.delete()
-        ProblemSolved.query.delete()
+    Contest.query.delete()
+    Problem.query.delete()
+    User.query.delete()
+    ContestParticipant.query.delete()
+    ProblemSolved.query.delete()
 
 
 """
@@ -41,136 +37,89 @@ Database addition functions.
 """
 
 
-def add_users_to_db(app: Flask, users: list[dict]):
+def add_users_to_db(users: list[dict]):
     """
     Add the users to the database.
 
     Arguments:
-    * app - The Flask application.
     * users - List of users to add to the database.
     """
 
-    with app.app_context():
-        for user in users:
-            # Convert the datestring to datetime object
-            user["creation_date"] = convert_datestring_to_datetime(
-                user["creation_date"]
-            )
+    for user in users:
+        # Convert the datestring to datetime object
+        user["creation_date"] = convert_datestring_to_datetime(user["creation_date"])
 
-            # Add the user to the database
-            db.session.add(User(**user))
-
-            # Commit the change; if there is an error, roll back the change
-            try:
-                db.session.commit()
-            except Exception as e:
-                app.logger.error(e)
-                db.session.rollback()
+        # Add the user to the database
+        db.session.add(User(**user))
 
 
-def add_contests_to_db(app: Flask, contests: list[dict]):
+def add_contests_to_db(contests: list[dict]):
     """
     Add the contests to the database.
 
     Arguments:
-    * app - The Flask application.
     * contests - List of contests to add to the database.
     """
 
-    with app.app_context():
-        for contest in contests:
-            # Convert the datestring to datetime object
-            contest["date"] = convert_datestring_to_datetime(contest["date"])
+    for contest in contests:
+        # Convert the datestring to datetime object
+        contest["date"] = convert_datestring_to_datetime(contest["date"])
 
-            # Add the contest to the database
-            db.session.add(Contest(**contest))
-
-            # Commit the change; if there is an error, roll back the change
-            try:
-                db.session.commit()
-            except Exception as e:
-                app.logger.error(e)
-                db.session.rollback()
+        # Add the contest to the database
+        db.session.add(Contest(**contest))
 
 
-def add_contest_participants_to_db(app: Flask, contest_participants: list[list[dict]]):
+def add_contest_participants_to_db(contest_participants: list[list[dict]]):
     """
     Add the contest participants to the database.
 
     Arguments:
-    * app - The Flask application.
     * contest_participants - List of contest participation statistics to add to the database.
     """
 
-    with app.app_context():
-        # contest_participants is a list of contest participation statistics dictionaries
-        # Each list corresponds to a user
-        for contest_participant in contest_participants:
-            for contest in contest_participant:
-                # Convert the datestring to datetime object
-                contest["rating_update_time"] = convert_datestring_to_datetime(
-                    contest["rating_update_time"]
-                )
+    # contest_participants is a list of contest participation statistics dictionaries
+    # Each list corresponds to a user
+    for contest_participant in contest_participants:
+        for contest in contest_participant:
+            # Convert the datestring to datetime object
+            contest["rating_update_time"] = convert_datestring_to_datetime(
+                contest["rating_update_time"]
+            )
 
-                # Add the contest participant to the database
-                db.session.add(ContestParticipant(**contest))
-
-                # Commit the change; if there is an error, roll back the change
-                try:
-                    db.session.commit()
-                except Exception as e:
-                    app.logger.error(e)
-                    db.session.rollback()
+            # Add the contest participant to the database
+            db.session.add(ContestParticipant(**contest))
 
 
-def add_problems_to_db(app: Flask, problems: list[dict]):
+def add_problems_to_db(problems: list[dict]):
     """
     Add the problems to the database.
 
     Arguments:
-    * app - The Flask application.
     * problems - List of problems to add to the database.
     """
 
-    with app.app_context():
-        for problem in problems:
-            # Add the problem to the database
-            db.session.add(Problem(**problem))
-
-            # Commit the change; if there is an error, roll back the change
-            try:
-                db.session.commit()
-            except Exception as e:
-                app.logger.error(e)
-                db.session.rollback()
+    for problem in problems:
+        # Add the problem to the database
+        db.session.add(Problem(**problem))
 
 
-def add_problems_solved_to_db(app: Flask, problems_solved: list[dict]):
+def add_problems_solved_to_db(problems_solved: list[dict]):
     """
     Add the problems statistics to the database.
 
     Arguments:
-    * app - The Flask application.
     * problems_solved - List of problems solved statistics to add to the database.
     """
 
-    with app.app_context():
-        for problem_solved in problems_solved:
-            # Add the problem statistics to the database
-            for problem in problem_solved:
-                # Convert the datestring to datetime object
-                problem["solved_time"] = convert_datestring_to_datetime(
-                    problem["solved_time"]
-                )
+    for problem_solved in problems_solved:
+        # Add the problem statistics to the database
+        for problem in problem_solved:
+            # Convert the datestring to datetime object
+            problem["solved_time"] = convert_datestring_to_datetime(
+                problem["solved_time"]
+            )
 
-                db.session.add(ProblemSolved(**problem))
-
-                # Commit the change; if there is an error, roll back the change
-                try:
-                    db.session.commit()
-                except Exception as e:
-                    app.logger.error(e)
-                    db.session.rollback()
+            db.session.add(ProblemSolved(**problem))
 
 
 """
@@ -178,36 +127,25 @@ Metadata-related functions.
 """
 
 
-def store_last_update_time(app: Flask):
+def store_last_update_time():
     """
     Stores the last time the database was updated.
-
-    Arguments:
-    * app - The Flask application.
     """
 
     # Obtaining the pytz timezone string from the .env file
     time_zone = environ.get("TIMEZONE", "Asia/Kolkata")
 
-    with app.app_context():
-        metadata_last_update_time = Metadata.query.get("last_update_time")
+    metadata_last_update_time = Metadata.query.get("last_update_time")
 
-        # If the metadata doesn't exist, create it
-        if metadata_last_update_time is None:
-            metadata = Metadata(
-                key="last_update_time",
-                value=datetime.now(timezone(time_zone)),
-            )
-            db.session.add(metadata)
-        else:
-            metadata_last_update_time.value = datetime.now(timezone(time_zone))
-
-        # Commit the change; if there is an error, roll back the change
-        try:
-            db.session.commit()
-        except Exception as e:
-            app.logger.error(e)
-            db.session.rollback()
+    # If the metadata doesn't exist, create it
+    if metadata_last_update_time is None:
+        metadata = Metadata(
+            key="last_update_time",
+            value=datetime.now(timezone(time_zone)),
+        )
+        db.session.add(metadata)
+    else:
+        metadata_last_update_time.value = datetime.now(timezone(time_zone))
 
 
 """
@@ -235,15 +173,25 @@ def update_db(
     * users_problems - List of all the users' solved problems.
     """
 
-    # Clear all database tables
-    clear_db_tables(app)
+    with app.app_context():
+        # Clear all database tables
+        clear_db_tables()
 
-    # Add the updated information to the database
-    add_contests_to_db(app, contests)
-    add_problems_to_db(app, problems)
-    add_users_to_db(app, users_information)
-    add_contest_participants_to_db(app, users_contests)
-    add_problems_solved_to_db(app, users_problems)
+        # Add the updated information to the database
+        add_contests_to_db(contests)
+        add_problems_to_db(problems)
+        add_users_to_db(users_information)
+        add_contest_participants_to_db(users_contests)
+        add_problems_solved_to_db(users_problems)
 
-    # Update the last database update time
-    store_last_update_time(app)
+        # Update the last database update time
+        store_last_update_time()
+
+        # Commit the changes to the database, and rollback if an error occurs.
+        # Essentiallly, if there is any error, the database is not updated, ensuring
+        # that the database state remains consistent and some data is not lost.
+        try:
+            db.session.commit()
+        except Exception as e:
+            app.logger.exception(f"ERROR OCCURRED DURING DATABASE UPDATION: {e}")
+            db.session.rollback()
