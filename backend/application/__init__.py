@@ -87,7 +87,7 @@ def register_error_handlers(app: Flask):
         Handles 404 (page not found) errors.
         """
 
-        app.logger.exception(f"404 ERROR: {error}")
+        app.logger.error(f"404 ERROR: {error}")
         return jsonify({"error": "Page not found"}), 404
 
     # 500 - Internal server error
