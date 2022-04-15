@@ -14,7 +14,11 @@ import {
   obtainOverallProblemsStatistics,
 } from "../helpers/organization";
 
-export default function Home({ overallContests, overallProblems }) {
+export default function Home({
+  organizationInformation,
+  overallContests,
+  overallProblems,
+}) {
   // The time period for which the user wants to view the statistics
   const [timePeriod, setTimePeriod] = useState("all_time");
 
@@ -34,43 +38,64 @@ export default function Home({ overallContests, overallProblems }) {
         {/* Heading */}
         <div className={styles.heading_container}>
           <h1 className={styles.heading_prefix}>statistics for</h1>
-          <h1 className={styles.heading_name}>{"IIIT Hyderabad"}</h1>{" "}
+          <h1 className={styles.heading_name}>
+            {organizationInformation.name}
+          </h1>{" "}
         </div>
 
-        {/* Organization Information Cards TODO: To be changed */}
+        {/* Organization Information Cards */}
         <div className={styles.user_information_container}>
-          <KeyValueCard cardKey={"Organization ID"} cardValue={227} />
-          <KeyValueCard cardKey={"Global Rank"} cardValue={1234} />
-          <KeyValueCard cardKey={"Rating"} cardValue={5678} />
-          <KeyValueCard cardKey={"Users"} cardValue={969} />
+          <KeyValueCard
+            cardKey={"Organization ID"}
+            cardValue={organizationInformation["organization_id"]}
+            color={"#dc143c"}
+          />
+          <KeyValueCard
+            cardKey={"Global Rank"}
+            cardValue={organizationInformation["global_rank"]}
+            color={"#2196f3"}
+          />
+          <KeyValueCard
+            cardKey={"Rating"}
+            cardValue={organizationInformation["rating"]}
+            color={"#32cd32"}
+          />
+          <KeyValueCard
+            cardKey={"Users"}
+            cardValue={organizationInformation["number_of_users"]}
+            color={"#f39c12"}
+          />
         </div>
 
         <div className={styles.problems_stats_container}>
           {/* Problems Solved Leaderboard Bar Chart */}
           <div className={styles.one_third_chart_container}>
             <HorizontalBarChart
-              title={`Most Problems Solved in ${"IIIT Hyderabad"}`}
+              title={`Most Problems Solved in ${organizationInformation.name}`}
               data={overallProblems[timePeriod].most_problems_solved}
               color={"#2196f3"}
               dataName={"Problems Solved"}
+              buttonLink={"/leaderboards/problems-solved"}
             />
           </div>
           {/* Contests Given Leaderboard Table */}
           <div className={styles.one_third_chart_container}>
             <HorizontalBarChart
-              title={`Most Contests Given in ${"IIIT Hyderabad"}`}
+              title={`Most Contests Given in ${organizationInformation.name}`}
               data={overallContests[timePeriod].most_contests_participated}
               color={"#32cd32"}
               dataName={"Contests Participated"}
+              buttonLink={"/leaderboards/contests-participated"}
             />
           </div>
           {/* Highest Rank Leaderboard Table */}
           <div className={styles.one_third_chart_container}>
             <HorizontalBarChart
-              title={`Best Contest Ranks in ${"IIIT Hyderabad"}`}
+              title={`Best Contest Ranks in ${organizationInformation.name}`}
               data={overallContests[timePeriod].best_contest_ranks}
               color={"#dc143c"}
               dataName={"Highest Rank"}
+              buttonLink={"/leaderboards/contest-ranks"}
             />
           </div>
           {/* Contests Statistics Table */}
@@ -90,21 +115,21 @@ export default function Home({ overallContests, overallProblems }) {
           {/* Language Distribution Chart */}
           <div className={styles.half_chart_container}>
             <DonutChart
-              title={`Languages Used by ${"IIIT Hyderabad"}`}
+              title={`Languages Used by ${organizationInformation.name}`}
               data={overallProblems[timePeriod].languages}
             />
           </div>
           {/* Tag Distribution Donut Chart */}
           <div className={styles.half_chart_container}>
             <DonutChart
-              title={`Problem Tags Solved by ${"IIIT Hyderabad"}`}
+              title={`Problem Tags Solved by ${organizationInformation.name}`}
               data={overallProblems[timePeriod].tags}
             />
           </div>
           {/* Index Distribution Bar Chart */}
           <div className={styles.half_chart_container}>
             <VerticalBarChart
-              title={`Problem Indexes Solved by ${"IIIT Hyderabad"}`}
+              title={`Problem Indexes Solved by ${organizationInformation.name}`}
               data={overallProblems[timePeriod].indexes}
               color={"#ff1744"}
               dataName={"Problems Solved"}
@@ -113,7 +138,7 @@ export default function Home({ overallContests, overallProblems }) {
           {/* Ratings Distribution Bar Chart */}
           <div className={styles.half_chart_container}>
             <VerticalBarChart
-              title={`Problem Ratings Solved by ${"IIIT Hyderabad"}`}
+              title={`Problem Ratings Solved by ${organizationInformation.name}`}
               data={overallProblems[timePeriod].ratings}
               color={"#2196f3"}
               dataName={"Problems Solved"}
@@ -126,7 +151,10 @@ export default function Home({ overallContests, overallProblems }) {
 }
 
 export const getStaticProps = async () => {
-  // Obtain the data about contests and problems solved by each user from the backend
+  // Obtain the data about organization and contests and problems solved by each user from the backend
+  const organizationInformation = await axios.get(
+    "http://localhost:5000/organization"
+  );
   const userContests = await axios.get(
     "http://localhost:5000/users/contests-participated"
   );
@@ -135,6 +163,7 @@ export const getStaticProps = async () => {
   );
 
   // Retrieve the data from the response
+  const organizationInformationData = organizationInformation.data;
   const userContestsData = await userContests.data;
   const userProblemsData = await userProblems.data;
 
@@ -150,6 +179,7 @@ export const getStaticProps = async () => {
   // Passing in the statistics to the page component
   return {
     props: {
+      organizationInformation: organizationInformationData,
       overallContests: overallContestsStatistics,
       overallProblems: overallProblemsStatistics,
     },

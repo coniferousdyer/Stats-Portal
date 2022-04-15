@@ -15,6 +15,7 @@ from logging.handlers import RotatingFileHandler
 
 from application.models.orm import db
 from application.codeforces.organization import (
+    get_organization_information,
     get_organization_user_handles,
     get_organization_users_contests,
     get_organization_users_problems,
@@ -37,13 +38,19 @@ def perform_update(app: Flask):
     * app - The Flask application.
     """
 
-    # 1. List of handles of users of the organization
-    handles = get_organization_user_handles()
+    # 1. Obtain the organization information
+    organization_information = get_organization_information()
     app.logger.info(
-        f"{len(handles)} HANDLES FOUND IN {environ.get('ORGANIZATION_NAME', '')}."
+        f"ORGANIZATION INFORMATION OBTAINED: {organization_information['name']}"
     )
 
-    # 2. Get the required information from the Codeforces API.
+    # 2. List of handles of users of the organization
+    handles = get_organization_user_handles()
+    app.logger.info(
+        f"{len(handles)} HANDLES FOUND IN {organization_information['name']}."
+    )
+
+    # 3. Get the required information from the Codeforces API.
 
     # List of all the contests
     contests = get_all_contests()
@@ -65,9 +72,15 @@ def perform_update(app: Flask):
     users_problems = get_organization_users_problems(handles)
     app.logger.info(f"{len(users_problems)} USERS' PROBLEMS RETRIEVED.")
 
-    # 3. Update the database with the retrieved data.
+    # 4. Update the database with the retrieved data.
     update_db(
-        app, contests, problems, users_information, users_contests, users_problems
+        app,
+        organization_information,
+        contests,
+        problems,
+        users_information,
+        users_contests,
+        users_problems,
     )
     app.logger.info("UPDATED DATABASE.")
 
@@ -110,6 +123,14 @@ def init_logger():
     """
 
     log_dir = environ.get("LOG_DIR", "./logs")
+
+    # If the log path is empty, we do not log to a file (defaulting to logging instead
+    # to the console). This serves 2 purposes:
+    # 1. The user can just add an empty path in the .env file to disable file logging and not have errors pop up
+    # 2. File logging can easily be disabled during testing by serving an empty path. This way, a log file won't
+    #    be created during testing.
+    if not log_dir:
+        return
 
     # Creating a directory to store logs
     if not path.exists(log_dir):
@@ -183,11 +204,13 @@ def register_blueprints(app: Flask):
     * app - The Flask application.
     """
 
+    from application.routes.organization import organization_routes
     from application.routes.users import users_routes
     from application.routes.contests import contests_routes
     from application.routes.problems import problems_routes
 
     # Register the blueprints
+    app.register_blueprint(organization_routes, url_prefix="/organization")
     app.register_blueprint(users_routes, url_prefix="/users")
     app.register_blueprint(contests_routes, url_prefix="/contests")
     app.register_blueprint(problems_routes, url_prefix="/problems")

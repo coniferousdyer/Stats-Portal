@@ -9,6 +9,7 @@ Base URLs for the application, as well as for accessing data from Codeforces.
 
 
 API_BASE_URL = "https://codeforces.com/api/"
+ORGANIZATION_LIST_BASE_URL = "https://codeforces.com/ratings/organizations"  
 ORGANIZATION_BASE_URL = "https://codeforces.com/ratings/organization/"
 PROFILE_BASE_URL = "https://codeforces.com/profile/"
 CONTEST_BASE_URL = "https://codeforces.com/contest/"

@@ -6,6 +6,7 @@ from pytz import timezone
 from application.utils.common import convert_datestring_to_datetime
 from application.models.orm import db
 from application.models.models import (
+    Organization,
     Contest,
     Problem,
     ProblemSolved,
@@ -25,6 +26,7 @@ def clear_db_tables():
     Clears all tables in the database (except Metadata).
     """
 
+    Organization.query.delete()
     Contest.query.delete()
     Problem.query.delete()
     User.query.delete()
@@ -35,6 +37,17 @@ def clear_db_tables():
 """
 Database addition functions.
 """
+
+
+def add_organization_information_to_db(organization_information: dict):
+    """
+    Add the organization information to the database.
+
+    Arguments:
+    * organization_information - The organization information.
+    """
+
+    db.session.add(Organization(**organization_information))
 
 
 def add_users_to_db(users: list[dict]):
@@ -155,6 +168,7 @@ General database-related functions.
 
 def update_db(
     app: Flask,
+    organization_information: dict,
     contests: list[dict],
     problems: list[dict],
     users_information: list[dict],
@@ -166,6 +180,7 @@ def update_db(
 
     Arguments:
     * app - The Flask application.
+    * organization_information - The organization information.
     * contests - List of all the contests.
     * problems - List of all the problems.
     * users_information - List of all the users' information.
@@ -178,6 +193,7 @@ def update_db(
         clear_db_tables()
 
         # Add the updated information to the database
+        add_organization_information_to_db(organization_information)
         add_contests_to_db(contests)
         add_problems_to_db(problems)
         add_users_to_db(users_information)

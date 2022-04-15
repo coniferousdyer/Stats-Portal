@@ -5,6 +5,11 @@
     font-weight: 700;
 }
 
+.button_container {
+    display: flex;
+    justify-content: center;
+}
+
 @media screen and (min-width: 600px) and (max-width: 900px) {
     .title {
         font-size: 2vw;

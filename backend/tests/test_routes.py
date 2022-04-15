@@ -9,15 +9,48 @@ To test this suite only, run `pytest -v tests/test_routes.py`.
 
 import pytest
 from datetime import datetime
+from os import environ
 
 from application.models.orm import db
 from application.models.models import (
+    Organization,
     User,
     Contest,
     ContestParticipant,
     Problem,
     ProblemSolved,
 )
+
+
+@pytest.mark.usefixtures("app", "client")
+class TestOrganizationRoutes:
+    """
+    Organization-related routes.
+    """
+
+    def test_organization_routes(self, app, client):
+        """
+        Tests the organization-related routes.
+        """
+
+        # Create an organization and add it to the database
+        with app.app_context():
+            organization = Organization(
+                organization_id=int(environ.get("ORGANIZATION_NUMBER", "")),
+                name="test_organization",
+                global_rank=1,
+                number_of_users=1,
+                rating=1000,
+            )
+            db.session.add(organization)
+            db.session.commit()
+
+        # Test the organization route
+        response = client.get("/organization")
+        assert response.status_code == 200
+        assert response.get_json()["organization_id"] == int(
+            environ.get("ORGANIZATION_NUMBER", "")
+        )
 
 
 @pytest.mark.usefixtures("app", "client")

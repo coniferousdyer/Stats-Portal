@@ -8,7 +8,11 @@ from bs4 import BeautifulSoup
 from time import sleep
 from concurrent.futures import ThreadPoolExecutor
 
-from application.utils.constants import ORGANIZATION_BASE_URL, MAX_WORKER_THREADS
+from application.utils.constants import (
+    ORGANIZATION_BASE_URL,
+    MAX_WORKER_THREADS,
+    ORGANIZATION_LIST_BASE_URL,
+)
 from application.codeforces.users import (
     get_user_problems,
     get_user_contests,
@@ -105,3 +109,51 @@ def get_organization_user_handles():
         i += 1
 
     return handles
+
+
+def get_organization_information():
+    """
+    Obtains information about the organization, namely:
+    * Organization ID
+    * Global rank
+    * Organization rating
+    * Number of users
+    This information is scraped from https://codeforces.com/ratings/organizations.
+    """
+
+    url = ORGANIZATION_LIST_BASE_URL
+    response = None
+
+    # Send the request to the Codeforces API and retry if it fails
+    while not response:
+        try:
+            response = requests.get(url)
+        except requests.exceptions.RequestException:
+            sleep(1)
+
+    # Initialize the BeautifulSoup object
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # We find the link leading to the organization's ratings page. Since there may
+    # be multiple organizations with the same name, we find the one with the specified
+    # organization number. The parent of the div containing the link is the table row
+    # that contains the information we need in
+    organization_row = soup.find(
+        "a",
+        href=f"/ratings/organization/{environ.get('ORGANIZATION_NUMBER', '')}",
+    ).parent.parent.find_all("td")
+
+    # First column contains global rank, second column contains organization name,
+    # third column contains number of users, and fourth column contains organization
+    # rating
+    organization_information = {
+        "organization_id": int(environ.get("ORGANIZATION_NUMBER", "")),
+        "global_rank": organization_row[0].text,
+        "name": organization_row[1].find("a").text,
+        "number_of_users": int(
+            organization_row[2].find_all("span")[1].text.strip("()")
+        ),
+        "rating": int(organization_row[3].find_all("span")[1].text.strip("()")),
+    }
+
+    return organization_information
