@@ -69,7 +69,7 @@ const DonutChart = ({ title, data }) => {
       ...options,
       labels: names,
     });
-  }, []);
+  }, [data]);
 
   return (
     <Paper elevation={5} style={{ height: "100%" }}>

@@ -194,8 +194,8 @@ export const obtainOverallProblemsStatistics = async (userProblems) => {
 export const formatContestsDataForTable = (contestsData) => {
   return {
     "Total Contests Participated": contestsData.total_contests,
-    "Best Rank": contestsData.best_rank,
-    "Worst Rank": contestsData.worst_rank,
+    "Best Rank": contestsData.best_rank ? contestsData.best_rank : "N/A", // If best rank is null, it is taken to be "N/A"
+    "Worst Rank": contestsData.worst_rank ? contestsData.worst_rank : "N/A", // If worst rank is null, it is taken to be "N/A"
     "Highest Rating Increase": contestsData.highest_rating_increase,
     "Highest Rating Decrease": contestsData.highest_rating_decrease,
   };
@@ -209,19 +209,47 @@ export const formatContestsDataForTable = (contestsData) => {
  * @param {Object} - The formatted data as a dictionary to give to the problems table
  */
 export const formatProblemsDataForTable = (problemsData) => {
+  const languageKeys = Object.keys(problemsData.languages);
+  const ratingKeys = Object.keys(problemsData.ratings);
+  const tagKeys = Object.keys(problemsData.tags);
+  const indexKeys = Object.keys(problemsData.indexes);
+
+  // If there is no key in the dictionary, Object.keys returns an empty array on
+  // which reduce() cannot be called. Therefore, we have to check if the array is empty.
+  // eg. If there is no language, preferredLanguage will be taken to be "N/A".
+  const preferredLanguage =
+    languageKeys.length > 0
+      ? languageKeys.reduce((a, b) =>
+          problemsData.languages[a] > problemsData.languages[b] ? a : b
+        )
+      : "N/A";
+
+  const ratingMostSolved =
+    ratingKeys.length > 0
+      ? ratingKeys.reduce((a, b) =>
+          problemsData.ratings[a] > problemsData.ratings[b] ? a : b
+        )
+      : "N/A";
+
+  const tagMostSolved =
+    tagKeys.length > 0
+      ? tagKeys.reduce((a, b) =>
+          problemsData.tags[a] > problemsData.tags[b] ? a : b
+        )
+      : "N/A";
+
+  const indexMostSolved =
+    indexKeys.length > 0
+      ? indexKeys.reduce((a, b) =>
+          problemsData.indexes[a] > problemsData.indexes[b] ? a : b
+        )
+      : "N/A";
+
   return {
     "Total Problems Solved": problemsData.total_problems,
-    "Preferred Language": Object.keys(problemsData.languages).reduce((a, b) =>
-      problemsData.languages[a] > problemsData.languages[b] ? a : b
-    ),
-    "Rating Most Solved": Object.keys(problemsData.ratings).reduce((a, b) =>
-      problemsData.ratings[a] > problemsData.ratings[b] ? a : b
-    ),
-    "Tag Most Solved": Object.keys(problemsData.tags).reduce((a, b) =>
-      problemsData.tags[a] > problemsData.tags[b] ? a : b
-    ),
-    "Index Most Solved": Object.keys(problemsData.indexes).reduce((a, b) =>
-      problemsData.indexes[a] > problemsData.indexes[b] ? a : b
-    ),
+    "Preferred Language": preferredLanguage,
+    "Rating Most Solved": ratingMostSolved,
+    "Tag Most Solved": tagMostSolved,
+    "Index Most Solved": indexMostSolved,
   };
 };

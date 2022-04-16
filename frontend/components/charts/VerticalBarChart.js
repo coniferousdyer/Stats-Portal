@@ -72,7 +72,7 @@ const VerticalBarChart = ({ title, data, color, dataName }) => {
         categories: names,
       },
     });
-  }, []);
+  }, [data]);
 
   return (
     <Paper elevation={5} style={{ height: "100%" }}>

@@ -58,7 +58,7 @@ const LineChart = ({ title, data }) => {
 
     // Update the series
     setSeries([{ name: "Rating", data: ratingHistory }]);
-  }, []);
+  }, [data]);
 
   return (
     <Paper elevation={5} style={{ height: "100%" }}>

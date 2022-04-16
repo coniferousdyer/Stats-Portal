@@ -46,7 +46,6 @@ const HorizontalBarChart = ({ title, data, color, dataName, buttonLink }) => {
     // to convert into 2 arrays: names and values.
     const names = data.map((item) => item[0]);
     const values = data.map((item) => item[1]);
-    console.log(data);
 
     // Update the series and options
     setSeries([{ name: dataName, data: values }]);
@@ -56,7 +55,7 @@ const HorizontalBarChart = ({ title, data, color, dataName, buttonLink }) => {
         categories: names,
       },
     });
-  }, []);
+  }, [data]);
 
   return (
     <Paper elevation={5} style={{ height: "100%" }}>
