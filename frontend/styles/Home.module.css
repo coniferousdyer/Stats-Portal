@@ -20,24 +20,6 @@
     margin-bottom: 5vw;
 }
 
-.heading_container {
-    width: 100%;
-    margin-top: 7vw;
-}
-
-.heading_prefix {
-    margin: 0 0 -1vw;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 200;
-    font-size: 2vw;
-}
-
-.heading_name {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    font-size: 5vw;
-}
-
 .user_information_container {
     width: 100%;
     display: flex;
@@ -45,17 +27,7 @@
     margin-top: 4vw;
 }
 
-.time_period_select_container {
-    width: 100%;
-    display: flex;
-    justify-content: right;
-}
-
-.time_period_select {
-    font-family: 'Poppins', sans-serif;
-}
-
-.problems_stats_container {
+.flex_wrap_container {
     width: 100%;
     margin-top: 4vw;
     display: flex;
@@ -81,43 +53,15 @@
 }
 
 @media screen and (min-width: 600px) and (max-width: 900px) {
-    .heading_container {
-        margin-top: 10vw;
-    }
-
-    .heading_prefix {
-        font-size: 3vw;
-    }
-
-    .heading_name {
-        font-size: 7vw;
-    }
-
     .one_third_chart_container, .half_chart_container {
         width: 100%;
     }
 }
 
 @media screen and (max-width: 600px) {
-    .heading_container {
-        margin-top: 15vw;
-    }
-
-    .heading_prefix {
-        font-size: 5vw;
-    }
-
-    .heading_name {
-        font-size: 10vw;
-    }
-
     .user_information_container {
         flex-wrap: wrap;
         margin-top: 7vw;
-    }
-
-    .time_period_select_container {
-        margin-top: 10vw;
     }
 
     .one_third_chart_container, .half_chart_container {

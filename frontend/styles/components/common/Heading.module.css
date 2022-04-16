@@ -1,0 +1,45 @@
+.heading_container {
+    width: 100%;
+    margin-top: 7vw;
+}
+
+.heading_prefix {
+    margin: 0 0 -1vw;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 200;
+    font-size: 2vw;
+}
+
+.heading_name {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 5vw;
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+    .heading_container {
+        margin-top: 10vw;
+    }
+
+    .heading_prefix {
+        font-size: 3vw;
+    }
+
+    .heading_name {
+        font-size: 7vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .heading_container {
+        margin-top: 15vw;
+    }
+
+    .heading_prefix {
+        font-size: 5vw;
+    }
+
+    .heading_name {
+        font-size: 10vw;
+    }
+}

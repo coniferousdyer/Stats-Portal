@@ -1,16 +1,15 @@
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Heading from "../components/common/Heading";
 import Navbar from "../components/common/Navbar";
 import KeyValueCard from "../components/common/KeyValueCard";
+import TimePeriodDropdown from "../components/common/TimePeriodDropdown";
 import InformationTable from "../components/tables/InformationTable";
 import DonutChart from "../components/charts/DonutChart";
 import VerticalBarChart from "../components/charts/VerticalBarChart";
 import HorizontalBarChart from "../components/charts/HorizontalBarChart";
+import DescriptorCard from "../components/common/DescriptorCard";
 import styles from "../styles/Home.module.css";
 import {
   formatContestsDataForTable,
@@ -39,12 +38,10 @@ export default function Home({
 
       <div className={styles.stats_container}>
         {/* Heading */}
-        <div className={styles.heading_container}>
-          <h1 className={styles.heading_prefix}>welcome to the stats portal for</h1>
-          <h1 className={styles.heading_name}>
-            {organizationInformation.name}
-          </h1>{" "}
-        </div>
+        <Heading
+          prefixHeading={"welcome to the stats portal for"}
+          mainHeading={organizationInformation.name}
+        />
 
         {/* Organization Information Cards */}
         <div className={styles.user_information_container}>
@@ -70,43 +67,12 @@ export default function Home({
           />
         </div>
 
-        <div className={styles.problems_stats_container}>
+        <div className={styles.flex_wrap_container}>
           {/* Time Period Select Dropdown */}
-          <div className={styles.time_period_select_container}>
-            <FormControl>
-              <InputLabel id="demo-simple-select-label">Time Period</InputLabel>
-              <Select
-                labelId="time-period-select-label"
-                id="time-period-select"
-                value={timePeriod}
-                label="Time Period"
-                onChange={(event) => setTimePeriod(event.target.value)}
-                className={styles.time_period_select}
-              >
-                <MenuItem
-                  value={"all_time"}
-                  className={styles.time_period_select}
-                >
-                  All Time
-                </MenuItem>
-                <MenuItem
-                  value={"this_month"}
-                  className={styles.time_period_select}
-                >
-                  This Month
-                </MenuItem>
-                <MenuItem
-                  value={"this_week"}
-                  className={styles.time_period_select}
-                >
-                  This Week
-                </MenuItem>
-                <MenuItem value={"today"} className={styles.time_period_select}>
-                  Today
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </div>
+          <TimePeriodDropdown
+            timePeriod={timePeriod}
+            setTimePeriod={setTimePeriod}
+          />
 
           {/* Problems Solved Leaderboard Bar Chart */}
           <div className={styles.one_third_chart_container}>
@@ -182,6 +148,45 @@ export default function Home({
               data={overallProblems[timePeriod].ratings}
               color={"#2196f3"}
               dataName={"Problems Solved"}
+            />
+          </div>
+        </div>
+
+        {/* Sections Heading */}
+        <Heading
+          prefixHeading={"have a look at the"}
+          mainHeading={"other sections"}
+        />
+
+        <div className={styles.flex_wrap_container}>
+          {/* Leaderboard Section Card */}
+          <div className={styles.half_chart_container}>
+            <DescriptorCard
+              title={"LEADERBOARDS"}
+              description={`View the leaderboards for ${organizationInformation["name"]} and see where you stand among ${organizationInformation["name"]}'s elite.`}
+              imageLink={"/images/leaderboard_img.png"}
+              buttonText={"View Leaderboards >>"}
+              buttonLink={"/leaderboards"}
+            />
+          </div>
+          {/* Users Section Card */}
+          <div className={styles.half_chart_container}>
+            <DescriptorCard
+              title={"USER VISUALIZER"}
+              description={`View visualized analytics for any user in ${organizationInformation["name"]}.`}
+              imageLink={"/images/user_img.png"}
+              buttonText={"View User Visualizer >>"}
+              buttonLink={"/user"}
+            />
+          </div>
+          {/* Compare Section Card */}
+          <div className={styles.half_chart_container}>
+            <DescriptorCard
+              title={"COMPARE"}
+              description={`Compare statistics for any two users in ${organizationInformation["name"]}.`}
+              imageLink={"/images/compare_img.png"}
+              buttonText={"Compare Users >>"}
+              buttonLink={"/compare"}
             />
           </div>
         </div>
