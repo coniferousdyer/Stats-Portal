@@ -228,7 +228,7 @@ export const getStaticProps = async () => {
       overallContests: overallContestsStatistics,
       overallProblems: overallProblemsStatistics,
     },
-    // If a request is made an hour after the page was last generated, the page
+    // If a request is made 5 minutes after the page was last generated, the page
     // is regenerated. As the data in the backend remains static for some time,
     // this is not an issue.
     revalidate: 3600,

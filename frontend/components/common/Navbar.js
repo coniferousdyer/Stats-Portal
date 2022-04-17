@@ -93,8 +93,8 @@ const Navbar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem>
-                  <Link key={page["name"]} href={page["link"]} passHref>
+                <MenuItem key={page["name"]}>
+                  <Link href={page["link"]} passHref>
                     <Typography
                       textAlign="center"
                       className={`${styles.unweighted_link} ${styles.menu_link}`}

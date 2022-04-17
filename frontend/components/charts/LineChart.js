@@ -52,8 +52,8 @@ const LineChart = ({ title, data }) => {
     // format for the line chart, we need to first convert each object to the format
     // { x: (value_x in type datetime), y: value_y } for the time series to be valid.
     const ratingHistory = data.map((rating) => ({
-      x: new Date(rating.x).getTime(),
-      y: rating.y,
+      x: new Date(rating.date).getTime(),
+      y: rating.rating,
     }));
 
     // Update the series
