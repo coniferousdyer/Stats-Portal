@@ -6,8 +6,8 @@ import Navbar from "../../components/common/Navbar";
 import KeyValueCard from "../../components/common/KeyValueCard";
 import TimePeriodDropdown from "../../components/common/TimePeriodDropdown";
 import InformationTable from "../../components/tables/InformationTable";
-import DonutChart from "../../components/charts/DonutChart";
-import VerticalBarChart from "../../components/charts/VerticalBarChart";
+import PieChart from "../../components/charts/PieChart";
+import BarChart from "../../components/charts/BarChart";
 import LineChart from "../../components/charts/LineChart";
 import styles from "../../styles/pages/user/User.module.css";
 import {
@@ -75,53 +75,70 @@ const User = ({ userInformation, userContests, userProblems }) => {
           <div className={styles.half_chart_container}>
             <InformationTable
               title={"Contest Statistics"}
-              data={formatContestsDataForTable(userContests[timePeriod])}
+              dataList={[formatContestsDataForTable(userContests[timePeriod])]}
             />
           </div>
           {/* Problems Statistics Table */}
           <div className={styles.half_chart_container}>
             <InformationTable
               title={"Problem Statistics"}
-              data={formatProblemsDataForTable(userProblems[timePeriod])}
+              dataList={[formatProblemsDataForTable(userProblems[timePeriod])]}
             />
           </div>
           {/* Language Distribution Chart */}
           <div className={styles.half_chart_container}>
-            <DonutChart
+            <PieChart
               title={`Languages Used by ${userInformation.handle}`}
+              donut={true}
               data={userProblems[timePeriod].languages}
-            />
+              />
           </div>
           {/* Tag Distribution Donut Chart */}
           <div className={styles.half_chart_container}>
-            <DonutChart
+            <PieChart
               title={`Problem Tags Solved by ${userInformation.handle}`}
+              donut={true}
               data={userProblems[timePeriod].tags}
             />
           </div>
           {/* Index Distribution Bar Chart */}
           <div className={styles.half_chart_container}>
-            <VerticalBarChart
+            <BarChart
               title={`Problem Indexes Solved by ${userInformation.handle}`}
-              data={userProblems[timePeriod].indexes}
+              horizontal={false}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: userProblems[timePeriod].indexes,
+                },
+              ]}
               color={"#ff1744"}
-              dataName={"Problems Solved"}
             />
           </div>
           {/* Ratings Distribution Bar Chart */}
           <div className={styles.half_chart_container}>
-            <VerticalBarChart
+            <BarChart
               title={`Problem Ratings Solved by ${userInformation.handle}`}
-              data={userProblems[timePeriod].ratings}
+              horizontal={false}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: userProblems[timePeriod].ratings,
+                },
+              ]}
               color={"#2196f3"}
-              dataName={"Problems Solved"}
             />
           </div>
           {/* Rating History Line Chart */}
           <div className={styles.full_chart_container}>
             <LineChart
               title={`Rating History for ${userInformation.handle}`}
-              data={userContests[timePeriod].rating_history}
+              dataList={[
+                {
+                  name: "Rating",
+                  series: userContests[timePeriod].rating_history,
+                },
+              ]}
             />
           </div>
         </div>
@@ -132,7 +149,7 @@ const User = ({ userInformation, userContests, userProblems }) => {
 
 export default User;
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
   // Extracting handle from URL
   const handle = context.params.handle;
 
@@ -152,32 +169,5 @@ export const getStaticProps = async (context) => {
       userContests: await userContests.data,
       userProblems: await userProblems.data,
     },
-    // If any request is made an hour after the last one, the page will be regenerated.
-    // Only the requested page is regenerated, not the whole application.
-    revalidate: 3600,
-  };
-};
-
-export const getStaticPaths = async () => {
-  // Getting information of all users from the database. We need this to
-  // pregenerate the pages on build time.
-  const URL = "http://localhost:5000/users";
-  const users = await axios.get(URL);
-  const usersData = await users.data;
-
-  // Obtaining essentially an array of user handles to build the pages for each user.
-  // This is run once at build time and so subsequent requests will serve static
-  // pages, resulting in much lower load times.
-  const paths = usersData.map((user) => ({
-    params: { handle: user["handle"] },
-  }));
-
-  // If the path still doesn't exist after the static build, the page will be
-  // server-rendered on-demand, if fallback is set to "blocking", instead of
-  // displaying a 404. This is just a fallback in case of any mismatches between
-  // backend database updates and the frontend static build.
-  return {
-    paths: paths,
-    fallback: "blocking",
   };
 };

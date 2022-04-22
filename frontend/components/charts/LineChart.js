@@ -6,8 +6,9 @@ import styles from "../../styles/components/charts/LineChart.module.css";
 // Dynamic import that fixes the "ReferenceError: window is not defined" error
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-// The data passed in, i.e. "data", must be of the form [{ x: value_x, y: value_y }, ...]
-const LineChart = ({ title, data }) => {
+// dataList is an array of arrays. Each array corresponds to a particular user.
+// Each member of the dataList passed in must be of the form [{ x: value_x, y: value_y }, ...]
+const LineChart = ({ title, dataList }) => {
   // The data series supplied to the chart
   const [series, setSeries] = useState([]);
   // The chart configuration options
@@ -48,17 +49,24 @@ const LineChart = ({ title, data }) => {
 
   // Modify the passed data into a format that ApexCharts can understand
   useEffect(() => {
-    // data is of the form [{ x: value_x, y: value_y }, ...]. While this is a valid
-    // format for the line chart, we need to first convert each object to the format
-    // { x: (value_x in type datetime), y: value_y } for the time series to be valid.
-    const ratingHistory = data.map((rating) => ({
-      x: new Date(rating.date).getTime(),
-      y: rating.rating,
-    }));
+    const dataSeries = dataList.map((data) => {
+      // data is of the form [{ x: value_x, y: value_y }, ...]. While this is a valid
+      // format for the line chart, we need to first convert each object to the format
+      // { x: (value_x in type datetime), y: value_y } for the time series to be valid.
+      const ratingHistory = data.series.map((rating) => ({
+        x: new Date(rating.date).getTime(),
+        y: rating.rating,
+      }));
+
+      return {
+        name: data.name,
+        data: ratingHistory,
+      };
+    });
 
     // Update the series
-    setSeries([{ name: "Rating", data: ratingHistory }]);
-  }, [data]);
+    setSeries(dataSeries);
+  }, [dataList]);
 
   return (
     <Paper elevation={5} style={{ height: "100%" }}>

@@ -1,19 +1,19 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
-import styles from "../../styles/components/charts/DonutChart.module.css";
+import styles from "../../styles/components/charts/PieChart.module.css";
 
 // Dynamic import that fixes the "ReferenceError: window is not defined" error
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 // The data passed in, i.e. "data", must be of the form { name_1: value_1, name_2: value_2, ... }
-const DonutChart = ({ title, data }) => {
+const PieChart = ({ title, donut, data }) => {
   // The data series supplied to the chart
   const [series, setSeries] = useState([]);
   // The chart configuration options
   const [options, setOptions] = useState({
     chart: {
-      type: "donut",
+      type: donut ? "donut" : "pie",
     },
     legend: {
       show: true,
@@ -56,15 +56,10 @@ const DonutChart = ({ title, data }) => {
     const names = Object.keys(data).sort((a, b) => data[b] - data[a]);
     const values = Object.values(data).sort((a, b) => b - a);
 
-    // Remove "handle" from names and the handle from values. These are merely
-    // record identifiers and should not be displayed on the chart.
-    names.splice(names.indexOf("handle"), 1);
-    values.splice(values.indexOf(data["handle"]), 1);
-
     // Update the series
     setSeries(values);
 
-    // Add the newly created labels to the configuraion options
+    // Add the newly created labels to the configuration options
     setOptions({
       ...options,
       labels: names,
@@ -74,9 +69,9 @@ const DonutChart = ({ title, data }) => {
   return (
     <Paper elevation={5} style={{ height: "100%" }}>
       <h1 className={styles.title}>{title.toUpperCase()}</h1>
-      <Chart options={options} series={series} type="donut" />
+      <Chart options={options} series={series} type={donut ? "donut" : "pie"} />
     </Paper>
   );
 };
 
-export default DonutChart;
+export default PieChart;

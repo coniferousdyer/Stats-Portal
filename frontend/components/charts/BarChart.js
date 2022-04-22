@@ -3,37 +3,47 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import styles from "../../styles/components/charts/HorizontalBarChart.module.css";
+import styles from "../../styles/components/charts/BarChart.module.css";
 
 // Dynamic import that fixes the "ReferenceError: window is not defined" error
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 // The data passed in, i.e. "data", must be of the form [[name_1, object_1], [name_2, object_2], ...]
-const HorizontalBarChart = ({ title, data, color, dataName, buttonLink }) => {
+const BarChart = ({
+  title,
+  horizontal,
+  dataList,
+  color,
+  buttonText,
+  buttonLink,
+}) => {
   // The data series supplied to the chart
   const [series, setSeries] = useState([]);
   // The chart configuration options
   const [options, setOptions] = useState({
     chart: {
       type: "bar",
-      height: 350,
     },
     plotOptions: {
       bar: {
         borderRadius: 4,
-        horizontal: true,
+        horizontal: horizontal,
       },
     },
     dataLabels: {
       enabled: false,
     },
-    colors: [color],
     responsive: [
       {
         breakpoint: 600,
         options: {
           chart: {
             height: 350,
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true,
+            },
           },
         },
       },
@@ -42,28 +52,39 @@ const HorizontalBarChart = ({ title, data, color, dataName, buttonLink }) => {
 
   // Modify the passed data into a format that ApexCharts can understand
   useEffect(() => {
-    // data is of the form [[name_1, object_1], [name_2, object_2], ...]. We need
-    // to convert into 2 arrays: names and values.
-    const names = data.map((item) => item[0]);
-    const values = data.map((item) => item[1]);
+    // Obtain the sorted set of all keys in the data
+    let names = [];
+    names = [
+      ...new Set(...names, ...dataList.map((data) => Object.keys(data.series))),
+    ];
 
-    // Update the series and options
-    setSeries([{ name: dataName, data: values }]);
+    const dataSeries = dataList.map((data) => {
+      return {
+        name: data.name,
+        data: names.map((name) => data.series[name] || 0),
+      };
+    });
+
+    // Update the series
+    setSeries(dataSeries);
+
+    // Update the chart configuration with the new names and color, if defined
     setOptions({
       ...options,
+      ...(color && { colors: color }),
       xaxis: {
         categories: names,
       },
     });
-  }, [data]);
+  }, [dataList]);
 
   return (
     <Paper elevation={5} style={{ height: "100%" }}>
       <h1 className={styles.title}>{title.toUpperCase()}</h1>
       <Chart options={options} series={series} type="bar" />
-      {buttonLink && (
+      {buttonText && (
         <div className={styles.button_container}>
-          <Link href={buttonLink} passHref>
+          <Link href={buttonLink ? buttonLink : ""} passHref>
             <Button
               variant="contained"
               style={{
@@ -73,7 +94,7 @@ const HorizontalBarChart = ({ title, data, color, dataName, buttonLink }) => {
                 fontWeight: 600,
               }}
             >
-              {"View All >>"}
+              {buttonText}
             </Button>
           </Link>
         </div>
@@ -82,4 +103,4 @@ const HorizontalBarChart = ({ title, data, color, dataName, buttonLink }) => {
   );
 };
 
-export default HorizontalBarChart;
+export default BarChart;

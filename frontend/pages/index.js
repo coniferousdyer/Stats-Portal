@@ -6,9 +6,8 @@ import Navbar from "../components/common/Navbar";
 import KeyValueCard from "../components/common/KeyValueCard";
 import TimePeriodDropdown from "../components/common/TimePeriodDropdown";
 import InformationTable from "../components/tables/InformationTable";
-import DonutChart from "../components/charts/DonutChart";
-import VerticalBarChart from "../components/charts/VerticalBarChart";
-import HorizontalBarChart from "../components/charts/HorizontalBarChart";
+import PieChart from "../components/charts/PieChart";
+import BarChart from "../components/charts/BarChart";
 import DescriptorCard from "../components/common/DescriptorCard";
 import styles from "../styles/Home.module.css";
 import {
@@ -76,31 +75,50 @@ export default function Home({
 
           {/* Problems Solved Leaderboard Bar Chart */}
           <div className={styles.one_third_chart_container}>
-            <HorizontalBarChart
+            <BarChart
               title={`Most Problems Solved in ${organizationInformation.name}`}
-              data={overallProblems[timePeriod].most_problems_solved}
+              horizontal={true}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: overallProblems[timePeriod].most_problems_solved,
+                },
+              ]}
               color={"#2196f3"}
-              dataName={"Problems Solved"}
+              buttonText={"View All >>"}
               buttonLink={"/leaderboards/problems-solved"}
             />
           </div>
-          {/* Contests Given Leaderboard Table */}
+          {/* Contests Given Leaderboard Bar Chart */}
           <div className={styles.one_third_chart_container}>
-            <HorizontalBarChart
+            <BarChart
               title={`Most Contests Given in ${organizationInformation.name}`}
-              data={overallContests[timePeriod].most_contests_participated}
+              horizontal={true}
+              dataList={[
+                {
+                  name: "Contests Participated",
+                  series:
+                    overallContests[timePeriod].most_contests_participated,
+                },
+              ]}
               color={"#32cd32"}
-              dataName={"Contests Participated"}
+              buttonText={"View All >>"}
               buttonLink={"/leaderboards/contests-participated"}
             />
           </div>
-          {/* Highest Rank Leaderboard Table */}
+          {/* Highest Rank Leaderboard Bar Chart */}
           <div className={styles.one_third_chart_container}>
-            <HorizontalBarChart
+            <BarChart
               title={`Best Contest Ranks in ${organizationInformation.name}`}
-              data={overallContests[timePeriod].best_contest_ranks}
+              horizontal={true}
+              dataList={[
+                {
+                  name: "Highest Rank",
+                  series: overallContests[timePeriod].best_contest_ranks,
+                },
+              ]}
               color={"#dc143c"}
-              dataName={"Highest Rank"}
+              buttonText={"View All >>"}
               buttonLink={"/leaderboards/contest-ranks"}
             />
           </div>
@@ -108,46 +126,62 @@ export default function Home({
           <div className={styles.half_chart_container}>
             <InformationTable
               title={"Contest Statistics"}
-              data={formatContestsDataForTable(overallContests[timePeriod])}
+              dataList={[
+                formatContestsDataForTable(overallContests[timePeriod]),
+              ]}
             />
           </div>
           {/* Problems Statistics Table */}
           <div className={styles.half_chart_container}>
             <InformationTable
               title={"Problem Statistics"}
-              data={formatProblemsDataForTable(overallProblems[timePeriod])}
+              dataList={[
+                formatProblemsDataForTable(overallProblems[timePeriod]),
+              ]}
             />
           </div>
           {/* Language Distribution Chart */}
           <div className={styles.half_chart_container}>
-            <DonutChart
+            <PieChart
               title={`Languages Used by ${organizationInformation.name}`}
+              donut={true}
               data={overallProblems[timePeriod].languages}
             />
           </div>
           {/* Tag Distribution Donut Chart */}
           <div className={styles.half_chart_container}>
-            <DonutChart
+            <PieChart
               title={`Problem Tags Solved by ${organizationInformation.name}`}
+              donut={true}
               data={overallProblems[timePeriod].tags}
             />
           </div>
           {/* Index Distribution Bar Chart */}
           <div className={styles.half_chart_container}>
-            <VerticalBarChart
+            <BarChart
               title={`Problem Indexes Solved by ${organizationInformation.name}`}
-              data={overallProblems[timePeriod].indexes}
+              horizontal={false}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: overallProblems[timePeriod].indexes,
+                },
+              ]}
               color={"#ff1744"}
-              dataName={"Problems Solved"}
             />
           </div>
           {/* Ratings Distribution Bar Chart */}
           <div className={styles.half_chart_container}>
-            <VerticalBarChart
+            <BarChart
               title={`Problem Ratings Solved by ${organizationInformation.name}`}
-              data={overallProblems[timePeriod].ratings}
+              horizontal={false}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: overallProblems[timePeriod].ratings,
+                },
+              ]}
               color={"#2196f3"}
-              dataName={"Problems Solved"}
             />
           </div>
         </div>

@@ -80,9 +80,7 @@ export const obtainOverallContestsStatistics = async (userContests) => {
     // If no contests have been given, there is no need to find the top 10 users
     if (overallStatistics[time].total_contests > 0) {
       // Sort the users according to the number of contests they have participated in
-      overallStatistics[time].most_contests_participated = Object.entries(
-        userContests
-      )
+      const top10ContestsParticipatedList = Object.entries(userContests)
         .sort((a, b) => {
           return (
             userContests[b[0]][time].total_contests -
@@ -93,7 +91,7 @@ export const obtainOverallContestsStatistics = async (userContests) => {
         .map((user) => [user[0], user[1][time].total_contests]);
 
       // Sort the users according to their best contest rank
-      overallStatistics[time].best_contest_ranks = Object.entries(userContests)
+      const top10BestRanksList = Object.entries(userContests)
         .sort((a, b) => {
           return (
             userContests[a[0]][time].best_rank -
@@ -102,9 +100,17 @@ export const obtainOverallContestsStatistics = async (userContests) => {
         })
         .slice(0, 10)
         .map((user) => [user[0], user[1][time].best_rank]);
+
+      // Convert the lists to an object with the user as the key and the corresponding value as key.
+      // This is so that they can be fed to the bar chart component.
+      overallStatistics[time].most_contests_participated = Object.fromEntries(
+        top10ContestsParticipatedList
+      );
+      overallStatistics[time].best_contest_ranks =
+        Object.fromEntries(top10BestRanksList);
     } else {
-      overallStatistics[time].most_contests_participated = [];
-      overallStatistics[time].best_contest_ranks = [];
+      overallStatistics[time].most_contests_participated = {};
+      overallStatistics[time].best_contest_ranks = {};
     }
   });
 
@@ -165,9 +171,7 @@ export const obtainOverallProblemsStatistics = async (userProblems) => {
     // If no problems have been solved, there is no need to find the top 10 users
     if (overallStatistics[time].total_problems > 0) {
       // Sort the users by the number of problems solved in the time period and get the top 10
-      overallStatistics[time].most_problems_solved = Object.entries(
-        userProblems
-      )
+      const top10ProblemsSolvedList = Object.entries(userProblems)
         .sort((a, b) => {
           return (
             userProblems[b[0]][time].total_problems -
@@ -176,12 +180,38 @@ export const obtainOverallProblemsStatistics = async (userProblems) => {
         })
         .slice(0, 10)
         .map((user) => [user[0], user[1][time].total_problems]);
+
+      // Converting the top 10 list to an object with the user as the key and the number of problems solved as the value.
+      // We do this so that it can be fed to the bar chart component.
+      overallStatistics[time].most_problems_solved = Object.fromEntries(
+        top10ProblemsSolvedList
+      );
     } else {
-      overallStatistics[time].most_problems_solved = [];
+      overallStatistics[time].most_problems_solved = {};
     }
   });
 
   return overallStatistics;
+};
+
+/**
+ * Takes in the information obtained about a user from the backend and returns
+ * the formatted data as a dictionary to give to the user information table.
+ *
+ * @param {Object} informationData - The data about a user's information
+ * @returns {Object} - The formatted data as a dictionary to give to the user information table
+ */
+export const formatInformationDataForTable = (informationData) => {
+  return {
+    Handle: informationData.handle,
+    "User Since": informationData.creation_date
+      .split(" ")
+      .slice(0, 4)
+      .join(" "),
+    Rank: informationData.rank,
+    Rating: informationData.rating,
+    "Maximum Rating": informationData.max_rating,
+  };
 };
 
 /**
