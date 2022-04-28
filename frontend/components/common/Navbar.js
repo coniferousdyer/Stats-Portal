@@ -27,7 +27,7 @@ const Navbar = () => {
     },
     {
       name: "User Visualizer",
-      link: "/users",
+      link: "/user",
       icon: <PersonIcon className={styles.link_icon} />,
     },
     {

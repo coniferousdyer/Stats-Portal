@@ -39,6 +39,9 @@ const LineChart = ({ title, dataList }) => {
       {
         breakpoint: 900,
         options: {
+          chart: {
+            height: 350,
+          },
           stroke: {
             width: 2,
           },

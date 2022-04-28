@@ -38,7 +38,7 @@ const BarChart = ({
         breakpoint: 600,
         options: {
           chart: {
-            height: 350,
+            height: 750,
           },
           plotOptions: {
             bar: {
@@ -87,12 +87,7 @@ const BarChart = ({
           <Link href={buttonLink ? buttonLink : ""} passHref>
             <Button
               variant="contained"
-              style={{
-                marginTop: "1.5vw",
-                width: "95%",
-                fontFamily: "Poppins, sans-serif",
-                fontWeight: 600,
-              }}
+              className={styles.button}
             >
               {buttonText}
             </Button>

@@ -10,6 +10,13 @@
     justify-content: center;
 }
 
+.button {
+    margin-top: 1.5vw;
+    width: 95%;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+
 @media screen and (min-width: 600px) and (max-width: 900px) {
     .title {
         font-size: 2vw;
