@@ -1,9 +1,12 @@
+// Material UI components
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
+// CSS styles
 import styles from "../../styles/components/tables/InformationTable.module.css";
 
 // dataList is an array of objects, all having the same keys. For each key, there will be

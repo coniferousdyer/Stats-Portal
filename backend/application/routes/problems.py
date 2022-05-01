@@ -5,8 +5,11 @@ under the /problems blueprint.
 
 from flask import Blueprint, jsonify
 
-from application.models.models import Problem
-from application.utils.common import get_all_rows_as_dict
+from application.models.models import Metadata, Problem
+from application.utils.common import (
+    get_all_rows_as_dict,
+    convert_datestring_to_datetime,
+)
 
 
 # Blueprint for problem-related endpoints
@@ -20,4 +23,15 @@ def get_all_problems():
     """
 
     problems = get_all_rows_as_dict(Problem.query.all())
-    return jsonify(problems), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "problems": problems,
+            }
+        ),
+        200,
+    )

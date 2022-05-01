@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
 
-// Material UI Components
+// Material UI components
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -32,6 +32,7 @@ import {
 
 const User = ({
   handleProvided,
+  lastUpdateTime,
   error,
   userInformation,
   userContests,
@@ -53,45 +54,177 @@ const User = ({
     setHandle(event.target.value);
   };
 
-  // The user handle form component
+  // The user handle input component
   const HandleForm = () => {
     return (
-      <Box component="form" className={styles.form_container}>
-        <FormControl
-          variant="outlined"
-          required
-          fullWidth
-          error={handleError ? true : false}
-        >
-          <InputLabel
-            htmlFor="handle-input"
-            className={styles.handle_input}
-            required={false}
-          >
-            Enter handle of user whose statistics you want to view
-          </InputLabel>
-          <OutlinedInput
-            id="handle-input"
-            name="handle"
-            className={styles.handle_input}
-            label="Enter handle of user whose statistics you want to view"
-            value={handle}
-            onChange={handleChange}
+      <div className={styles.stats_container}>
+        {/* Heading */}
+        <Heading
+          prefixHeading={"view individual statistics with the"}
+          mainHeading={"user visualizer"}
+        />
+
+        {/* Handle Input Field */}
+        <div className={styles.half_chart_container}>
+          <Box component="form" className={styles.form_container}>
+            <FormControl
+              variant="outlined"
+              required
+              fullWidth
+              error={handleError ? true : false}
+            >
+              <InputLabel
+                htmlFor="handle-input"
+                className={styles.handle_input}
+                required={false}
+              >
+                Enter handle of user whose statistics you want to view
+              </InputLabel>
+              <OutlinedInput
+                id="handle-input"
+                name="handle"
+                className={styles.handle_input}
+                label="Enter handle of user whose statistics you want to view"
+                value={handle}
+                onChange={handleChange}
+              />
+              {handleError && (
+                <FormHelperText id="handle-input">{handleError}</FormHelperText>
+              )}
+            </FormControl>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={styles.submit_button}
+            >
+              Submit
+            </Button>
+          </Box>
+        </div>
+      </div>
+    );
+  };
+
+  // The user statistics component
+  const UserStats = () => {
+    return (
+      <div className={styles.stats_container}>
+        {/* Heading */}
+        <Heading
+          prefixHeading={"statistics for"}
+          mainHeading={userInformation.handle}
+          suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
+        />
+
+        {/* User Information Cards */}
+        <div className={styles.user_information_container}>
+          <KeyValueCard
+            cardKey={"User Since"}
+            // We convert the string to this format: "Weekday, Day Month Year"
+            cardValue={userInformation["creation_date"]
+              .split(" ")
+              .splice(0, 4)
+              .join(" ")}
+            color={"#dc143c"}
           />
-          {handleError && (
-            <FormHelperText id="handle-input">{handleError}</FormHelperText>
-          )}
-        </FormControl>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={styles.submit_button}
-        >
-          Submit
-        </Button>
-      </Box>
+          <KeyValueCard
+            cardKey={"Rank"}
+            cardValue={userInformation["rank"]}
+            color={"#2196f3"}
+          />
+          <KeyValueCard
+            cardKey={"Rating"}
+            cardValue={userInformation["rating"]}
+            color={"#32cd32"}
+          />
+          <KeyValueCard
+            cardKey={"Maximum Rating"}
+            cardValue={userInformation["max_rating"]}
+            color={"#f39c12"}
+          />
+        </div>
+
+        <div className={styles.flex_wrap_container}>
+          {/* Time Period Select Dropdown */}
+          <TimePeriodDropdown
+            timePeriod={timePeriod}
+            setTimePeriod={setTimePeriod}
+          />
+
+          {/* Contests Statistics Table */}
+          <div className={styles.half_chart_container}>
+            <InformationTable
+              title={"Contest Statistics"}
+              dataList={[formatContestsDataForTable(userContests[timePeriod])]}
+            />
+          </div>
+          {/* Problems Statistics Table */}
+          <div className={styles.half_chart_container}>
+            <InformationTable
+              title={"Problem Statistics"}
+              dataList={[formatProblemsDataForTable(userProblems[timePeriod])]}
+            />
+          </div>
+          {/* Language Distribution Chart */}
+          <div className={styles.half_chart_container}>
+            <PieChart
+              title={`Languages Used by ${userInformation.handle}`}
+              donut={true}
+              data={userProblems[timePeriod].languages}
+            />
+          </div>
+          {/* Tag Distribution Donut Chart */}
+          <div className={styles.half_chart_container}>
+            <PieChart
+              title={`Problem Tags Solved by ${userInformation.handle}`}
+              donut={true}
+              data={userProblems[timePeriod].tags}
+            />
+          </div>
+          {/* Index Distribution Bar Chart */}
+          <div className={styles.half_chart_container}>
+            <BarChart
+              title={`Problem Indexes Solved by ${userInformation.handle}`}
+              horizontal={false}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: userProblems[timePeriod].indexes,
+                },
+              ]}
+              color={"#ff1744"}
+            />
+          </div>
+          {/* Ratings Distribution Bar Chart */}
+          <div className={styles.half_chart_container}>
+            <BarChart
+              title={`Problem Ratings Solved by ${userInformation.handle}`}
+              horizontal={false}
+              dataList={[
+                {
+                  name: "Problems Solved",
+                  series: userProblems[timePeriod].ratings,
+                },
+              ]}
+              color={"#2196f3"}
+            />
+          </div>
+          {/* Rating History Line Chart */}
+          <div className={styles.full_chart_container}>
+            <LineChart
+              title={`Rating History for ${userInformation.handle}`}
+              dataList={[
+                {
+                  name: "Rating",
+                  series: userContests[timePeriod].rating_history,
+                },
+              ]}
+            />
+          </div>
+        </div>
+      </div>
     );
   };
 
@@ -99,146 +232,14 @@ const User = ({
     <div className={styles.container}>
       <Head>
         <title>
-          Stats Portal -{" "}
+          Stats Portal |{" "}
           {handleProvided ? userInformation.handle : "User Visualizer"}
         </title>
-        <meta name="description" content="Generated by create next app" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Navbar />
 
-      {!handleProvided ? (
-        <div className={styles.stats_container}>
-          {/* Heading */}
-          <Heading
-            prefixHeading={"view individual statistics with the"}
-            mainHeading={"user visualizer"}
-          />
-
-          {/* Handle Input Field */}
-          <div className={styles.half_chart_container}>{HandleForm()}</div>
-        </div>
-      ) : (
-        <div className={styles.stats_container}>
-          {/* Heading */}
-          <Heading
-            prefixHeading={"statistics for"}
-            mainHeading={userInformation.handle}
-          />
-
-          {/* User Information Cards */}
-          <div className={styles.user_information_container}>
-            <KeyValueCard
-              cardKey={"User Since"}
-              // We convert the string to this format: "Weekday, Day Month Year"
-              cardValue={userInformation["creation_date"]
-                .split(" ")
-                .splice(0, 4)
-                .join(" ")}
-              color={"#dc143c"}
-            />
-            <KeyValueCard
-              cardKey={"Rank"}
-              cardValue={userInformation["rank"]}
-              color={"#2196f3"}
-            />
-            <KeyValueCard
-              cardKey={"Rating"}
-              cardValue={userInformation["rating"]}
-              color={"#32cd32"}
-            />
-            <KeyValueCard
-              cardKey={"Maximum Rating"}
-              cardValue={userInformation["max_rating"]}
-              color={"#f39c12"}
-            />
-          </div>
-
-          <div className={styles.flex_wrap_container}>
-            {/* Time Period Select Dropdown */}
-            <TimePeriodDropdown
-              timePeriod={timePeriod}
-              setTimePeriod={setTimePeriod}
-            />
-
-            {/* Contests Statistics Table */}
-            <div className={styles.half_chart_container}>
-              <InformationTable
-                title={"Contest Statistics"}
-                dataList={[
-                  formatContestsDataForTable(userContests[timePeriod]),
-                ]}
-              />
-            </div>
-            {/* Problems Statistics Table */}
-            <div className={styles.half_chart_container}>
-              <InformationTable
-                title={"Problem Statistics"}
-                dataList={[
-                  formatProblemsDataForTable(userProblems[timePeriod]),
-                ]}
-              />
-            </div>
-            {/* Language Distribution Chart */}
-            <div className={styles.half_chart_container}>
-              <PieChart
-                title={`Languages Used by ${userInformation.handle}`}
-                donut={true}
-                data={userProblems[timePeriod].languages}
-              />
-            </div>
-            {/* Tag Distribution Donut Chart */}
-            <div className={styles.half_chart_container}>
-              <PieChart
-                title={`Problem Tags Solved by ${userInformation.handle}`}
-                donut={true}
-                data={userProblems[timePeriod].tags}
-              />
-            </div>
-            {/* Index Distribution Bar Chart */}
-            <div className={styles.half_chart_container}>
-              <BarChart
-                title={`Problem Indexes Solved by ${userInformation.handle}`}
-                horizontal={false}
-                dataList={[
-                  {
-                    name: "Problems Solved",
-                    series: userProblems[timePeriod].indexes,
-                  },
-                ]}
-                color={"#ff1744"}
-              />
-            </div>
-            {/* Ratings Distribution Bar Chart */}
-            <div className={styles.half_chart_container}>
-              <BarChart
-                title={`Problem Ratings Solved by ${userInformation.handle}`}
-                horizontal={false}
-                dataList={[
-                  {
-                    name: "Problems Solved",
-                    series: userProblems[timePeriod].ratings,
-                  },
-                ]}
-                color={"#2196f3"}
-              />
-            </div>
-            {/* Rating History Line Chart */}
-            <div className={styles.full_chart_container}>
-              <LineChart
-                title={`Rating History for ${userInformation.handle}`}
-                dataList={[
-                  {
-                    name: "Rating",
-                    series: userContests[timePeriod].rating_history,
-                  },
-                ]}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {!handleProvided ? HandleForm() : UserStats()}
     </div>
   );
 };
@@ -258,7 +259,7 @@ export const getServerSideProps = async (context) => {
   if (handle) {
     // Trimming the handle to remove any whitespace
     handle = handle.trim();
-    
+
     // The base URL is common to information ("/"), user's contests ("/contests-participated")
     // and user's problems solved ("/problems-solved")
     const baseURL = `http://localhost:5000/users/${handle}`;
@@ -283,9 +284,10 @@ export const getServerSideProps = async (context) => {
       return {
         props: {
           handleProvided: true,
-          userInformation: await userInformation.data,
-          userContests: await userContests.data,
-          userProblems: await userProblems.data,
+          lastUpdateTime: userInformation.data.last_update_time,
+          userInformation: userInformation.data.user,
+          userContests: userContests.data.contest_statistics,
+          userProblems: userProblems.data.problem_statistics,
         },
       };
     } catch (error) {

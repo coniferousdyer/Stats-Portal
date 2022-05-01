@@ -23,15 +23,16 @@ def convert_timestamp_to_datetime(timestamp: int):
     return result_date
 
 
-def convert_datestring_to_datetime(datestring: str):
+def convert_datestring_to_datetime(datestring: str, dateformat: str = "%Y-%m-%d"):
     """
     Converts a datestring to a DateTime objext.
 
     Arguments:
-    * datestring - The datestring of format (%Y-%m-%d) to convert.
+    * datestring - The datestring of format of given format to convert.
+    * dateformat - The format of the datestring. Defaults to "%Y-%m-%d".
     """
 
-    return datetime.strptime(datestring, "%Y-%m-%d")
+    return datetime.strptime(datestring, dateformat)
 
 
 def row_to_dict(row: db.Model):

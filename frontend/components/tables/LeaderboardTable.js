@@ -1,4 +1,7 @@
+// Material UI components
 import MUIDataTable from "mui-datatables";
+
+// Helper functions
 import { getRankColor } from "../../helpers/leaderboards";
 
 // data must be of the form [{"handle": handle, "rating": rating, "rank": rank, "data_name": value}, ...]

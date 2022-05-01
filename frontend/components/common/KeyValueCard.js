@@ -1,5 +1,8 @@
+// Material UI components
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+
+// CSS styles
 import styles from "../../styles/components/common/KeyValueCard.module.css";
 
 // The color must be given as a hex code

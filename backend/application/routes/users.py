@@ -6,6 +6,7 @@ under the /users blueprint.
 from flask import Blueprint, jsonify
 
 from application.models.models import (
+    Metadata,
     Contest,
     ProblemSolved,
     User,
@@ -13,7 +14,11 @@ from application.models.models import (
 )
 from application.helpers.contests import get_contest_statistics
 from application.helpers.problems import get_problems_statistics
-from application.utils.common import row_to_dict, get_all_rows_as_dict
+from application.utils.common import (
+    row_to_dict,
+    get_all_rows_as_dict,
+    convert_datestring_to_datetime,
+)
 
 
 # Blueprint for user-related endpoints
@@ -32,7 +37,18 @@ def get_all_users_information():
     """
 
     users = get_all_rows_as_dict(User.query.all())
-    return jsonify(users), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "users": users,
+            }
+        ),
+        200,
+    )
 
 
 @users_routes.route("/<handle>", methods=["GET"])
@@ -51,7 +67,18 @@ def get_user_information(handle: str):
     else:
         user = row_to_dict(user)
 
-    return jsonify(user), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "user": user,
+            }
+        ),
+        200,
+    )
 
 
 """
@@ -82,7 +109,18 @@ def get_all_users_contests_participated():
             contests, contests_participated
         )
 
-    return jsonify(contest_statistics), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "contest_statistics": contest_statistics,
+            }
+        ),
+        200,
+    )
 
 
 @users_routes.route("/<handle>/contests-participated", methods=["GET"])
@@ -115,7 +153,18 @@ def get_user_contests_participated(handle: str):
         contests, contests_participated, rating_history=True
     )
 
-    return jsonify(contest_statistics), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "contest_statistics": contest_statistics,
+            }
+        ),
+        200,
+    )
 
 
 """
@@ -143,7 +192,18 @@ def get_all_users_problems_solved():
         # Obtaining the problem statistics for the user
         problem_statistics[user["handle"]] = get_problems_statistics(problems_solved)
 
-    return jsonify(problem_statistics), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "problem_statistics": problem_statistics,
+            }
+        ),
+        200,
+    )
 
 
 @users_routes.route("/<handle>/problems-solved", methods=["GET"])
@@ -170,4 +230,15 @@ def get_user_problems_solved(handle: str):
     # Obtaining the problem statistics for the user
     problem_statistics = get_problems_statistics(problems_solved)
 
-    return jsonify(problem_statistics), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "problem_statistics": problem_statistics,
+            }
+        ),
+        200,
+    )

@@ -1,8 +1,13 @@
+// External ibrary components
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+
+// Material UI components
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+
+// CSS styles
 import styles from "../../styles/components/charts/BarChart.module.css";
 
 // Dynamic import that fixes the "ReferenceError: window is not defined" error
@@ -85,10 +90,7 @@ const BarChart = ({
       {buttonText && (
         <div className={styles.button_container}>
           <Link href={buttonLink ? buttonLink : ""} passHref>
-            <Button
-              variant="contained"
-              className={styles.button}
-            >
+            <Button variant="contained" className={styles.button}>
               {buttonText}
             </Button>
           </Link>

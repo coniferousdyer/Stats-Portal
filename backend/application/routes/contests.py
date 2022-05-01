@@ -5,9 +5,13 @@ under the /contests blueprint.
 
 from flask import Blueprint, jsonify
 
-from application.models.models import Contest, ContestParticipant
+from application.models.models import Metadata, Contest, ContestParticipant
 from application.helpers.contests import sort_contest_participants
-from application.utils.common import get_all_rows_as_dict, row_to_dict
+from application.utils.common import (
+    get_all_rows_as_dict,
+    row_to_dict,
+    convert_datestring_to_datetime,
+)
 
 
 # Blueprint for contest-related endpoints
@@ -21,7 +25,18 @@ def get_all_contests():
     """
 
     contests = get_all_rows_as_dict(Contest.query.all())
-    return jsonify(contests), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "contests": contests,
+            }
+        ),
+        200,
+    )
 
 
 @contests_routes.route("/<int:contest_id>", methods=["GET"])
@@ -43,7 +58,18 @@ def get_contest(contest_id: int):
     else:
         contest = row_to_dict(contest)
 
-    return jsonify(contest), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "contest": contest,
+            }
+        ),
+        200,
+    )
 
 
 @contests_routes.route("/<int:contest_id>/standings", methods=["GET"])
@@ -72,4 +98,15 @@ def get_contest_standings(contest_id: int):
     # Get the standings
     contest_standings = sort_contest_participants(contest_participants)
 
-    return jsonify(contest_standings), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "contest_standings": contest_standings,
+            }
+        ),
+        200,
+    )

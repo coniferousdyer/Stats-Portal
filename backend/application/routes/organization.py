@@ -7,8 +7,8 @@ from flask import Blueprint, jsonify
 from dotenv import load_dotenv
 from os import environ
 
-from application.models.models import Organization
-from application.utils.common import row_to_dict
+from application.models.models import Metadata, Organization
+from application.utils.common import row_to_dict, convert_datestring_to_datetime
 
 
 load_dotenv()
@@ -38,4 +38,15 @@ def get_organization_information():
     else:
         organization = row_to_dict(organization)
 
-    return jsonify(organization), 200
+    return (
+        jsonify(
+            {
+                "last_update_time": convert_datestring_to_datetime(
+                    Metadata.query.get("last_update_time").value,
+                    "%Y-%m-%d %H:%M:%S.%f%z",
+                ),
+                "organization": organization,
+            }
+        ),
+        200,
+    )

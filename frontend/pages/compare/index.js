@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
 
-// Material UI Components
+// Material UI components
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -29,7 +29,7 @@ import {
   formatProblemsDataForTable,
 } from "../../helpers/organization";
 
-const Compare = ({ handlesProvided, errors, usersList }) => {
+const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
   // The time period for which the user wants to view the statistics
   const [timePeriod, setTimePeriod] = useState("all_time");
   // The values of the handles entered by the user in the fields (if handlesProvided is false).
@@ -77,60 +77,174 @@ const Compare = ({ handlesProvided, errors, usersList }) => {
     window.location.href = `/compare?handles=${mergedHandles}`;
   };
 
-  // The user handle form component
+  // The user handles input component
   const HandleForm = () => {
     return (
-      <Box component="form" className={styles.form_container}>
-        {handles.map((handle, index) => {
-          return (
-            <FormControl
-              key={index}
+      <div className={styles.stats_container}>
+        {/* Heading */}
+        <Heading
+          prefixHeading={"compare user statistics with the"}
+          mainHeading={"compare tool"}
+        />
+
+        {/* Handle Input Fields */}
+        <div className={styles.half_chart_container}>
+          <Box component="form" className={styles.form_container}>
+            {handles.map((handle, index) => {
+              return (
+                <FormControl
+                  key={index}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  error={handleErrors[index] ? true : false}
+                >
+                  <InputLabel
+                    htmlFor={`handle-input-${index}`}
+                    className={styles.handle_input}
+                    required={false}
+                  >
+                    Enter handle of user {index + 1}
+                  </InputLabel>
+                  <OutlinedInput
+                    id={`handle-input-${index}`}
+                    className={styles.handle_input}
+                    label={`Enter handle of user ${index + 1}`}
+                    value={handle}
+                    onChange={(event) => handleChange(event, index)}
+                  />
+                  {handleErrors[index] && (
+                    <FormHelperText id="handle-input">
+                      {handleErrors[index]}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              );
+            })}
+            <Button
               variant="outlined"
-              required
+              className={styles.button}
               fullWidth
-              error={handleErrors[index] ? true : false}
+              onClick={addHandleField}
             >
-              <InputLabel
-                htmlFor={`handle-input-${index}`}
-                className={styles.handle_input}
-                required={false}
-              >
-                Enter handle of user {index + 1}
-              </InputLabel>
-              <OutlinedInput
-                id={`handle-input-${index}`}
-                className={styles.handle_input}
-                label={`Enter handle of user ${index + 1}`}
-                value={handle}
-                onChange={(event) => handleChange(event, index)}
-              />
-              {handleErrors[index] && (
-                <FormHelperText id="handle-input">
-                  {handleErrors[index]}
-                </FormHelperText>
+              Add another handle
+            </Button>
+            {/* Submit Button */}
+            <Button
+              variant="contained"
+              color="primary"
+              className={styles.button}
+              fullWidth
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </Box>
+        </div>
+      </div>
+    );
+  };
+
+  // The user statistics comparison component
+  const UserStatsComparison = () => {
+    return (
+      <div className={styles.stats_container}>
+        {/* Heading */}
+        <Heading
+          prefixHeading={"comparison between"}
+          mainHeading={usersList
+            .map((user) => user.information.handle)
+            .join(", ")}
+          suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
+        />
+
+        <div className={styles.flex_wrap_container}>
+          {/* Time Period Select Dropdown */}
+          <TimePeriodDropdown
+            timePeriod={timePeriod}
+            setTimePeriod={setTimePeriod}
+          />
+
+          {/* User Information Comparison Table */}
+          <div className={styles.user_information_container}>
+            <InformationTable
+              dataList={usersList.map((user) =>
+                formatInformationDataForTable(user.information)
               )}
-            </FormControl>
-          );
-        })}
-        <Button
-          variant="outlined"
-          className={styles.button}
-          fullWidth
-          onClick={addHandleField}
-        >
-          Add another handle
-        </Button>
-        {/* Submit Button */}
-        <Button
-          variant="contained"
-          color="primary"
-          className={styles.button}
-          fullWidth
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      </Box>
+            />
+          </div>
+
+          {/* Contests Statistics Table */}
+          <div className={styles.full_chart_container}>
+            <InformationTable
+              title={"Contest Statistics"}
+              dataList={usersList.map((user) =>
+                formatContestsDataForTable(user.contests[timePeriod])
+              )}
+            />
+          </div>
+          {/* Problems Statistics Table */}
+          <div className={styles.full_chart_container}>
+            <InformationTable
+              title={"Problem Statistics"}
+              dataList={usersList.map((user) =>
+                formatProblemsDataForTable(user.problems[timePeriod])
+              )}
+            />
+          </div>
+          {/* Problem Tags Comparison Bar Chart */}
+          <div className={styles.full_chart_container}>
+            <BarChart
+              title={"Problem Tags"}
+              horizontal={false}
+              dataList={usersList.map((user) => {
+                return {
+                  name: user.information.handle,
+                  series: user.problems[timePeriod].tags,
+                };
+              })}
+            />
+          </div>
+          {/* Problem Indexes Comparison Bar Chart */}
+          <div className={styles.full_chart_container}>
+            <BarChart
+              title={"Problem Indexes"}
+              horizontal={false}
+              dataList={usersList.map((user) => {
+                return {
+                  name: user.information.handle,
+                  series: user.problems[timePeriod].indexes,
+                };
+              })}
+            />
+          </div>
+          {/* Problem Ratings Comparison Bar Chart */}
+          <div className={styles.full_chart_container}>
+            <BarChart
+              title={"Problem Ratings"}
+              horizontal={false}
+              dataList={usersList.map((user) => {
+                return {
+                  name: user.information.handle,
+                  series: user.problems[timePeriod].ratings,
+                };
+              })}
+            />
+          </div>
+          {/* Rating History Line Chart */}
+          <div className={styles.full_chart_container}>
+            <LineChart
+              title={"Rating History"}
+              dataList={usersList.map((user) => {
+                return {
+                  name: user.information.handle,
+                  series: user.contests[timePeriod].rating_history,
+                };
+              })}
+            />
+          </div>
+        </div>
+      </div>
     );
   };
 
@@ -139,126 +253,16 @@ const Compare = ({ handlesProvided, errors, usersList }) => {
       <Head>
         {/* Joining all the handles together to form a comma separated string */}
         <title>
-          Stats Portal - Compare{" "}
+          Stats Portal | Compare{" "}
           {handlesProvided
             ? usersList.map((user) => user.information.handle).join(", ")
             : "Users"}
         </title>
-        <meta name="description" content="Generated by create next app" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Navbar />
 
-      {!handlesProvided ? (
-        <div className={styles.stats_container}>
-          {/* Heading */}
-          <Heading
-            prefixHeading={"compare user statistics with the"}
-            mainHeading={"compare tool"}
-          />
-
-          {/* Handle Input Fields */}
-          <div className={styles.half_chart_container}>{HandleForm()}</div>
-        </div>
-      ) : (
-        <div className={styles.stats_container}>
-          {/* Heading */}
-          <Heading
-            prefixHeading={"comparison between"}
-            mainHeading={usersList
-              .map((user) => user.information.handle)
-              .join(", ")}
-          />
-
-          <div className={styles.flex_wrap_container}>
-            {/* Time Period Select Dropdown */}
-            <TimePeriodDropdown
-              timePeriod={timePeriod}
-              setTimePeriod={setTimePeriod}
-            />
-
-            {/* User Information Comparison Table */}
-            <div className={styles.user_information_container}>
-              <InformationTable
-                dataList={usersList.map((user) =>
-                  formatInformationDataForTable(user.information)
-                )}
-              />
-            </div>
-
-            {/* Contests Statistics Table */}
-            <div className={styles.full_chart_container}>
-              <InformationTable
-                title={"Contest Statistics"}
-                dataList={usersList.map((user) =>
-                  formatContestsDataForTable(user.contests[timePeriod])
-                )}
-              />
-            </div>
-            {/* Problems Statistics Table */}
-            <div className={styles.full_chart_container}>
-              <InformationTable
-                title={"Problem Statistics"}
-                dataList={usersList.map((user) =>
-                  formatProblemsDataForTable(user.problems[timePeriod])
-                )}
-              />
-            </div>
-            {/* Problem Tags Comparison Bar Chart */}
-            <div className={styles.full_chart_container}>
-              <BarChart
-                title={"Problem Tags"}
-                horizontal={false}
-                dataList={usersList.map((user) => {
-                  return {
-                    name: user.information.handle,
-                    series: user.problems[timePeriod].tags,
-                  };
-                })}
-              />
-            </div>
-            {/* Problem Indexes Comparison Bar Chart */}
-            <div className={styles.full_chart_container}>
-              <BarChart
-                title={"Problem Indexes"}
-                horizontal={false}
-                dataList={usersList.map((user) => {
-                  return {
-                    name: user.information.handle,
-                    series: user.problems[timePeriod].indexes,
-                  };
-                })}
-              />
-            </div>
-            {/* Problem Ratings Comparison Bar Chart */}
-            <div className={styles.full_chart_container}>
-              <BarChart
-                title={"Problem Ratings"}
-                horizontal={false}
-                dataList={usersList.map((user) => {
-                  return {
-                    name: user.information.handle,
-                    series: user.problems[timePeriod].ratings,
-                  };
-                })}
-              />
-            </div>
-            {/* Rating History Line Chart */}
-            <div className={styles.full_chart_container}>
-              <LineChart
-                title={"Rating History"}
-                dataList={usersList.map((user) => {
-                  return {
-                    name: user.information.handle,
-                    series: user.contests[timePeriod].rating_history,
-                  };
-                })}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {!handlesProvided ? HandleForm() : UserStatsComparison()}
     </div>
   );
 };
@@ -285,6 +289,8 @@ export const getServerSideProps = async (context) => {
       .map((handle) => handle.trim())
       .filter((handle) => handle !== "");
 
+    let lastUpdateTime = null;
+
     // The array of user data
     const users = await Promise.all(
       handles.map(async (handle) => {
@@ -310,10 +316,15 @@ export const getServerSideProps = async (context) => {
           );
           const userProblems = await axios.get(`${baseURL}/problems-solved`);
 
+          // We update the last update time if it is set to null
+          if (lastUpdateTime === null) {
+            lastUpdateTime = userInformation.data.last_update_time;
+          }
+
           return {
-            information: await userInformation.data,
-            contests: await userContests.data,
-            problems: await userProblems.data,
+            information: userInformation.data.user,
+            contests: userContests.data.contest_statistics,
+            problems: userProblems.data.problem_statistics,
           };
         } catch (error) {
           // If there was an error, we add the error message to the errors dictionary
@@ -344,6 +355,7 @@ export const getServerSideProps = async (context) => {
       return {
         props: {
           handlesProvided: true,
+          lastUpdateTime: lastUpdateTime,
           usersList: users,
         },
       };

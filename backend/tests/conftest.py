@@ -6,6 +6,7 @@ import pytest
 
 from application import create_app
 from application.models.orm import db
+from application.models.models import Metadata
 
 
 @pytest.fixture()
@@ -43,6 +44,15 @@ def app(env_setup):
 
     # Create the application in testing mode
     app = create_app("application.config.TestingConfig")
+
+    # We add dummy metadata to the database as part of the initial setup. This
+    # is actually done during the database update but we add it as a fixture as
+    # part of the test setup so that the database doesn't have to be updated first.
+    with app.app_context():
+        db.session.add(
+            Metadata(key="last_update_time", value="2022-01-01 00:00:00.000000+05:30")
+        )
+        db.session.commit()
 
     # The entrypoint for subsequent tests
     yield app

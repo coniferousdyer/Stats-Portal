@@ -1,14 +1,17 @@
+// Material UI components
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+
+// CSS styles
 import styles from "../../styles/components/common/TimePeriodDropdown.module.css";
 
 const TimePeriodDropdown = ({ timePeriod, setTimePeriod }) => {
   return (
     <div className={styles.time_period_select_container}>
       <FormControl>
-        <InputLabel id="demo-simple-select-label">Time Period</InputLabel>
+        <InputLabel id="select-label">Time Period</InputLabel>
         <Select
           labelId="time-period-select-label"
           id="time-period-select"

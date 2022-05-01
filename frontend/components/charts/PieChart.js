@@ -1,6 +1,11 @@
+// External library components
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+
+// Material UI components
 import Paper from "@mui/material/Paper";
+
+// CSS styles
 import styles from "../../styles/components/charts/PieChart.module.css";
 
 // Dynamic import that fixes the "ReferenceError: window is not defined" error

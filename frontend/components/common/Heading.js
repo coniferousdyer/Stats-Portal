@@ -1,10 +1,22 @@
+// CSS styles
 import styles from "../../styles/components/common/Heading.module.css";
 
-const Heading = ({ prefixHeading, mainHeading }) => {
+const Heading = ({ prefixHeading, mainHeading, suffixHeading }) => {
   return (
     <div className={styles.heading_container}>
-      <h1 className={styles.heading_prefix} align="center">{prefixHeading}</h1>
-      <h1 className={styles.heading_name} align="center">{mainHeading}</h1>{" "}
+      {prefixHeading && (
+        <h1 className={styles.heading_prefix} align="center">
+          {prefixHeading}
+        </h1>
+      )}
+      <h1 className={styles.heading_name} align="center">
+        {mainHeading}
+      </h1>{" "}
+      {suffixHeading && (
+        <h3 className={styles.heading_suffix} align="center">
+          {suffixHeading}
+        </h3>
+      )}
     </div>
   );
 };
