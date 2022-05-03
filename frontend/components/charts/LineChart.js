@@ -1,22 +1,31 @@
-// External ibrary components
+// External ibrary components.
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
-// Material UI components
+// Material UI components.
 import Paper from "@mui/material/Paper";
 
-// CSS styles
+// CSS styles.
 import styles from "../../styles/components/charts/LineChart.module.css";
 
-// Dynamic import that fixes the "ReferenceError: window is not defined" error
+// Dynamic import that fixes the "ReferenceError: window is not defined" error.
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-// dataList is an array of arrays. Each array corresponds to a particular user.
-// Each member of the dataList passed in must be of the form [{ x: value_x, y: value_y }, ...]
+/**
+ * Component that renders a line chart (specifically, a time series chart).
+ *
+ * @prop {string} title - The title of the chart. Optional.
+ * @prop {array[Object]} dataList - An array of objects that contain the data to be rendered in the chart. Each object
+ *                                  corresponds to a single series in the chart.
+ *                                  Each object must have the following properties:
+ *                                  - name: The name of the data series, eg. "Rating of User".
+ *                                  - series: The data series, which is an array of objects that are of the form:
+ *                                   {"x": "2019-01-01", "y": 10} (x is the date, y is the value).
+ */
 const LineChart = ({ title, dataList }) => {
-  // The data series supplied to the chart
+  // The data series supplied to the chart. Obtained from the dataList prop.
   const [series, setSeries] = useState([]);
-  // The chart configuration options
+  // The chart configuration options.
   const [options, setOptions] = useState({
     chart: {
       type: "line",
@@ -55,7 +64,7 @@ const LineChart = ({ title, dataList }) => {
     ],
   });
 
-  // Modify the passed data into a format that ApexCharts can understand
+  // Modify the passed data into a format that ApexCharts can understand.
   useEffect(() => {
     const dataSeries = dataList.map((data) => {
       // data is of the form [{ x: value_x, y: value_y }, ...]. While this is a valid
@@ -72,7 +81,7 @@ const LineChart = ({ title, dataList }) => {
       };
     });
 
-    // Update the series
+    // Update the series.
     setSeries(dataSeries);
   }, [dataList]);
 

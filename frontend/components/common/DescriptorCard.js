@@ -1,8 +1,8 @@
-// External library components
+// External library components.
 import Link from "next/link";
 import Image from "next/image";
 
-// Material UI components
+// Material UI components.
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -10,9 +10,19 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-// CSS styles
+// CSS styles.
 import styles from "../../styles/components/common/DescriptorCard.module.css";
 
+/**
+ * Component that renders a card with an image, title, description and a button. Generally
+ * used as a way to add a link to a page with information about it.
+ *
+ * @prop {string} title - The title of the card.
+ * @prop {string} description - The description of the card.
+ * @prop {string} image - A URL to the image to be displayed in the card, eg. "/images/logo.png".
+ * @prop {string} buttonText - The text of the button that is rendered at the bottom of the card. If not supplied, no button is rendered.
+ * @prop {string} buttonLink - The link of the button that is rendered at the bottom of the card. Only useful if buttonText is supplied.
+ */
 const DescriptorCard = ({
   title,
   description,
@@ -40,13 +50,15 @@ const DescriptorCard = ({
           {description}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Link href={buttonLink} passHref>
-          <Button variant="contained" className={styles.button} fullWidth>
-            {buttonText}
-          </Button>
-        </Link>
-      </CardActions>
+      {buttonText && (
+        <CardActions>
+          <Link href={buttonLink} passHref>
+            <Button variant="contained" className={styles.button} fullWidth>
+              {buttonText}
+            </Button>
+          </Link>
+        </CardActions>
+      )}
     </Card>
   );
 };

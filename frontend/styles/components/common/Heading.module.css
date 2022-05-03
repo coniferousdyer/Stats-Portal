@@ -41,6 +41,10 @@
     .heading_name {
         font-size: 7vw;
     }
+
+    .heading_suffix {
+        font-size: 2vw;
+    }
 }
 
 @media screen and (max-width: 600px) {
@@ -54,5 +58,9 @@
 
     .heading_name {
         font-size: 10vw;
+    }
+
+    .heading_suffix {
+        font-size: 3vw;
     }
 }

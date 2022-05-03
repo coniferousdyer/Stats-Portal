@@ -1,15 +1,21 @@
-// External library components
+// External library components.
 import Head from "next/head";
 import axios from "axios";
 
-// Internal application components
+// Internal application components.
 import Heading from "../../components/common/Heading";
 import Navbar from "../../components/common/Navbar";
 import DescriptorCard from "../../components/common/DescriptorCard";
 
-// CSS styles
+// CSS styles.
 import styles from "../../styles/pages/leaderboards/Leaderboard.module.css";
 
+/**
+ * Component that renders the main leaderboards page. Corresponds to the URL:
+ * "/leaderboards".
+ *
+ * @prop {string} organizationName - The organization name.
+ */
 const Leaderboards = ({ organizationName }) => {
   return (
     <div className={styles.container}>
@@ -74,7 +80,7 @@ const Leaderboards = ({ organizationName }) => {
 export default Leaderboards;
 
 export const getStaticProps = async () => {
-  // Obtain the data about the organization from the backend
+  // Obtain the data about the organization from the backend.
   const organizationInformation = await axios.get(
     "http://localhost:5000/organization"
   );

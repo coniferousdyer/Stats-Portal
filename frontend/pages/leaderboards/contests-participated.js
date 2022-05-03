@@ -1,20 +1,31 @@
-// External library components
+// External library components.
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
 
-// Internal application components
+// Internal application components.
 import Navbar from "../../components/common/Navbar";
 import Heading from "../../components/common/Heading";
 import TimePeriodDropdown from "../../components/common/TimePeriodDropdown";
 import LeaderboardTable from "../../components/tables/LeaderboardTable";
 
-// CSS styles
+// CSS styles.
 import styles from "../../styles/pages/leaderboards/Leaderboard.module.css";
 
-// Helper functions
+// Helper functions.
 import { obtainDataCountPerUser } from "../../helpers/leaderboards";
 
+/**
+ * Component that renders the contest participated leaderboard page. Corresponds to the URL:
+ * "/leaderboards/contests-participaed".
+ *
+ * @prop {string} lastUpdateTime - The string representation of the last database update time.
+ * @prop {Object} contestData - The object containing the contest count corresponding to each
+ *                              user, for each time period. Must contain a key for each time
+ *                              period. The value corresponding to each time period key is an
+ *                              array of objects, each of which contains the user's handle, rank
+ *                              rating, and number of contests given in that time period.
+ */
 const ContestsParticipated = ({ lastUpdateTime, contestsData }) => {
   const [timePeriod, setTimePeriod] = useState("all_time");
 
@@ -44,10 +55,10 @@ const ContestsParticipated = ({ lastUpdateTime, contestsData }) => {
         <div className={styles.table_container}>
           <LeaderboardTable
             title={"Most Contests Participated"}
-            data={contestsData[timePeriod]}
-            attribute={"total_contests"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps
-            statisticName={"Contests Participated"} // The column name for the statistic corresponding to the attribute
-            sortingOrder={"desc"} // Either "asc" or "desc"
+            dataList={contestsData[timePeriod]}
+            attribute={"total_contests"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
+            statisticName={"Contests Participated"} // The column name for the statistic corresponding to the attribute.
+            sortingOrder={"desc"} // Either "asc" or "desc".
           />
         </div>
       </div>
@@ -58,25 +69,28 @@ const ContestsParticipated = ({ lastUpdateTime, contestsData }) => {
 export default ContestsParticipated;
 
 export const getStaticProps = async () => {
-  // Obtain the data about information of users in the organization and
-  // contests participated by the organization
-  const usersInformation = await axios.get("http://localhost:5000/users");
+  // The base URL is common to information ("/") and users' contests ("/contests-participated").
+  const baseURL = `http://localhost:5000/users`;
+
+  // Obtain the data about information of users in the organization and contests participated
+  // by the organization.
+  const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
-    "http://localhost:5000/users/contests-participated"
+    `${baseURL}/contests-participated`
   );
 
-  // Retrieve the data from the response
+  // Retrieve the data from the response.
   const usersData = usersInformation.data.users;
   const contestsParticipatedData = contestsParticipated.data.contest_statistics;
 
-  // Obtain the data count per user
+  // Obtain the data count per user.
   const dataCountPerUser = await obtainDataCountPerUser(
     usersData,
     contestsParticipatedData,
     "total_contests"
   );
 
-  // Pass the data to the component as props
+  // Pass the data to the component as props.
   return {
     props: {
       lastUpdateTime: usersInformation.data.last_update_time,

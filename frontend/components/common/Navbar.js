@@ -1,8 +1,8 @@
-// External library components
+// External library components.
 import Link from "next/link";
 import { useState } from "react";
 
-//  Material UI components
+//  Material UI components.
 import Slide from "@mui/material/Slide";
 import AppBar from "@mui/material/AppBar";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
@@ -19,7 +19,7 @@ import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import PersonIcon from "@mui/icons-material/Person";
 import CompareIcon from "@mui/icons-material/Compare";
 
-// CSS styles
+// CSS styles.
 import styles from "../../styles/components/common/Navbar.module.css";
 
 const Navbar = () => {
@@ -65,7 +65,7 @@ const Navbar = () => {
       <AppBar color="">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {/* Collapsed (with hamburger icon) */}
+            {/* Uncollapsed (with hamburger icon) navbar heading */}
             <Typography
               variant="h6"
               noWrap
@@ -78,6 +78,7 @@ const Navbar = () => {
               </Link>
             </Typography>
 
+            {/* Collapsed (with hamburger icon) links */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -123,7 +124,7 @@ const Navbar = () => {
               </Menu>
             </Box>
 
-            {/* Uncollapsed (without hamburger icon) */}
+            {/* Collapsed (without hamburger icon) navbar heading */}
             <Typography
               variant="h6"
               noWrap
@@ -136,6 +137,7 @@ const Navbar = () => {
               </Link>
             </Typography>
 
+            {/* Uncollapsed (without hamburger icon) links */}
             <Box
               sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
               className={styles.links_container}

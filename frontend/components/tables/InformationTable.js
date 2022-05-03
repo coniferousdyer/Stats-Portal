@@ -1,4 +1,4 @@
-// Material UI components
+// Material UI components.
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,13 +6,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-// CSS styles
+// CSS styles.
 import styles from "../../styles/components/tables/InformationTable.module.css";
 
-// dataList is an array of objects, all having the same keys. For each key, there will be
-// a row in the table, and the values of each object will be the values of the row.
-// Each member of "dataList" will be of the form {name: value, ...}. All key-value pairs
-// will be listed as rows in the table.
+/**
+ * Component that renders a table with some specified information (key-value pairs).
+ *
+ * @prop {string} title - The title of the table.
+ * @prop {array[Object]} dataList - The list of key-value pairs to be included in the table.
+ *                                  All objects must have the same keys, which will be listed
+ *                                  as the first column. The subsequent columns will contain
+ *                                  the values of the corresponding keys for each object.
+ */
 const InformationTable = ({ title, dataList }) => {
   return (
     <TableContainer

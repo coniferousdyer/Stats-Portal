@@ -1,97 +1,10 @@
 .container {
     padding: 0;
     margin: 0;
-}
-
-.container {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.stats_container {
-    width: 80%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-bottom: 5vw;
 }
-
-.form_container {
-    padding-top: 2.5vw;
-}
-
-.handle_input {
-    font-family: "Poppins", sans-serif;
-    margin-top: 1vw;
-}
-
-.button {
-    margin-top: 1vw;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-}
-
-.user_information_container {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 4vw;
-}
-
-.flex_wrap_container {
-    width: 100%;
-    margin-top: 4vw;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.half_chart_container {
-    width: 49.5%;
-    display: table-cell;
-    margin-top: 1vw;
-}
-
-.full_chart_container {
-    width: 100%;
-    margin-top: 1vw;
-}
-
-@media screen and (min-width: 600px) and (max-width: 900px) {
-    .half_chart_container {
-        width: 100%;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .handle_input {
-        margin-top: 5vw;
-    }
-    
-    .form_container {
-        padding-top: 10vw;
-    }
-
-    .button {
-        margin-top: 5vw;
-    }
-
-    .user_information_container {
-        flex-wrap: wrap;
-        margin-top: 7vw;
-    }
-
-    .half_chart_container {
-        width: 100%;
-        margin-top: 2vw;
-    }
-
-    .full_chart_container {
-        margin-top: 2vw;
-    }
-}
-  
