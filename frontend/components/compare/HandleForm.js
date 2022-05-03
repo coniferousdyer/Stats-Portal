@@ -65,7 +65,7 @@ const HandleForm = ({ errors }) => {
   };
 
   return (
-    <div className={styles.stats_container}>
+    <div className="container">
       {/* Heading */}
       <Heading
         prefixHeading={"compare user statistics with the"}
@@ -73,7 +73,7 @@ const HandleForm = ({ errors }) => {
       />
 
       {/* Handle Input Fields */}
-      <div className={styles.half_chart_container}>
+      <div className="half_container">
         <Box component="form" className={styles.form_container}>
           {handles.map((handle, index) => {
             return (

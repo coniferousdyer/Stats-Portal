@@ -80,7 +80,7 @@ const PieChart = ({ title, donut, data }) => {
   }, [data]);
 
   return (
-    <Paper elevation={5} style={{ height: "100%" }}>
+    <Paper elevation={5} className="paper_container">
       <h1 className={styles.title}>{title.toUpperCase()}</h1>
       <Chart options={options} series={series} type={donut ? "donut" : "pie"} />
     </Paper>

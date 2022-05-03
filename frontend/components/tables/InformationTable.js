@@ -22,7 +22,7 @@ const InformationTable = ({ title, dataList }) => {
   return (
     <TableContainer
       component={Paper}
-      style={{ marginTop: "1vw" }}
+      className={styles.table_container}
       elevation={5}
     >
       {title && <h1 className={styles.title}>{title.toUpperCase()}</h1>}
@@ -36,7 +36,7 @@ const InformationTable = ({ title, dataList }) => {
               <TableCell
                 component="th"
                 scope="row"
-                style={{ fontFamily: "Poppins, sans-serif", fontWeight: 600 }}
+                className={styles.table_key_cell}
               >
                 {key}
               </TableCell>
@@ -44,7 +44,7 @@ const InformationTable = ({ title, dataList }) => {
                 <TableCell
                   key={`${data[key]}-${rowIndex}-${colIndex}`}
                   align="right"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
+                  className={styles.table_value_cell}
                 >
                   {data[key]}
                 </TableCell>

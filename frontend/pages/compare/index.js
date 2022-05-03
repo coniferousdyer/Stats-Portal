@@ -7,9 +7,6 @@ import Navbar from "../../components/common/Navbar";
 import HandleForm from "../../components/compare/HandleForm";
 import UserStatisticsComparison from "../../components/compare/UserStatisticsComparison";
 
-// CSS styles.
-import styles from "../../styles/pages/compare/Compare.module.css";
-
 // Helper functions.
 import { validateHandle } from "../../helpers/codeforces";
 
@@ -27,7 +24,7 @@ import { validateHandle } from "../../helpers/codeforces";
  */
 const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
   return (
-    <div className={styles.container}>
+    <div className="layout">
       <Head>
         {/* Joining all the handles together to form a comma separated string */}
         <title>

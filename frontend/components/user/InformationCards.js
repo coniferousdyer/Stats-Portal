@@ -1,9 +1,6 @@
 // Internal application components.
 import KeyValueCard from "../../components/common/KeyValueCard";
 
-// CSS styles.
-import styles from "../../styles/components/user/InformationCards.module.css";
-
 /**
  * Component that renders the information cards for the user page.
  *
@@ -12,7 +9,7 @@ import styles from "../../styles/components/user/InformationCards.module.css";
  */
 const InformationCards = ({ userInformation }) => {
   return (
-    <div className={styles.user_information_container}>
+    <div className="information_container">
       <KeyValueCard
         cardKey={"User Since"}
         // We convert the string to this format: "Weekday, Day Month Year",

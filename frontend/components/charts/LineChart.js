@@ -86,7 +86,7 @@ const LineChart = ({ title, dataList }) => {
   }, [dataList]);
 
   return (
-    <Paper elevation={5} style={{ height: "100%" }}>
+    <Paper elevation={5} className="paper_container">
       <h1 className={styles.title}>{title.toUpperCase()}</h1>
       {/* height is set to 100% here to limit the height of the chart */}
       <Chart options={options} series={series} type="line" height="100%" />

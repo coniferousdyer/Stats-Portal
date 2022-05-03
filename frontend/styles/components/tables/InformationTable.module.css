@@ -5,6 +5,19 @@
     font-weight: 700;
 }
 
+.table_container {
+    margin-top: 1vw;
+}
+
+.table_key_cell {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+
+.table_value_cell {
+    font-family: "Poppins", sans-serif;
+}
+
 @media screen and (min-width: 600px) and (max-width: 900px) {
     .title {
         font-size: 2vw;

@@ -10,9 +10,6 @@ import PieChart from "../../components/charts/PieChart";
 import BarChart from "../../components/charts/BarChart";
 import LineChart from "../../components/charts/LineChart";
 
-// CSS styles.
-import styles from "../../styles/components/user/UserStatistics.module.css";
-
 // Helper functions.
 import {
   formatContestsDataForTable,
@@ -37,7 +34,7 @@ const UserStatistics = ({
   const [timePeriod, setTimePeriod] = useState("all_time");
 
   return (
-    <div className={styles.stats_container}>
+    <div className="container">
       {/* Heading */}
       <Heading
         prefixHeading={"statistics for"}
@@ -48,7 +45,7 @@ const UserStatistics = ({
       {/* User Information Cards */}
       <InformationCards userInformation={userInformation} />
 
-      <div className={styles.flex_wrap_container}>
+      <div className="flex_wrap_container">
         {/* Time Period Select Dropdown */}
         <TimePeriodDropdown
           timePeriod={timePeriod}
@@ -56,21 +53,21 @@ const UserStatistics = ({
         />
 
         {/* Contests Statistics Table */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <InformationTable
             title={"Contest Statistics"}
             dataList={[formatContestsDataForTable(userContests[timePeriod])]}
           />
         </div>
         {/* Problems Statistics Table */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <InformationTable
             title={"Problem Statistics"}
             dataList={[formatProblemsDataForTable(userProblems[timePeriod])]}
           />
         </div>
         {/* Language Distribution Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <PieChart
             title={`Languages Used by ${userInformation.handle}`}
             donut={true}
@@ -78,7 +75,7 @@ const UserStatistics = ({
           />
         </div>
         {/* Tag Distribution Donut Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <PieChart
             title={`Problem Tags Solved by ${userInformation.handle}`}
             donut={true}
@@ -86,7 +83,7 @@ const UserStatistics = ({
           />
         </div>
         {/* Index Distribution Bar Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <BarChart
             title={`Problem Indexes Solved by ${userInformation.handle}`}
             horizontal={false}
@@ -100,7 +97,7 @@ const UserStatistics = ({
           />
         </div>
         {/* Ratings Distribution Bar Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <BarChart
             title={`Problem Ratings Solved by ${userInformation.handle}`}
             horizontal={false}
@@ -114,7 +111,7 @@ const UserStatistics = ({
           />
         </div>
         {/* Rating History Line Chart */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <LineChart
             title={`Rating History for ${userInformation.handle}`}
             dataList={[

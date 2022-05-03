@@ -7,9 +7,6 @@ import Navbar from "../components/common/Navbar";
 import OrganizationStatistics from "../components/home/OrganizationStatistics";
 import SectionCards from "../components/home/SectionCards";
 
-// CSS styles.
-import styles from "../styles/Home.module.css";
-
 // Helper functions.
 import {
   obtainOverallContestsStatistics,
@@ -32,7 +29,7 @@ export default function Home({
   overallProblems,
 }) {
   return (
-    <div className={styles.container}>
+    <div className="layout">
       <Head>
         <title>Stats Portal | {organizationInformation.name}</title>
       </Head>

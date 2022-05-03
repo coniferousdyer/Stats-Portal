@@ -14,3 +14,82 @@ a {
 * {
   box-sizing: border-box;
 }
+
+/* Custom classes shared by several components */
+
+.layout {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5vw;
+}
+
+.container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.information_container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4vw;
+}
+
+.flex_wrap_container {
+  width: 100%;
+  margin-top: 4vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.one_third_container {
+  width: 32.7%;
+  display: table-cell;
+  margin-top: 1vw;
+}
+
+.half_container {
+  width: 49.5%;
+  display: table-cell;
+  margin-top: 1vw;
+}
+
+.full_container {
+  width: 100%;
+  margin-top: 1vw;
+}
+
+.paper_container {
+  height: 100%;
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  .one_third_container, .half_container {
+      width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .information_container {
+      flex-wrap: wrap;
+      margin-top: 7vw;
+  }
+
+  .one_third_container, .half_container {
+      width: 100%;
+      margin-top: 2vw;
+  }
+
+  .full_container {
+      margin-top: 2vw;
+  }
+}

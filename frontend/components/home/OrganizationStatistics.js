@@ -9,9 +9,6 @@ import InformationTable from "../tables/InformationTable";
 import PieChart from "../charts/PieChart";
 import BarChart from "../charts/BarChart";
 
-// CSS styles.
-import styles from "../../styles/components/home/OrganizationStatistics.module.css";
-
 // Helper functions.
 import {
   formatContestsDataForTable,
@@ -36,7 +33,7 @@ const OrganizationStatistics = ({
   const [timePeriod, setTimePeriod] = useState("all_time");
 
   return (
-    <div className={styles.stats_container}>
+    <div className="container">
       {/* Heading */}
       <Heading
         prefixHeading={"welcome to the stats portal for"}
@@ -46,7 +43,8 @@ const OrganizationStatistics = ({
 
       {/* Organization Information Cards */}
       <InformationCards organizationInformation={organizationInformation} />
-      <div className={styles.flex_wrap_container}>
+
+      <div className="flex_wrap_container">
         {/* Time Period Select Dropdown */}
         <TimePeriodDropdown
           timePeriod={timePeriod}
@@ -54,7 +52,7 @@ const OrganizationStatistics = ({
         />
 
         {/* Problems Solved Leaderboard Bar Chart */}
-        <div className={styles.one_third_chart_container}>
+        <div className="one_third_container">
           <BarChart
             title={`Most Problems Solved in ${organizationInformation.name}`}
             horizontal={true}
@@ -70,7 +68,7 @@ const OrganizationStatistics = ({
           />
         </div>
         {/* Contests Given Leaderboard Bar Chart */}
-        <div className={styles.one_third_chart_container}>
+        <div className="one_third_container">
           <BarChart
             title={`Most Contests Given in ${organizationInformation.name}`}
             horizontal={true}
@@ -86,7 +84,7 @@ const OrganizationStatistics = ({
           />
         </div>
         {/* Highest Rank Leaderboard Bar Chart */}
-        <div className={styles.one_third_chart_container}>
+        <div className="one_third_container">
           <BarChart
             title={`Best Contest Ranks in ${organizationInformation.name}`}
             horizontal={true}
@@ -102,21 +100,21 @@ const OrganizationStatistics = ({
           />
         </div>
         {/* Contests Statistics Table */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <InformationTable
             title={"Contest Statistics"}
             dataList={[formatContestsDataForTable(overallContests[timePeriod])]}
           />
         </div>
         {/* Problems Statistics Table */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <InformationTable
             title={"Problem Statistics"}
             dataList={[formatProblemsDataForTable(overallProblems[timePeriod])]}
           />
         </div>
         {/* Language Distribution Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <PieChart
             title={`Languages Used by ${organizationInformation.name}`}
             donut={true}
@@ -124,7 +122,7 @@ const OrganizationStatistics = ({
           />
         </div>
         {/* Tag Distribution Donut Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <PieChart
             title={`Problem Tags Solved by ${organizationInformation.name}`}
             donut={true}
@@ -132,7 +130,7 @@ const OrganizationStatistics = ({
           />
         </div>
         {/* Index Distribution Bar Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <BarChart
             title={`Problem Indexes Solved by ${organizationInformation.name}`}
             horizontal={false}
@@ -146,7 +144,7 @@ const OrganizationStatistics = ({
           />
         </div>
         {/* Ratings Distribution Bar Chart */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <BarChart
             title={`Problem Ratings Solved by ${organizationInformation.name}`}
             horizontal={false}

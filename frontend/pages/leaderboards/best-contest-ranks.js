@@ -30,14 +30,14 @@ const BestContestRanks = ({ lastUpdateTime, contestsData }) => {
   const [timePeriod, setTimePeriod] = useState("all_time");
 
   return (
-    <div className={styles.container}>
+    <div className="layout">
       <Head>
         <title>Stats Portal | Best Contest Ranks</title>
       </Head>
 
       <Navbar />
 
-      <div className={styles.stats_container}>
+      <div className="container">
         {/* Heading */}
         <Heading
           prefixHeading={"leaderboard for"}

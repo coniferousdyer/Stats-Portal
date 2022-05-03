@@ -1,9 +1,6 @@
 // Internal application components.
 import KeyValueCard from "../common/KeyValueCard";
 
-// CSS styles.
-import styles from "../../styles/components/home/InformationCards.module.css";
-
 /**
  * Component that renders the information cards for the home page.
  *
@@ -12,7 +9,7 @@ import styles from "../../styles/components/home/InformationCards.module.css";
  */
 const InformationCards = ({ organizationInformation }) => {
   return (
-    <div className={styles.user_information_container}>
+    <div className="information_container">
       <KeyValueCard
         cardKey={"Organization ID"}
         cardValue={organizationInformation.organization_id}

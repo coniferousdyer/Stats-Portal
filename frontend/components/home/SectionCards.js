@@ -2,9 +2,6 @@
 import Heading from "../common/Heading";
 import DescriptorCard from "../common/DescriptorCard";
 
-// CSS styles.
-import styles from "../../styles/components/home/SectionCards.module.css";
-
 /**
  * Component that renders the section descriptor cards for the home page. Each card
  * links to a specific section of the application.
@@ -13,16 +10,16 @@ import styles from "../../styles/components/home/SectionCards.module.css";
  */
 const SectionCards = ({ organizationName }) => {
   return (
-    <div className={styles.stats_container}>
+    <div className="container">
       {/* Sections Heading */}
       <Heading
         prefixHeading={"have a look at the"}
         mainHeading={"other sections"}
       />
 
-      <div className={styles.flex_wrap_container}>
+      <div className="flex_wrap_container">
         {/* Leaderboard Section Card */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <DescriptorCard
             title={"LEADERBOARDS"}
             description={`View the leaderboards for ${organizationName} and see where you stand among ${organizationName}'s elite.`}
@@ -32,7 +29,7 @@ const SectionCards = ({ organizationName }) => {
           />
         </div>
         {/* Users Section Card */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <DescriptorCard
             title={"USER VISUALIZER"}
             description={`View visualized analytics for any user in ${organizationName}.`}
@@ -42,7 +39,7 @@ const SectionCards = ({ organizationName }) => {
           />
         </div>
         {/* Compare Section Card */}
-        <div className={styles.half_chart_container}>
+        <div className="half_container">
           <DescriptorCard
             title={"COMPARE"}
             description={`Compare statistics for any two users in ${organizationName}.`}

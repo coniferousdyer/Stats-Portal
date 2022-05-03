@@ -7,9 +7,6 @@ import Heading from "../../components/common/Heading";
 import Navbar from "../../components/common/Navbar";
 import DescriptorCard from "../../components/common/DescriptorCard";
 
-// CSS styles.
-import styles from "../../styles/pages/leaderboards/Leaderboard.module.css";
-
 /**
  * Component that renders the main leaderboards page. Corresponds to the URL:
  * "/leaderboards".
@@ -18,14 +15,14 @@ import styles from "../../styles/pages/leaderboards/Leaderboard.module.css";
  */
 const Leaderboards = ({ organizationName }) => {
   return (
-    <div className={styles.container}>
+    <div className="layout">
       <Head>
         <title>Stats Portal | Leaderboards</title>
       </Head>
 
       <Navbar />
 
-      <div className={styles.stats_container}>
+      <div className="container">
         {/* Heading */}
         <Heading
           prefixHeading={`view ${organizationName}'s`}
@@ -33,9 +30,9 @@ const Leaderboards = ({ organizationName }) => {
         />
 
         {/* Creating a descriptor card for each of the leaderboards in the leaderboards array */}
-        <div className={styles.flex_wrap_container}>
+        <div className="flex_wrap_container">
           {/* Most Problems Solved Leaderboards Card */}
-          <div className={styles.half_chart_container}>
+          <div className="half_container">
             <DescriptorCard
               title={"MOST PROBLEMS SOLVED"}
               description={`Leaderboard for the most problems solved by the users of ${organizationName}.`}
@@ -44,7 +41,7 @@ const Leaderboards = ({ organizationName }) => {
               buttonLink={"/leaderboards/problems-solved"}
             />
           </div>
-          <div className={styles.half_chart_container}>
+          <div className="half_container">
             <DescriptorCard
               title={"HIGHEST RATING INCREASE"}
               description={`Leaderboard for the highest rating increase obtained by users of ${organizationName}.`}
@@ -53,7 +50,7 @@ const Leaderboards = ({ organizationName }) => {
               buttonLink={"/leaderboards/highest-rating-increase"}
             />
           </div>
-          <div className={styles.half_chart_container}>
+          <div className="half_container">
             <DescriptorCard
               title={"MOST CONTESTS PARTICIPATED"}
               description={`Leaderboard for the most contests participated by users of ${organizationName}.`}
@@ -62,7 +59,7 @@ const Leaderboards = ({ organizationName }) => {
               buttonLink={"/leaderboards/contests-participated"}
             />
           </div>
-          <div className={styles.half_chart_container}>
+          <div className="half_container">
             <DescriptorCard
               title={"BEST CONTEST RANKS"}
               description={`Leaderboard for the highest contest ranks achieved by users of ${organizationName}.`}

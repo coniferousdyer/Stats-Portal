@@ -37,7 +37,7 @@ const HandleForm = ({ error }) => {
   };
 
   return (
-    <div className={styles.stats_container}>
+    <div className="container">
       {/* Heading */}
       <Heading
         prefixHeading={"view individual statistics with the"}
@@ -45,7 +45,7 @@ const HandleForm = ({ error }) => {
       />
 
       {/* Handle Input Field */}
-      <div className={styles.half_chart_container}>
+      <div className="half_container">
         <Box component="form" className={styles.form_container}>
           <FormControl
             variant="outlined"
@@ -77,7 +77,7 @@ const HandleForm = ({ error }) => {
             fullWidth
             variant="contained"
             color="primary"
-            className={styles.submit_button}
+            className={styles.button}
           >
             Submit
           </Button>

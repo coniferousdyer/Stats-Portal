@@ -30,14 +30,14 @@ const HighestRatingIncrease = ({ lastUpdateTime, contestsData }) => {
   const [timePeriod, setTimePeriod] = useState("all_time");
 
   return (
-    <div className={styles.container}>
+    <div className="layout">
       <Head>
         <title>Stats Portal | Highest Rating Increase</title>
       </Head>
 
       <Navbar />
 
-      <div className={styles.stats_container}>
+      <div className="container">
         {/* Heading */}
         <Heading
           prefixHeading={"leaderboard for"}

@@ -7,9 +7,6 @@ import Navbar from "../../components/common/Navbar";
 import HandleForm from "../../components/user/HandleForm";
 import UserStatistics from "../../components/user/UserStatistics";
 
-// CSS styles.
-import styles from "../../styles/pages/user/User.module.css";
-
 // Helper functions.
 import { validateHandle } from "../../helpers/codeforces";
 
@@ -34,7 +31,7 @@ const User = ({
   userProblems,
 }) => {
   return (
-    <div className={styles.container}>
+    <div className="layout">
       <Head>
         <title>
           Stats Portal |{" "}

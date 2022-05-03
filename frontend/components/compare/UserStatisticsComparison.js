@@ -8,9 +8,6 @@ import InformationTable from "../../components/tables/InformationTable";
 import BarChart from "../../components/charts/BarChart";
 import LineChart from "../../components/charts/LineChart";
 
-// CSS styles.
-import styles from "../../styles/components/compare/UserStatisticsComparison.module.css";
-
 // Helper functions.
 import {
   formatInformationDataForTable,
@@ -31,7 +28,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
   const [timePeriod, setTimePeriod] = useState("all_time");
 
   return (
-    <div className={styles.stats_container}>
+    <div className="container">
       {/* Heading */}
       <Heading
         prefixHeading={"comparison between"}
@@ -41,7 +38,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
         suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
       />
 
-      <div className={styles.flex_wrap_container}>
+      <div className="flex_wrap_container">
         {/* Time Period Select Dropdown */}
         <TimePeriodDropdown
           timePeriod={timePeriod}
@@ -49,7 +46,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
         />
 
         {/* User Information Comparison Table */}
-        <div className={styles.user_information_container}>
+        <div className="information_container">
           <InformationTable
             dataList={usersList.map((user) =>
               formatInformationDataForTable(user.information)
@@ -58,7 +55,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
         </div>
 
         {/* Contests Statistics Table */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <InformationTable
             title={"Contest Statistics"}
             dataList={usersList.map((user) =>
@@ -67,7 +64,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           />
         </div>
         {/* Problems Statistics Table */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <InformationTable
             title={"Problem Statistics"}
             dataList={usersList.map((user) =>
@@ -76,7 +73,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           />
         </div>
         {/* Problem Tags Comparison Bar Chart */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <BarChart
             title={"Problem Tags"}
             horizontal={false}
@@ -89,7 +86,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           />
         </div>
         {/* Problem Indexes Comparison Bar Chart */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <BarChart
             title={"Problem Indexes"}
             horizontal={false}
@@ -102,7 +99,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           />
         </div>
         {/* Problem Ratings Comparison Bar Chart */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <BarChart
             title={"Problem Ratings"}
             horizontal={false}
@@ -115,7 +112,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           />
         </div>
         {/* Rating History Line Chart */}
-        <div className={styles.full_chart_container}>
+        <div className="full_container">
           <LineChart
             title={"Rating History"}
             dataList={usersList.map((user) => {
