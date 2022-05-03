@@ -57,31 +57,37 @@ const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
 export default Compare;
 
 export const getServerSideProps = async (context) => {
-  // Extracting handles from URL, separated by ";", eg. ?handles="user1;user2;user3".
-  let handles = context.query.handles;
+  // Extracting handles from URL. handles would be an array of strings,
+  // eg. "/compare?handle=user1&handle=user2" would give ["user1", "user2"].
+  let handles = context.query.handle;
 
-  // Check if an array of handles is provided. We account for the case where
-  // the user enters a URL like "/user?handles=user1;user2&handles=user2". If so,
-  // we choose the first handles string only.
-  handles = Array.isArray(handles) ? handles[0] : handles;
+  if (handles !== undefined) {
+    // If only one handle was provided, handles would be a string, eg. "/compare?handle=user1".
+    // So we convert it to an array. Even though there is no comparison, we do not treat it as an error.
+    handles = typeof handles === "string" ? [handles] : handles;
 
-  // Dictionary to track the errors in the handles.
-  const errors = {};
-
-  if (handles) {
-    // We format the handles to an array of strings, trimming the whitespace and
-    // removing empty strings.
-    handles = handles
-      .split(";")
-      .map((handle) => handle.trim())
-      .filter((handle) => handle !== "");
-
+    // Dictionary to track the errors in the handles.
+    const errors = {};
+    // Variable to store the last database update time, if found.
     let lastUpdateTime = null;
 
     // The array of user data.
     const users = await Promise.all(
-      handles.map(async (handle) => {
+      handles.map(async (handle, index) => {
         try {
+          // Trimming the handle to remove leading and trailing whitespace.
+          handle = handle.trim();
+
+          // If the handle is empty, we do 2 things:
+          // 1. Throw an error.
+          // 2. Modify the handle to be a whitespace string of length (index + 1). This is
+          //    because empty strings cannot be keys in the errors dictionary, and
+          //    (index + 1)-length strings are guaranteed to be unique keys in this case.
+          if (handle === "") {
+            handles[index] = handle = " ".repeat(index + 1);
+            throw new Error("Handle cannot be empty.");
+          }
+
           // We check for errors in the provided handle that may interfere with
           // the URL to which the API call to the backend is made. We check if the
           // handle is valid. If not, we throw an error.
@@ -117,11 +123,7 @@ export const getServerSideProps = async (context) => {
           // for the corresponding handle.
           if (error.response && error.response.status === 404) {
             errors[handle] = `User with handle ${handle} not found`;
-          } else if (
-            error.message &&
-            error.message ===
-              "Handle can only contain letters, digits, underscores and hyphens"
-          ) {
+          } else if (error.message) {
             errors[handle] = error.message;
           } else {
             errors[handle] = "An unknown error occurred";

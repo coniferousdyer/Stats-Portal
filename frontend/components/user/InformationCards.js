@@ -17,7 +17,7 @@ const InformationCards = ({ userInformation }) => {
         cardKey={"User Since"}
         // We convert the string to this format: "Weekday, Day Month Year",
         // eg. "Monday, 1 Jan 2020 00:00:00.000000" becomes "Monday, 1 Jan 2020".
-        cardValue={userInformation["creation_date"]
+        cardValue={userInformation.creation_date
           .split(" ")
           .splice(0, 4)
           .join(" ")}
@@ -26,19 +26,19 @@ const InformationCards = ({ userInformation }) => {
       />
       <KeyValueCard
         cardKey={"Rank"}
-        cardValue={userInformation["rank"]}
+        cardValue={userInformation.rank}
         color={"#2196f3"}
         textColor={"#ffffff"}
       />
       <KeyValueCard
         cardKey={"Rating"}
-        cardValue={userInformation["rating"]}
+        cardValue={userInformation.rating}
         color={"#32cd32"}
         textColor={"#ffffff"}
       />
       <KeyValueCard
         cardKey={"Maximum Rating"}
-        cardValue={userInformation["max_rating"]}
+        cardValue={userInformation.max_rating}
         color={"#f39c12"}
         textColor={"#ffffff"}
       />

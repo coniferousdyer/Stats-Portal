@@ -72,11 +72,16 @@ export const getServerSideProps = async (context) => {
   handle = Array.isArray(handle) ? handle[0] : handle;
 
   // Fetch user information if and only if the handle is provided.
-  if (handle) {
+  if (handle !== undefined) {
     // Getting the required statistics from the backend.
     try {
       // Trimming the handle to remove any whitespace.
       handle = handle.trim();
+
+      // If the handle is empty, we throw an error.
+      if (handle === "") {
+        throw new Error("Handle cannot be empty.");
+      }
 
       // We check for errors in the provided handle that may interfere with
       // the URL to which the API call to the backend is made. We check if the
@@ -113,12 +118,8 @@ export const getServerSideProps = async (context) => {
       // We return a 404 error to the frontend.
       if (error.response && error.response.status === 404) {
         errorMessage = `User with handle ${handle} not found`;
-      } else if (
-        // If instead the handle was not valid, the error thrown contains the following message.
-        error.message &&
-        error.message ===
-          "Handle can only contain letters, digits, underscores and hyphens"
-      ) {
+      } else if (error.message) {
+        // If instead the handle was not valid, the error thrown contains an error message.
         errorMessage = error.message;
       } else {
         errorMessage = "An unknown error occurred";

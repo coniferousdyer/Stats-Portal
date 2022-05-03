@@ -11,6 +11,9 @@ import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Button from "@mui/material/Button";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // CSS styles.
 import styles from "../../styles/components/compare/HandleForm.module.css";
@@ -53,18 +56,12 @@ const HandleForm = ({ errors }) => {
     setHandleErrors([...handleErrors, ""]);
   };
 
-  // Handle form submission.
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // We merge all the handles together after removing empty handles.
-    // eg. ["user1", "user2"] -> "user1;user2".
-    const mergedHandles = handles
-      .filter((handle) => handle.trim() !== "")
-      .join(";");
-
-    // Then we redirect to "/user?handles=<mergedHandles>".
-    window.location.href = `/compare?handles=${mergedHandles}`;
+  // Handle the removal of a handle field.
+  const removeHandleField = (index) => {
+    setHandles(handles.filter((handle, handleIndex) => handleIndex !== index));
+    setHandleErrors(
+      handleErrors.filter((error, errorIndex) => errorIndex !== index)
+    );
   };
 
   return (
@@ -96,10 +93,25 @@ const HandleForm = ({ errors }) => {
                 </InputLabel>
                 <OutlinedInput
                   id={`handle-input-${index}`}
+                  name="handle"
                   className={styles.handle_input}
                   label={`Enter handle of user ${index + 1}`}
                   value={handle}
                   onChange={(event) => handleChange(event, index)}
+                  endAdornment={
+                    // The delete button would only be present if there are more than 2 handle fields.
+                    // This is because 2 or more handles are required to compare.
+                    index > 1 && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => removeHandleField(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
                 />
                 {handleErrors[index] && (
                   <FormHelperText id="handle-input">
@@ -119,11 +131,11 @@ const HandleForm = ({ errors }) => {
           </Button>
           {/* Submit Button */}
           <Button
+            type="submit"
             variant="contained"
             color="primary"
             className={styles.button}
             fullWidth
-            onClick={handleSubmit}
           >
             Submit
           </Button>
