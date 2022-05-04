@@ -60,6 +60,14 @@ const User = ({
 export default User;
 
 export const getServerSideProps = async (context) => {
+  // Enables SSR Caching. The page is considered fresh if a request is made within
+  // 5 minutes of the initial one, and a repopulation of the cache is triggered if
+  // the request is made within 1 hour of the initial one.
+  context.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=300, stale-while-revalidate=3600"
+  );
+
   // Extracting handle from URL.
   let handle = context.query.handle;
 

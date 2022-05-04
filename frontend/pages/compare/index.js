@@ -54,6 +54,14 @@ const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
 export default Compare;
 
 export const getServerSideProps = async (context) => {
+  // Enables SSR Caching. The page is considered fresh if a request is made within
+  // 5 minutes of the initial one, and a repopulation of the cache is triggered if
+  // the request is made within 1 hour of the initial one.
+  context.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=300, stale-while-revalidate=3600"
+  );
+
   // Extracting handles from URL. handles would be an array of strings,
   // eg. "/compare?handle=user1&handle=user2" would give ["user1", "user2"].
   let handles = context.query.handle;
