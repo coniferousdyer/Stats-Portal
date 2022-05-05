@@ -26,7 +26,6 @@ from application.codeforces.problems import get_all_problems
 from application.database import update_db
 
 
-# Load environment variables from the .env file
 load_dotenv()
 
 
@@ -38,13 +37,13 @@ def perform_update(app: Flask):
     * app - The Flask application.
     """
 
-    # 1. Obtain the organization information
+    # 1. Obtain the organization information.
     organization_information = get_organization_information()
     app.logger.info(
         f"ORGANIZATION INFORMATION OBTAINED: {organization_information['name']}"
     )
 
-    # 2. List of handles of users of the organization
+    # 2. List of handles of users of the organization.
     handles = get_organization_user_handles()
     app.logger.info(
         f"{len(handles)} HANDLES FOUND IN {organization_information['name']}."
@@ -52,23 +51,23 @@ def perform_update(app: Flask):
 
     # 3. Get the required information from the Codeforces API.
 
-    # List of all the contests
+    # List of all the contests.
     contests = get_all_contests()
     app.logger.info(f"{len(contests)} CONTESTS RETRIEVED.")
 
-    # List of all the problems
+    # List of all the problems.
     problems = get_all_problems()
     app.logger.info(f"{len(problems)} PROBLEMS RETRIEVED.")
 
-    # Obtain the information of the users
+    # Obtain the information of the users.
     users_information = get_organization_users_information(handles)
     app.logger.info(f"{len(users_information)} USERS' INFORMATION RETRIEVED.")
 
-    # Obtain the contests statistics of the users
+    # Obtain the contests statistics of the users.
     users_contests = get_organization_users_contests(handles)
     app.logger.info(f"{len(users_contests)} USERS' CONTESTS RETRIEVED.")
 
-    # Obtain the problems statistics of the users
+    # Obtain the problems statistics of the users.
     users_problems = get_organization_users_problems(handles)
     app.logger.info(f"{len(users_problems)} USERS' PROBLEMS RETRIEVED.")
 
@@ -93,7 +92,7 @@ def register_error_handlers(app: Flask):
     * app - The Flask application.
     """
 
-    # 404 - Page not found
+    # 404 - Page not found.
     @app.errorhandler(404)
     def page_not_found(error):
         """
@@ -103,14 +102,14 @@ def register_error_handlers(app: Flask):
         app.logger.error(f"404 ERROR: {error}")
         return jsonify({"error": "Page not found"}), 404
 
-    # 500 - Internal server error
+    # 500 - Internal server error.
     @app.errorhandler(500)
     def internal_server_error(error):
         """
         Handles 500 (internal server errors) errors.
         """
 
-        # Roll back any database changes
+        # Roll back any database changes.
         db.session.rollback()
 
         app.logger.exception(f"500 ERROR: {error}")
@@ -132,11 +131,10 @@ def init_logger():
     if not log_dir:
         return
 
-    # Creating a directory to store logs
+    # Creating a directory to store logs.
     if not path.exists(log_dir):
         mkdir(log_dir)
 
-    # Create and configure logger
     basicConfig(
         handlers=[
             RotatingFileHandler(
@@ -180,7 +178,6 @@ def init_scheduler(app: Flask):
     * app - The Flask application.
     """
 
-    # Create the scheduler and register the update_db function as a job
     scheduler = BackgroundScheduler()
     scheduler.add_job(
         func=perform_update,
@@ -192,7 +189,7 @@ def init_scheduler(app: Flask):
     )
     scheduler.start()
 
-    # Shut down the scheduler when exiting the app
+    # Shut down the scheduler when exiting the app.
     atexit.register(lambda: scheduler.shutdown())
 
 
@@ -209,7 +206,6 @@ def register_blueprints(app: Flask):
     from application.routes.contests import contests_routes
     from application.routes.problems import problems_routes
 
-    # Register the blueprints
     app.register_blueprint(organization_routes, url_prefix="/organization")
     app.register_blueprint(users_routes, url_prefix="/users")
     app.register_blueprint(contests_routes, url_prefix="/contests")
@@ -225,31 +221,19 @@ def create_app(config_class: str):
     eg. "application.config.DevelopmentConfig", "application.config.ProductionConfig"
     """
 
-    # Create the application
     app = Flask(__name__)
 
-    # Load the configuration class depending on the mode, from config.py
     app.config.from_object(config_class)
 
-    # Makes app treat route URLs with and without trailing slashes the same
+    # Makes app treat route URLs with and without trailing slashes the same.
     app.url_map.strict_slashes = False
 
-    # Initialize the logger
+    # Application configuration.
     init_logger()
-
-    # Register the error handlers
     register_error_handlers(app)
-
-    # Initialize the Sentry client
     init_sentry()
-
-    # Register the blueprints
     register_blueprints(app)
-
-    # Initialize the database
     init_db(app)
-
-    # Initialize the scheduler
     init_scheduler(app)
 
     return app

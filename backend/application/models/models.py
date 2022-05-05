@@ -24,15 +24,15 @@ class Organization(db.Model):
 
     __tablename__ = "organization"
 
-    # Organization ID
+    # Organization ID.
     organization_id = db.Column(db.Integer, primary_key=True)
-    # Name of the organization
+    # Name of the organization.
     name = db.Column(db.String(100), nullable=False)
-    # Global rank of the organization
+    # Global rank of the organization.
     global_rank = db.Column(db.Integer, nullable=False)
-    # Number of users of the organization
+    # Number of users of the organization.
     number_of_users = db.Column(db.Integer, nullable=False)
-    # Rating of the organization
+    # Rating of the organization.
     rating = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
@@ -49,15 +49,15 @@ class User(db.Model):
 
     __tablename__ = "user"
 
-    # Codeforces handle of the user
+    # Codeforces handle of the user.
     handle = db.Column(db.String(50), primary_key=True)
-    # Account creation date
+    # Account creation date.
     creation_date = db.Column(db.DateTime, nullable=False)
-    # Codeforces rating of the user
+    # Codeforces rating of the user.
     rating = db.Column(db.Integer, nullable=False)
-    # The maximum rating of the user
+    # The maximum rating of the user.
     max_rating = db.Column(db.Integer, nullable=False)
-    # "rank" refers to the Title of the user in official terminology
+    # "rank" refers to the Title of the user in official terminology.
     rank = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
@@ -74,13 +74,13 @@ class Contest(db.Model):
 
     __tablename__ = "contest"
 
-    # Codeforces contest ID
+    # Codeforces contest ID.
     contest_id = db.Column(db.Integer, primary_key=True)
-    # Name of the contest
+    # Name of the contest.
     name = db.Column(db.String(50), nullable=False)
-    # Date of the contest
+    # Date of the contest.
     date = db.Column(db.DateTime, nullable=False)
-    # Duration of the contest
+    # Duration of the contest.
     duration = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
@@ -97,21 +97,21 @@ class ContestParticipant(db.Model):
 
     __tablename__ = "contest_participant"
 
-    # Unique ID assigned to the relation
+    # Unique ID assigned to the relation.
     id = db.Column(db.Integer, primary_key=True)
-    # Codeforces handle of the user
+    # Codeforces handle of the user.
     handle = db.Column(db.String(50), db.ForeignKey("user.handle"), nullable=False)
-    # Codeforces contest ID
+    # Codeforces contest ID.
     contest_id = db.Column(
         db.Integer, db.ForeignKey("contest.contest_id"), nullable=False
     )
-    # Rank of the user in the contest
+    # Rank of the user in the contest.
     rank = db.Column(db.Integer, nullable=False)
-    # Old rating (before the contest)
+    # Old rating (before the contest).
     old_rating = db.Column(db.Integer, nullable=False)
-    # New rating (after the contest)
+    # New rating (after the contest).
     new_rating = db.Column(db.Integer, nullable=False)
-    # Rating update time
+    # Rating update time.
     rating_update_time = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
@@ -125,17 +125,17 @@ class Problem(db.Model):
 
     __tablename__ = "problem"
 
-    # ID of the contest in which the problem is present
+    # ID of the contest in which the problem is present.
     contest_id = db.Column(
         db.Integer, db.ForeignKey("contest.contest_id"), primary_key=True
     )
-    # Index of problem in the contest
+    # Index of problem in the contest.
     index = db.Column(db.String(5), primary_key=True)
-    # Problem name
+    # Problem name.
     name = db.Column(db.String(50), nullable=False)
-    # Problem rating
+    # Problem rating.
     rating = db.Column(db.Integer, nullable=False)
-    # Tags of the problem (stored as a string to store in the database)
+    # Tags of the problem (stored as a string to store in the database).
     tags = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
@@ -152,23 +152,23 @@ class ProblemSolved(db.Model):
 
     __tablename__ = "problem_solved"
 
-    # Unique ID assigned to the relation
+    # Unique ID assigned to the relation.
     id = db.Column(db.Integer, primary_key=True)
-    # Codeforces handle of the user
+    # Codeforces handle of the user.
     handle = db.Column(db.String(50), db.ForeignKey("user.handle"), nullable=False)
-    # Codeforces contest ID
+    # Codeforces contest ID.
     contest_id = db.Column(
         db.Integer, db.ForeignKey("contest.contest_id"), nullable=False
     )
-    # Index of the problem in the contest
+    # Index of the problem in the contest.
     index = db.Column(db.String(5), nullable=False)
-    # Problem rating
+    # Problem rating.
     rating = db.Column(db.Integer, nullable=False)
-    # Tags of the problem (stored as a string to store in the database)
+    # Tags of the problem (stored as a string to store in the database).
     tags = db.Column(db.String(200), nullable=False)
-    # Programming language the problem was solved in
+    # Programming language the problem was solved in.
     language = db.Column(db.String(50), nullable=False)
-    # Problem solved time
+    # Problem solved time.
     solved_time = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
@@ -189,9 +189,9 @@ class Metadata(db.Model):
     __bind_key__ = "metadata"
     __tablename__ = "metadata"
 
-    # Property name (eg. "version")
+    # Property name (eg. "version").
     key = db.Column(db.String(50), primary_key=True)
-    # Property value (eg. "1.0.0")
+    # Property value (eg. "1.0.0").
     value = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):

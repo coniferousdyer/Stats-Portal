@@ -128,7 +128,6 @@ const UserStatistics = ({
   );
 };
 
-// Set prop types.
 UserStatistics.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
   userInformation: PropTypes.object.isRequired,

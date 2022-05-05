@@ -146,7 +146,6 @@ const HandleForm = ({ errors }) => {
   );
 };
 
-// Set prop types.
 HandleForm.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.string),
 };

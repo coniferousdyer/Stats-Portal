@@ -59,8 +59,8 @@ const ProblemsSolved = ({ lastUpdateTime, problemsData }) => {
               title={"Most Problems Solved"}
               dataList={problemsData[timePeriod]}
               attribute={"total_problems"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
-              statisticName={"Problems Solved"} // The column name for the statistic corresponding to the attribute.
-              sortingOrder={"desc"} // Either "asc" or "desc".
+              statisticName={"Problems Solved"}
+              sortingOrder={"desc"}
             />
           </div>
         </div>
@@ -69,7 +69,6 @@ const ProblemsSolved = ({ lastUpdateTime, problemsData }) => {
   );
 };
 
-// Set prop types.
 ProblemsSolved.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
   problemsData: PropTypes.object.isRequired,
@@ -81,12 +80,9 @@ export const getStaticProps = async () => {
   // The base URL is common to information ("/") and users' problems ("/problems-solved").
   const baseURL = `http://localhost:5000/users`;
 
-  // Obtain the data about information of users in the organization and problems solved
-  // by the organization.
   const usersInformation = await axios.get(baseURL);
   const problemsSolved = await axios.get(`${baseURL}/problems-solved`);
 
-  // Retrieve the data from the response.
   const usersData = usersInformation.data.users;
   const problemsSolvedData = problemsSolved.data.problem_statistics;
 
@@ -97,7 +93,6 @@ export const getStaticProps = async () => {
     "total_problems"
   );
 
-  // Pass the data to the component as props.
   return {
     props: {
       lastUpdateTime: usersInformation.data.last_update_time,

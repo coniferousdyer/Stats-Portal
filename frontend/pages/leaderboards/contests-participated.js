@@ -59,8 +59,8 @@ const ContestsParticipated = ({ lastUpdateTime, contestsData }) => {
               title={"Most Contests Participated"}
               dataList={contestsData[timePeriod]}
               attribute={"total_contests"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
-              statisticName={"Contests Participated"} // The column name for the statistic corresponding to the attribute.
-              sortingOrder={"desc"} // Either "asc" or "desc".
+              statisticName={"Contests Participated"}
+              sortingOrder={"desc"}
             />
           </div>
         </div>
@@ -69,7 +69,6 @@ const ContestsParticipated = ({ lastUpdateTime, contestsData }) => {
   );
 };
 
-// Set prop types.
 ContestsParticipated.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
   contestsData: PropTypes.object.isRequired,
@@ -81,14 +80,11 @@ export const getStaticProps = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
   const baseURL = `http://localhost:5000/users`;
 
-  // Obtain the data about information of users in the organization and contests participated
-  // by the organization.
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
     `${baseURL}/contests-participated`
   );
 
-  // Retrieve the data from the response.
   const usersData = usersInformation.data.users;
   const contestsParticipatedData = contestsParticipated.data.contest_statistics;
 
@@ -99,7 +95,6 @@ export const getStaticProps = async () => {
     "total_contests"
   );
 
-  // Pass the data to the component as props.
   return {
     props: {
       lastUpdateTime: usersInformation.data.last_update_time,

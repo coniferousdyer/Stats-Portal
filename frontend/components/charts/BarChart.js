@@ -89,10 +89,8 @@ const BarChart = ({
       };
     });
 
-    // Update the series
     setSeries(dataSeries);
 
-    // Update the chart configuration with the new names and color, if defined.
     setOptions({
       ...options,
       ...(color && { colors: color }),
@@ -119,12 +117,10 @@ const BarChart = ({
   );
 };
 
-// Set the default values of certain props in case they are not supplied.
 BarChart.defaultProps = {
   horizontal: false,
 };
 
-// Set prop types.
 BarChart.propTypes = {
   title: PropTypes.string,
   horizontal: PropTypes.bool,

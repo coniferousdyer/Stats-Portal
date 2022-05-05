@@ -16,7 +16,7 @@ def get_all_problems():
     url = f"{API_BASE_URL}problemset.problems"
     response = None
 
-    # Send the request to the Codeforces API and retry if it fails
+    # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
             response = requests.get(url)
@@ -25,13 +25,13 @@ def get_all_problems():
 
     result = response.json()["result"]["problems"]
 
-    problems = []  # List of problems
+    problems = []  # List of problems.
 
     for problem in result:
-        # If rating is not available, set it to 0
         rating = problem.get("rating", 0)
 
-        # Join the tags into a single string
+        # Join the tags into a single string so that they can be stored in a convenient
+        # format in the database.
         tags = ";".join(problem.get("tags", []))
 
         problems.append(

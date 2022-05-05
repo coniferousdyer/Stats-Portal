@@ -17,20 +17,20 @@ def get_all_contests():
     url = f"{API_BASE_URL}contest.list"
     response = None
 
-    # Send the request to the Codeforces API and retry if it fails
+    # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
             response = requests.get(url)
         except requests.exceptions.RequestException:
             sleep(1)
 
-    # Filtering out the contests that have not finished
+    # Filtering out the contests that have not finished.
     result = filter(lambda x: x["phase"] == "FINISHED", response.json()["result"])
 
-    contests = []  # List of contests
+    contests = []  # List of contests.
 
     for contest in result:
-        # Obtaining contest time in DateTime format
+        # Obtaining contest time in DateTime format.
         contest_time = convert_timestamp_to_datetime(contest["startTimeSeconds"])
 
         contests.append(

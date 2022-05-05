@@ -14,7 +14,6 @@ from application.utils.common import (
 )
 
 
-# Blueprint for contest-related endpoints
 contests_routes = Blueprint("contests_routes", __name__)
 
 
@@ -48,7 +47,7 @@ def get_contest(contest_id: int):
     * contest_id - The id of the contest.
     """
 
-    # Check if the contest exists
+    # Check if the contest exists.
     contest = Contest.query.get(contest_id)
     if contest is None:
         return (
@@ -82,7 +81,7 @@ def get_contest_standings(contest_id: int):
     """
 
     # Check if the contest exists. We must check the contest because it is possible
-    # that the contest exists, but no one in the organization prticipated.
+    # that the contest exists, but no one in the organization participated.
     contest = Contest.query.get(contest_id)
     if contest is None:
         return (
@@ -90,12 +89,11 @@ def get_contest_standings(contest_id: int):
             404,
         )
 
-    # Get the participants' list
+    # Get the participants' list.
     contest_participants = get_all_rows_as_dict(
         ContestParticipant.query.filter_by(contest_id=contest_id)
     )
 
-    # Get the standings
     contest_standings = sort_contest_participants(contest_participants)
 
     return (

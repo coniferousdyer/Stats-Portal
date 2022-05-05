@@ -31,28 +31,27 @@ def extract_contests_information(
         "highest_rating_decrease": 0,
     }
 
-    # If rating_history is True, we initialize the rating history list
     if rating_history:
         statistics["rating_history"] = []
 
     for contest_participated in contests_participated:
         statistics["total_contests"] += 1
 
-        # Check if the rank is the best
+        # Check if the rank is the best.
         if (
             statistics["best_rank"] is None
             or contest_participated["rank"] < statistics["best_rank"]
         ):
             statistics["best_rank"] = contest_participated["rank"]
 
-        # Check if the rank is the worst
+        # Check if the rank is the worst.
         if (
             statistics["worst_rank"] is None
             or contest_participated["rank"] > statistics["worst_rank"]
         ):
             statistics["worst_rank"] = contest_participated["rank"]
 
-        # Check if the rating increase is the highest
+        # Check if the rating increase is the highest.
         if (
             contest_participated["new_rating"] - contest_participated["old_rating"]
             > statistics["highest_rating_increase"]
@@ -61,7 +60,7 @@ def extract_contests_information(
                 contest_participated["new_rating"] - contest_participated["old_rating"]
             )
 
-        # Check if the rating decrease is the highest
+        # Check if the rating decrease is the highest.
         if (
             contest_participated["new_rating"] - contest_participated["old_rating"]
             < statistics["highest_rating_decrease"]
@@ -70,7 +69,6 @@ def extract_contests_information(
                 contest_participated["new_rating"] - contest_participated["old_rating"]
             )
 
-        # If rating_history is True, we add the rating change to the rating history list
         if rating_history:
             statistics["rating_history"].append(
                 {
@@ -99,11 +97,9 @@ def get_contest_statistics(
 
     all_time, this_month, this_week, today = [], [], [], []
 
-    # Separating the contests into the different time periods
     for contest_participated in contests_participated:
         all_time.append(contest_participated)
 
-        # Getting the date of the contest
         contest_date = next(
             (
                 contest["date"]
@@ -112,21 +108,20 @@ def get_contest_statistics(
             )
         )
 
-        # If the contest took place this year
+        # If the contest took place this year.
         if contest_date.year == datetime.now().year:
-            # If the contest took place this month
+            # If the contest took place this month.
             if contest_date.month == datetime.now().month:
                 this_month.append(contest_participated)
 
-                # If the contest took place this week
+                # If the contest took place this week.
                 if contest_date.isocalendar()[1] == datetime.now().isocalendar()[1]:
                     this_week.append(contest_participated)
 
-                    # If the contest took place today
+                    # If the contest took place today.
                     if contest_date.day == datetime.now().day:
                         today.append(contest_participated)
 
-    # Extracting the contest statistics
     statistics = {
         "all_time": extract_contests_information(all_time, rating_history),
         "this_month": extract_contests_information(this_month, rating_history),
@@ -146,10 +141,9 @@ def sort_contest_participants(contest_participants: list[dict]):
     * contest_participants - List of contest participation statistics.
     """
 
-    # Sorting the contest participants by rank
+    # Sorting the contest participants by rank.
     contest_participants.sort(key=lambda x: x["rank"])
 
-    # # Formatting the contest participants
     contest_standings = [
         {
             "handle": contest_participant["handle"],

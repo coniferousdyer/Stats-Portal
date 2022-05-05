@@ -46,7 +46,6 @@ const InformationCards = ({ userInformation }) => {
   );
 };
 
-// Set prop types.
 InformationCards.propTypes = {
   userInformation: PropTypes.shape({
     creation_date: PropTypes.string.isRequired,

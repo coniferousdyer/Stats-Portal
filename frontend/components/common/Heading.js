@@ -31,7 +31,6 @@ const Heading = ({ prefixHeading, mainHeading, suffixHeading }) => {
   );
 };
 
-// Set prop types.
 Heading.propTypes = {
   prefixHeading: PropTypes.string,
   mainHeading: PropTypes.string.isRequired,

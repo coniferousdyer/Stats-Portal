@@ -60,7 +60,6 @@ const InformationTable = ({ title, dataList }) => {
   );
 };
 
-// Set prop types.
 InformationTable.propTypes = {
   title: PropTypes.string,
   dataList: PropTypes.arrayOf(PropTypes.object).isRequired,

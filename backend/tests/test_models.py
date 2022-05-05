@@ -37,7 +37,7 @@ class TestOrganizationModel:
         """
 
         with app.app_context():
-            # Create the Organization object
+            # Create the Organization object.
             organization = Organization(
                 organization_id=1,
                 name="test_organization",
@@ -48,14 +48,14 @@ class TestOrganizationModel:
             db.session.add(organization)
             db.session.commit()
 
-            # Check the object was added to the database
+            # Check the object was added to the database.
             retrieved_organization = Organization.query.get(1)
             assert retrieved_organization.organization_id == 1
             assert retrieved_organization.name == "test_organization"
             assert retrieved_organization.global_rank == 1
             assert retrieved_organization.number_of_users == 1
             assert retrieved_organization.rating == 1000
-            # Do not use ORGANIZATION_BASE_URL here, as the goal is to test the URL generation
+            # Do not use ORGANIZATION_BASE_URL here, as the goal is to test the URL generation.
             assert (
                 retrieved_organization.url()
                 == "https://codeforces.com/ratings/organization/1"
@@ -68,7 +68,7 @@ class TestOrganizationModel:
         * THEN the object is not stored in the database
         """
 
-        # Create the Organization object
+        # Create the Organization object.
         with app.app_context():
             organization = Organization(
                 organization_id=1,
@@ -80,7 +80,7 @@ class TestOrganizationModel:
             db.session.add(organization)
             db.session.commit()
 
-            # Try to create an organization with the same organization_id
+            # Try to create an organization with the same organization_id.
             with pytest.raises(IntegrityError):
                 organization = Organization(
                     organization_id=1,
@@ -118,14 +118,14 @@ class TestUserModel:
             db.session.add(user)
             db.session.commit()
 
-            # Check the object was stored correctly
+            # Check the object was stored correctly.
             retrieved_user = User.query.get("test_user")
             assert retrieved_user.handle == "test_user"
             assert retrieved_user.creation_date == datetime(2020, 1, 1)
             assert retrieved_user.rating == 1000
             assert retrieved_user.max_rating == 2000
             assert retrieved_user.rank == "test_rank"
-            # Do not use PROFILE_BASE_URL here, as the goal is to test the URL generation
+            # Do not use PROFILE_BASE_URL here, as the goal is to test the URL generation.
             assert retrieved_user.url() == "https://codeforces.com/profile/test_user"
 
     def test_duplicate_user_addition(self, app):
@@ -136,7 +136,7 @@ class TestUserModel:
         """
 
         with app.app_context():
-            # Create a User object
+            # Create a User object.
             user = User(
                 handle="test_user",
                 creation_date=datetime(2020, 1, 1),
@@ -147,10 +147,10 @@ class TestUserModel:
             db.session.add(user)
             db.session.commit()
 
-            # Try to create a User object with the same handle
+            # Try to create a User object with the same handle.
             with pytest.raises(IntegrityError):
                 user = User(
-                    # The handle must be unique for every user
+                    # The handle must be unique for every user.
                     handle="test_user",
                     creation_date=datetime(2022, 2, 1),
                     rating=1200,
@@ -175,7 +175,7 @@ class TestContestModel:
         """
 
         with app.app_context():
-            # Create a Contest object
+            # Create a Contest object.
             contest = Contest(
                 contest_id=1,
                 name="test_contest",
@@ -185,13 +185,13 @@ class TestContestModel:
             db.session.add(contest)
             db.session.commit()
 
-            # Check the object was stored correctly
+            # Check the object was stored correctly.
             retrieved_contest = Contest.query.get(1)
             assert retrieved_contest.contest_id == 1
             assert retrieved_contest.name == "test_contest"
             assert retrieved_contest.date == datetime(2020, 1, 1)
             assert retrieved_contest.duration == 100
-            # Do not use CONTEST_BASE_URL here, as the goal is to test the URL generation
+            # Do not use CONTEST_BASE_URL here, as the goal is to test the URL generation.
             assert retrieved_contest.url() == "https://codeforces.com/contest/1"
 
     def test_duplicate_contest_addition(self, app):
@@ -202,7 +202,7 @@ class TestContestModel:
         """
 
         with app.app_context():
-            # Create a Contest object
+            # Create a Contest object.
             contest = Contest(
                 contest_id=1,
                 name="test_contest",
@@ -212,10 +212,10 @@ class TestContestModel:
             db.session.add(contest)
             db.session.commit()
 
-            # Try to create a Contest object with the same contest_id
+            # Try to create a Contest object with the same contest_id.
             with pytest.raises(IntegrityError):
                 contest = Contest(
-                    # The contest_id must be unique for every contest
+                    # The contest_id must be unique for every contest.
                     contest_id=1,
                     name="test_contest_2",
                     date=datetime(2022, 2, 1),
@@ -239,7 +239,7 @@ class TestProblemModel:
         """
 
         with app.app_context():
-            # Create a Problem object
+            # Create a Problem object.
             problem = Problem(
                 contest_id=1,
                 index="test_index",
@@ -250,14 +250,14 @@ class TestProblemModel:
             db.session.add(problem)
             db.session.commit()
 
-            # Check the object was stored correctly
+            # Check the object was stored correctly.
             retrieved_problem = Problem.query.get((1, "test_index"))
             assert retrieved_problem.contest_id == 1
             assert retrieved_problem.index == "test_index"
             assert retrieved_problem.name == "test_name"
             assert retrieved_problem.rating == 1000
             assert retrieved_problem.tags.split(";") == ["tag1", "tag2"]
-            # Do not use PROBLEM_BASE_URL here, as the goal is to test the URL generation
+            # Do not use PROBLEM_BASE_URL here, as the goal is to test the URL generation.
             assert (
                 retrieved_problem.url()
                 == "https://codeforces.com/problemset/problem/1/test_index"
@@ -271,7 +271,7 @@ class TestProblemModel:
         """
 
         with app.app_context():
-            # Create a Problem object
+            # Create a Problem object.
             problem = Problem(
                 contest_id=1,
                 index="test_index",
@@ -282,10 +282,10 @@ class TestProblemModel:
             db.session.add(problem)
             db.session.commit()
 
-            # Try to create a Problem object with the same contest_id and index
+            # Try to create a Problem object with the same contest_id and index.
             with pytest.raises(IntegrityError):
                 problem = Problem(
-                    # The contest_id + index must be unique for every problem
+                    # The contest_id + index must be unique for every problem.
                     contest_id=1,
                     index="test_index",
                     name="test_name_2",
@@ -310,7 +310,7 @@ class TestContestParticipantModel:
         """
 
         with app.app_context():
-            # Create a ContestParticipant object
+            # Create a ContestParticipant object.
             contest_participant = ContestParticipant(
                 handle="test_handle",
                 contest_id=1,
@@ -322,7 +322,7 @@ class TestContestParticipantModel:
             db.session.add(contest_participant)
             db.session.commit()
 
-            # Check the object was stored correctly
+            # Check the object was stored correctly.
             retrieved_contest_participant = ContestParticipant.query.filter_by(
                 contest_id=1, handle="test_handle"
             ).first()
@@ -350,7 +350,7 @@ class TestProblemSolvedModel:
         """
 
         with app.app_context():
-            # Create a ProblemSolved object
+            # Create a ProblemSolved object.
             problem_solved = ProblemSolved(
                 handle="test_handle",
                 contest_id=1,
@@ -363,7 +363,7 @@ class TestProblemSolvedModel:
             db.session.add(problem_solved)
             db.session.commit()
 
-            # Check the object was stored correctly
+            # Check the object was stored correctly.
             retrieved_problem_solved = ProblemSolved.query.filter_by(
                 contest_id=1, handle="test_handle", index="test_index"
             ).first()
@@ -390,12 +390,12 @@ class TestMetadataModel:
         """
 
         with app.app_context():
-            # Create a Metadata object
+            # Create a Metadata object.
             metadata = Metadata(key="test_key", value="test_value")
             db.session.add(metadata)
             db.session.commit()
 
-            # Check the object was stored correctly
+            # Check the object was stored correctly.
             retrieved_metadata = Metadata.query.get("test_key")
             assert retrieved_metadata.key == "test_key"
             assert retrieved_metadata.value == "test_value"
@@ -408,14 +408,14 @@ class TestMetadataModel:
         """
 
         with app.app_context():
-            # Create a Metadata object
+            # Create a Metadata object.
             metadata = Metadata(key="test_key", value="test_value")
             db.session.add(metadata)
             db.session.commit()
 
-            # Try to create a Metadata object with the same key
+            # Try to create a Metadata object with the same key.
             with pytest.raises(IntegrityError):
-                # The key must be unique for every metadata
+                # The key must be unique for every metadata.
                 metadata = Metadata(key="test_key", value="test_value_2")
                 db.session.add(metadata)
                 db.session.commit()

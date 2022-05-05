@@ -4,7 +4,6 @@ from os import environ
 from application import create_app
 
 
-# Load environment variables from the .env file
 load_dotenv()
 
 
@@ -18,10 +17,8 @@ configuration_class = (
     else "application.config.DevelopmentConfig"
 )
 
-# Create the application with the supplied configuration
 app = create_app(configuration_class)
 
-# Run the app
 if __name__ == "__main__":
     app.run(
         host=environ.get("APPLICATION_HOST", "0.0.0.0"),

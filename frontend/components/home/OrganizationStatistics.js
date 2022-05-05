@@ -163,7 +163,6 @@ const OrganizationStatistics = ({
   );
 };
 
-// Set prop types.
 OrganizationStatistics.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
   organizationInformation: PropTypes.object.isRequired,

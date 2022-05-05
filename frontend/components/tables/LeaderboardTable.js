@@ -33,9 +33,7 @@ const LeaderboardTable = ({
   statisticName,
   sortingOrder,
 }) => {
-  // The column titles.
   const columns = [
-    // Position of user in the standings.
     {
       name: "",
       label: "Position",
@@ -47,7 +45,6 @@ const LeaderboardTable = ({
         },
       },
     },
-    // Handle.
     {
       name: "handle",
       label: "Handle",
@@ -56,7 +53,6 @@ const LeaderboardTable = ({
         sort: true,
       },
     },
-    // Rank.
     {
       name: "rank",
       label: "Rank",
@@ -77,7 +73,6 @@ const LeaderboardTable = ({
         },
       },
     },
-    // Rating.
     {
       name: "rating",
       label: "Rating",
@@ -86,7 +81,6 @@ const LeaderboardTable = ({
         sort: true,
       },
     },
-    // Statistic.
     {
       name: attribute,
       label: statisticName ? statisticName : attribute,
@@ -97,7 +91,6 @@ const LeaderboardTable = ({
     },
   ];
 
-  // The options for the table.
   const options = {
     rowsPerPageOptions: [10, 25, 50, 100],
     searchPlaceholder: `Search by handle, rank, rating, or ${statisticName.toLowerCase()}`,
@@ -108,9 +101,6 @@ const LeaderboardTable = ({
   };
 
   return (
-    // The core element of the leaderboard is an MUI DataTable. We abstract away the
-    // common configuration for the leaderboards, and only the data and attribute have
-    // to be supplied to generate the entire leaderboard.
     <MUIDataTable
       title={title}
       data={dataList}
@@ -120,12 +110,10 @@ const LeaderboardTable = ({
   );
 };
 
-// Set the default values of certain props in case they are not supplied.
 LeaderboardTable.defaultProps = {
   sortingOrder: "desc",
 };
 
-// Set prop types.
 LeaderboardTable.propTypes = {
   title: PropTypes.string.isRequired,
   dataList: PropTypes.arrayOf(

@@ -30,7 +30,6 @@ const TimePeriodDropdown = ({ timePeriod, setTimePeriod }) => {
           id="time-period-select"
           value={timePeriod}
           label="Time Period"
-          // When the user selects a time period, the state variable of the parent component is updated.
           onChange={(event) => setTimePeriod(event.target.value)}
           className={styles.time_period_select}
         >
@@ -52,7 +51,6 @@ const TimePeriodDropdown = ({ timePeriod, setTimePeriod }) => {
   );
 };
 
-// Set prop types.
 TimePeriodDropdown.propTypes = {
   timePeriod: PropTypes.string.isRequired,
   setTimePeriod: PropTypes.func.isRequired,

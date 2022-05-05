@@ -59,10 +59,8 @@ def add_users_to_db(users: list[dict]):
     """
 
     for user in users:
-        # Convert the datestring to datetime object
+        # Convert the datestring to datetime object.
         user["creation_date"] = convert_datestring_to_datetime(user["creation_date"])
-
-        # Add the user to the database
         db.session.add(User(**user))
 
 
@@ -75,10 +73,8 @@ def add_contests_to_db(contests: list[dict]):
     """
 
     for contest in contests:
-        # Convert the datestring to datetime object
+        # Convert the datestring to datetime object.
         contest["date"] = convert_datestring_to_datetime(contest["date"])
-
-        # Add the contest to the database
         db.session.add(Contest(**contest))
 
 
@@ -91,15 +87,13 @@ def add_contest_participants_to_db(contest_participants: list[list[dict]]):
     """
 
     # contest_participants is a list of contest participation statistics dictionaries
-    # Each list corresponds to a user
+    # Each list corresponds to a user.
     for contest_participant in contest_participants:
         for contest in contest_participant:
-            # Convert the datestring to datetime object
+            # Convert the datestring to datetime object.
             contest["rating_update_time"] = convert_datestring_to_datetime(
                 contest["rating_update_time"]
             )
-
-            # Add the contest participant to the database
             db.session.add(ContestParticipant(**contest))
 
 
@@ -112,7 +106,6 @@ def add_problems_to_db(problems: list[dict]):
     """
 
     for problem in problems:
-        # Add the problem to the database
         db.session.add(Problem(**problem))
 
 
@@ -125,13 +118,11 @@ def add_problems_solved_to_db(problems_solved: list[dict]):
     """
 
     for problem_solved in problems_solved:
-        # Add the problem statistics to the database
         for problem in problem_solved:
-            # Convert the datestring to datetime object
+            # Convert the datestring to datetime object.
             problem["solved_time"] = convert_datestring_to_datetime(
                 problem["solved_time"]
             )
-
             db.session.add(ProblemSolved(**problem))
 
 
@@ -145,12 +136,11 @@ def store_last_update_time():
     Stores the last time the database was updated.
     """
 
-    # Obtaining the pytz timezone string from the .env file
     time_zone = environ.get("TIMEZONE", "Asia/Kolkata")
 
     metadata_last_update_time = Metadata.query.get("last_update_time")
 
-    # If the metadata doesn't exist, create it
+    # If the metadata doesn't exist, create it.
     if metadata_last_update_time is None:
         metadata = Metadata(
             key="last_update_time",
@@ -189,10 +179,10 @@ def update_db(
     """
 
     with app.app_context():
-        # Clear all database tables
+        # Clear all database tables.
         clear_db_tables()
 
-        # Add the updated information to the database
+        # Add the updated information to the database.
         add_organization_information_to_db(organization_information)
         add_contests_to_db(contests)
         add_problems_to_db(problems)
@@ -200,7 +190,7 @@ def update_db(
         add_contest_participants_to_db(users_contests)
         add_problems_solved_to_db(users_problems)
 
-        # Update the last database update time
+        # Update the last database update time.
         store_last_update_time()
 
         # Commit the changes to the database, and rollback if an error occurs.

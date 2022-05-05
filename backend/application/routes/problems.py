@@ -12,7 +12,6 @@ from application.utils.common import (
 )
 
 
-# Blueprint for problem-related endpoints
 problems_routes = Blueprint("problems_routes", __name__)
 
 

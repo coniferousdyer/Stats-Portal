@@ -27,7 +27,6 @@ const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
   return (
     <>
       <Head>
-        {/* Joining all the handles together to form a comma separated string */}
         <title>
           Stats Portal | Compare{" "}
           {handlesProvided
@@ -39,8 +38,6 @@ const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
       <Navbar />
 
       <div className="layout">
-        {/* If valid handles were provided, render the user statistics comparison.
-          Else, render the handle input form. */}
         {!handlesProvided ? (
           <HandleForm errors={errors} />
         ) : (
@@ -54,7 +51,6 @@ const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
   );
 };
 
-// Set prop types.
 Compare.propTypes = {
   handlesProvided: PropTypes.bool.isRequired,
   lastUpdateTime: PropTypes.string,
@@ -95,11 +91,9 @@ export const getServerSideProps = async (context) => {
     // Variable to store the last database update time, if found.
     let lastUpdateTime = null;
 
-    // The array of user data.
     const users = await Promise.all(
       handles.map(async (handle, index) => {
         try {
-          // Trimming the handle to remove leading and trailing whitespace.
           handle = handle.trim();
 
           // If the handle is empty, we do 2 things:
@@ -125,14 +119,12 @@ export const getServerSideProps = async (context) => {
           // and user's problems solved ("/problems-solved").
           const baseURL = `http://localhost:5000/users/${handle}`;
 
-          // Getting the required statistics from the backend.
           const userInformation = await axios.get(baseURL);
           const userContests = await axios.get(
             `${baseURL}/contests-participated`
           );
           const userProblems = await axios.get(`${baseURL}/problems-solved`);
 
-          // We update the last update time if it is set to null.
           if (lastUpdateTime === null) {
             lastUpdateTime = userInformation.data.last_update_time;
           }
@@ -143,8 +135,6 @@ export const getServerSideProps = async (context) => {
             problems: userProblems.data.problem_statistics,
           };
         } catch (error) {
-          // If there was an error, we add the error message to the errors dictionary
-          // for the corresponding handle.
           if (error.response && error.response.status === 404) {
             errors[handle] = `User with handle ${handle} not found`;
           } else if (error.message) {
@@ -164,7 +154,6 @@ export const getServerSideProps = async (context) => {
 
     // If there were no errors, we return the users data.
     if (Object.keys(errors).length === 0) {
-      // Passing in the statistics as props to the page component.
       // handlesProvided is set to true if all handles provided were valid.
       return {
         props: {

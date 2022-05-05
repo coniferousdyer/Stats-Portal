@@ -56,7 +56,6 @@ const SectionCards = ({ organizationName }) => {
   );
 };
 
-// Set prop types.
 SectionCards.propTypes = {
   organizationName: PropTypes.string.isRequired,
 };

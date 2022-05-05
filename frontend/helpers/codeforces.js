@@ -10,15 +10,13 @@
  * @returns {boolean} - True if the handle is valid, false otherwise.
  */
 export const validateHandle = (handle) => {
-  // If the string is empty, return false.
   if (handle === "") {
     return false;
   } else if (!/^[a-zA-Z0-9_-]+$/.test(handle)) {
     // If the string contains any non-alphanumeric characters other than
-    // underscores and hyphens, return false.
+    // underscores and hyphens, it is not a valid handle.
     return false;
   } else {
-    // Otherwise, return true.
     return true;
   }
 };

@@ -66,7 +66,6 @@ const DescriptorCard = ({
   );
 };
 
-// Set prop types.
 DescriptorCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,

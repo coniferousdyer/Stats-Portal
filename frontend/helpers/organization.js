@@ -20,7 +20,6 @@ export const obtainOverallContestsStatistics = async (userContests) => {
   Object.keys(userContests).forEach((user) => {
     // For each time period.
     Object.keys(userContests[user]).forEach((time) => {
-      // If a key for the time period does not exist in overallStatistics, create it.
       if (!(time in overallStatistics))
         overallStatistics[time] = {
           best_rank: null,
@@ -134,18 +133,15 @@ export const obtainOverallProblemsStatistics = async (userProblems) => {
   Object.keys(userProblems).forEach((user) => {
     // For each time period.
     Object.keys(userProblems[user]).forEach((time) => {
-      // If a key for the time period does not exist in overallStatistics, create it.
       if (!(time in overallStatistics)) overallStatistics[time] = {};
       // For each category of problems solved ("rating", "tags", etc.).
       Object.keys(userProblems[user][time]).forEach((category) => {
         if (category !== "total_problems") {
-          // If a key for the category does not exist in overallStatistics, create it.
           if (!(category in overallStatistics[time]))
             overallStatistics[time][category] = {};
 
           // For each type of problem belonging to the category (eg. if category is "rating", type would be 800).
           Object.keys(userProblems[user][time][category]).forEach((type) => {
-            // If a key for the type does not exist in overallStatistics, create it.
             if (!(type in overallStatistics[time][category]))
               overallStatistics[time][category][type] = 0;
 
@@ -154,7 +150,6 @@ export const obtainOverallProblemsStatistics = async (userProblems) => {
               userProblems[user][time][category][type];
           });
         } else {
-          // If a key for the category does not exist in overallStatistics, create it.
           if (!("total_problems" in overallStatistics[time]))
             overallStatistics[time].total_problems = 0;
 

@@ -82,7 +82,6 @@ const LineChart = ({ title, dataList }) => {
       };
     });
 
-    // Update the series.
     setSeries(dataSeries);
   }, [dataList]);
 
@@ -95,7 +94,6 @@ const LineChart = ({ title, dataList }) => {
   );
 };
 
-// Set prop types.
 LineChart.propTypes = {
   title: PropTypes.string,
   dataList: PropTypes.arrayOf(

@@ -14,7 +14,6 @@ from application.utils.common import row_to_dict, convert_datestring_to_datetime
 load_dotenv()
 
 
-# Blueprint for organization-related endpoints
 organization_routes = Blueprint("organization_routes", __name__)
 
 
@@ -24,7 +23,7 @@ def get_organization_information():
     Returns the organization information.
     """
 
-    # Check if the organization exists
+    # Check if the organization exists.
     organization = Organization.query.get(environ.get("ORGANIZATION_NUMBER", ""))
     if organization is None:
         return (

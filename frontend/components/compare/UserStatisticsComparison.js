@@ -129,7 +129,6 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
   );
 };
 
-// Set prop types.
 UserStatisticsComparison.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
   usersList: PropTypes.arrayOf(

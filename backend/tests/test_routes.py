@@ -33,7 +33,7 @@ class TestOrganizationRoutes:
         Tests the organization-related routes.
         """
 
-        # Create an organization and add it to the database
+        # Create an organization and add it to the database.
         with app.app_context():
             organization = Organization(
                 organization_id=int(environ.get("ORGANIZATION_NUMBER", "")),
@@ -45,7 +45,7 @@ class TestOrganizationRoutes:
             db.session.add(organization)
             db.session.commit()
 
-        # Test the organization route
+        # Test the organization route.
         response = client.get("/organization")
         assert response.status_code == 200
         assert "last_update_time" in response.get_json()
@@ -67,7 +67,7 @@ class TestUserRoutes:
         * THEN check the status code is 200
         """
 
-        # Create a user and add to the database
+        # Create a user and add to the database.
         with app.app_context():
             user = User(
                 handle="test_user",
@@ -92,11 +92,11 @@ class TestUserRoutes:
         * IF the user does not exist, check the status code is 404
         """
 
-        # Test without a user
+        # Test without a user.
         response = client.get("/users/test_user")
         assert response.status_code == 404
 
-        # Create a user and add to the database
+        # Create a user and add to the database.
         with app.app_context():
             user = user = User(
                 handle="test_user",
@@ -108,11 +108,11 @@ class TestUserRoutes:
             db.session.add(user)
             db.session.commit()
 
-        # Test with the incorrect route (essentially looking for a different user)
+        # Test with the incorrect route (essentially looking for a different user).
         response = client.get("/users/test_user2")
         assert response.status_code == 404
 
-        # Test with the correct user handle
+        # Test with the correct user handle.
         response = client.get("/users/test_user")
         assert response.status_code == 200
         assert response.get_json() is not None
@@ -125,7 +125,7 @@ class TestUserRoutes:
         * THEN check the status code is 200
         """
 
-        # Create a user, a contest, a contest given and add to the database
+        # Create a user, a contest, a contest given and add to the database.
         with app.app_context():
             db.session.add(
                 User(
@@ -169,11 +169,11 @@ class TestUserRoutes:
         * IF the user does not exist, check the status code is 404
         """
 
-        # Test without the user
+        # Test without the user.
         response = client.get("/users/test_user/contests-participated")
         assert response.status_code == 404
 
-        # Create a user, a contest, a contest given and add to the database
+        # Create a user, a contest, a contest given and add to the database.
         with app.app_context():
             db.session.add(
                 User(
@@ -204,11 +204,11 @@ class TestUserRoutes:
             )
             db.session.commit()
 
-        # Test with the incorrect route (essentially looking for a different user)
+        # Test with the incorrect route (essentially looking for a different user).
         response = client.get("/users/test_user2/contests-participated")
         assert response.status_code == 404
 
-        # Test with the correct user handle
+        # Test with the correct user handle.
         response = client.get("/users/test_user/contests-participated")
         assert response.status_code == 200
         assert response.get_json() is not None
@@ -221,7 +221,7 @@ class TestUserRoutes:
         * THEN check the status code is 200
         """
 
-        # Create a user, a problem and a problem solved and add to the database
+        # Create a user, a problem and a problem solved and add to the database.
         with app.app_context():
             db.session.add(
                 User(
@@ -267,11 +267,11 @@ class TestUserRoutes:
         * IF the user does not exist, check the status code is 404
         """
 
-        # Test without the user
+        # Test without the user.
         response = client.get("/users/test_user/problems-solved")
         assert response.status_code == 404
 
-        # Create a user, a problem and a problem solved and add to the database
+        # Create a user, a problem and a problem solved and add to the database.
         with app.app_context():
             db.session.add(
                 User(
@@ -304,7 +304,7 @@ class TestUserRoutes:
             )
             db.session.commit()
 
-        # Test with the incorrect route (essentially looking for a different user)
+        # Test with the incorrect route (essentially looking for a different user).
         response = client.get("/users/test_user2/problems-solved")
         assert response.status_code == 404
 
@@ -328,7 +328,7 @@ class TestContestRoutes:
         * THEN check the status code is 200
         """
 
-        # Create a contest and add to the database
+        # Create a contest and add to the database.
         with app.app_context():
             db.session.add(
                 Contest(
@@ -353,11 +353,11 @@ class TestContestRoutes:
         * IF the contest does not exist, check the status code is 404
         """
 
-        # Test without a contest
+        # Test without a contest.
         response = client.get("/contests/1")
         assert response.status_code == 404
 
-        # Create a contest and add to the database
+        # Create a contest and add to the database.
         with app.app_context():
             db.session.add(
                 Contest(
@@ -369,11 +369,11 @@ class TestContestRoutes:
             )
             db.session.commit()
 
-        # Test with the incorrect route (essentially looking for a different contest)
+        # Test with the incorrect route (essentially looking for a different contest).
         response = client.get("/contests/2")
         assert response.status_code == 404
 
-        # Test with the correct contest id
+        # Test with the correct contest id.
         response = client.get("/contests/1")
         assert response.status_code == 200
         assert response.get_json() is not None
@@ -387,11 +387,11 @@ class TestContestRoutes:
         * IF the contest does not exist, check the status code is 404
         """
 
-        # Test without a contest
+        # Test without a contest.
         response = client.get("/contests/1/standings")
         assert response.status_code == 404
 
-        # Create a contest and a contest participant and add to the database
+        # Create a contest and a contest participant and add to the database.
         with app.app_context():
             db.session.add(
                 Contest(
@@ -413,7 +413,7 @@ class TestContestRoutes:
             )
             db.session.commit()
 
-        # Test with the incorrect route (essentially looking for a different contest)
+        # Test with the incorrect route (essentially looking for a different contest).
         response = client.get("/contests/2/standings")
         assert response.status_code == 404
 
@@ -437,7 +437,7 @@ class TestProblemRoutes:
         * THEN check the status code is 200
         """
 
-        # Create a problem and add to the database
+        # Create a problem and add to the database.
         with app.app_context():
             db.session.add(
                 Problem(

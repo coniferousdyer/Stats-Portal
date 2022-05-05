@@ -21,7 +21,6 @@ from application.utils.common import (
 )
 
 
-# Blueprint for user-related endpoints
 users_routes = Blueprint("users_routes", __name__)
 
 
@@ -60,7 +59,7 @@ def get_user_information(handle: str):
     * handle - The handle of the user. Supplied as part of the URL.
     """
 
-    # Checking if the user exists
+    # Checking if the user exists.
     user = User.query.get(handle)
     if not user:
         return jsonify({"error": "User not found."}), 404
@@ -92,19 +91,17 @@ def get_all_users_contests_participated():
     Returns statistics of contests given by all users in the organization.
     """
 
-    # Getting all users, contests and contest statistics
     users = get_all_rows_as_dict(User.query.all())
     contests = get_all_rows_as_dict(Contest.query.all())
 
     contest_statistics = {}
 
     for user in users:
-        # Finding the contests participated by the user
+        # Finding the contests participated by the user.
         contests_participated = get_all_rows_as_dict(
             ContestParticipant.query.filter_by(handle=user["handle"]).all()
         )
 
-        # Adding the date of the contest to the contest statistics
         contest_statistics[user["handle"]] = get_contest_statistics(
             contests, contests_participated
         )
@@ -132,22 +129,20 @@ def get_user_contests_participated(handle: str):
     * handle - The handle of the user. Supplied as part of the URL.
     """
 
-    # Checking if the user exists
+    # Checking if the user exists.
     user = User.query.get(handle)
     if not user:
         return jsonify({"error": "User not found."}), 404
     else:
         user = row_to_dict(user)
 
-    # Obtaining all contests
     contests = get_all_rows_as_dict(Contest.query.all())
 
-    # Obtaining contest participation statistics for the user from the database
+    # Obtaining contest participation statistics for the user from the database.
     contests_participated = get_all_rows_as_dict(
         ContestParticipant.query.filter_by(handle=handle).all()
     )
 
-    # Adding the date of the contest to the contest statistics.
     # For single users, we do require the rating history.
     contest_statistics = get_contest_statistics(
         contests, contests_participated, rating_history=True
@@ -178,18 +173,16 @@ def get_all_users_problems_solved():
     Returns statistics of problems solved and submissions made by all users in the organization.
     """
 
-    # Getting all users and problems solved
     users = get_all_rows_as_dict(User.query.all())
 
     problem_statistics = {}
 
     for user in users:
-        # Finding the problems solved by the user
+        # Finding the problems solved by the user.
         problems_solved = get_all_rows_as_dict(
             ProblemSolved.query.filter_by(handle=user["handle"]).all()
         )
 
-        # Obtaining the problem statistics for the user
         problem_statistics[user["handle"]] = get_problems_statistics(problems_solved)
 
     return (
@@ -215,19 +208,18 @@ def get_user_problems_solved(handle: str):
     * handle - The handle of the user. Supplied as part of the URL.
     """
 
-    # Checking if the user exists
+    # Checking if the user exists.
     user = User.query.get(handle)
     if not user:
         return jsonify({"error": "User not found."}), 404
     else:
         user = row_to_dict(user)
 
-    # Obtaining problems solved by the user from the database
+    # Obtaining problems solved by the user from the database.
     problems_solved = get_all_rows_as_dict(
         ProblemSolved.query.filter_by(handle=handle).all()
     )
 
-    # Obtaining the problem statistics for the user
     problem_statistics = get_problems_statistics(problems_solved)
 
     return (

@@ -37,13 +37,11 @@ const KeyValueCard = ({ cardKey, cardValue, color, textColor }) => {
   );
 };
 
-// Set the default values of certain props in case they are not supplied.
 KeyValueCard.defaultProps = {
   color: "#ffffff",
   textColor: "#000000",
 };
 
-// Set prop types.
 KeyValueCard.propTypes = {
   cardKey: PropTypes.string.isRequired,
   cardValue: PropTypes.oneOfType([

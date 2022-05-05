@@ -22,17 +22,14 @@ export const obtainDataCountPerUser = (usersInformation, data, attribute) => {
 
   // For each user.
   usersInformation.forEach((user) => {
-    // Obtain the corresponding data for the user.
     const userData = data[user.handle];
 
     // For each time period.
     Object.keys(userData).forEach((time) => {
-      // If the time period is not yet in the resultData object, create it.
       if (!resultData[time]) {
         resultData[time] = [];
       }
 
-      // Add the user's data to the resultData.
       resultData[time].push({
         handle: user.handle,
         rank: user.rank,

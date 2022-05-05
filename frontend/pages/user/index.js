@@ -43,8 +43,6 @@ const User = ({
       <Navbar />
 
       <div className="layout">
-        {/* If a valid handle was provided, render the user statistics visualization.
-          Else, render the handle input form. */}
         {!handleProvided ? (
           <HandleForm error={error} />
         ) : (
@@ -60,7 +58,6 @@ const User = ({
   );
 };
 
-// Set prop types.
 User.propTypes = {
   handleProvided: PropTypes.bool.isRequired,
   lastUpdateTime: PropTypes.string,
@@ -83,7 +80,6 @@ export const getServerSideProps = async (context) => {
     }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`
   );
 
-  // Extracting handle from URL.
   let handle = context.query.handle;
 
   // Check if an array of handles is provided. We account for the case where
@@ -93,12 +89,9 @@ export const getServerSideProps = async (context) => {
 
   // Fetch user information if and only if the handle is provided.
   if (handle !== undefined) {
-    // Getting the required statistics from the backend.
     try {
-      // Trimming the handle to remove any whitespace.
       handle = handle.trim();
 
-      // If the handle is empty, we throw an error.
       if (handle === "") {
         throw new Error("Handle cannot be empty.");
       }
@@ -120,7 +113,6 @@ export const getServerSideProps = async (context) => {
       const userContests = await axios.get(`${baseURL}/contests-participated`);
       const userProblems = await axios.get(`${baseURL}/problems-solved`);
 
-      // Passing in the statistics as props to the page component.
       // handleProvided is set to true only if a handle was provided and it is valid.
       return {
         props: {
@@ -135,11 +127,9 @@ export const getServerSideProps = async (context) => {
       let errorMessage;
 
       // If even one of the requests returns a 404, this means the user does not exist in the backend.
-      // We return a 404 error to the frontend.
       if (error.response && error.response.status === 404) {
         errorMessage = `User with handle ${handle} not found`;
       } else if (error.message) {
-        // If instead the handle was not valid, the error thrown contains an error message.
         errorMessage = error.message;
       } else {
         errorMessage = "An unknown error occurred";

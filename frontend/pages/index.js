@@ -53,7 +53,6 @@ export default function Home({
   );
 }
 
-// Set prop types.
 Home.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
   organizationInformation: PropTypes.object.isRequired,
@@ -66,14 +65,12 @@ export const getStaticProps = async () => {
   // and users' problems solved ("/users/problems-solved").
   const baseURL = "http://localhost:5000";
 
-  // Obtain the data about organization and contests and problems solved by each user from the backend.
   const organizationInformation = await axios.get(`${baseURL}/organization`);
   const userContests = await axios.get(
     `${baseURL}/users/contests-participated`
   );
   const userProblems = await axios.get(`${baseURL}/users/problems-solved`);
 
-  // Retrieve the data from the response.
   const lastUpdateTime = organizationInformation.data.last_update_time;
   const organizationInformationData = organizationInformation.data.organization;
   const userContestsData = userContests.data.contest_statistics;
@@ -88,7 +85,6 @@ export const getStaticProps = async () => {
     userProblemsData
   );
 
-  // Passing in the statistics to the page component.
   return {
     props: {
       lastUpdateTime: lastUpdateTime,

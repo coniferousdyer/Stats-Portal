@@ -70,10 +70,8 @@ const PieChart = ({ title, donut, data }) => {
     const names = Object.keys(data).sort((a, b) => data[b] - data[a]);
     const values = Object.values(data).sort((a, b) => b - a);
 
-    // Update the series.
     setSeries(values);
 
-    // Add the newly created labels to the configuration options.
     setOptions({
       ...options,
       labels: names,
@@ -88,12 +86,10 @@ const PieChart = ({ title, donut, data }) => {
   );
 };
 
-// Set the default values of certain props in case they are not supplied.
 PieChart.defaultProps = {
   donut: false,
 };
 
-// Set prop types.
 PieChart.propTypes = {
   title: PropTypes.string,
   donut: PropTypes.bool,

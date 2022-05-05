@@ -39,7 +39,6 @@ const InformationCards = ({ organizationInformation }) => {
   );
 };
 
-// Set prop types.
 InformationCards.propTypes = {
   organizationInformation: PropTypes.shape({
     organization_id: PropTypes.number.isRequired,

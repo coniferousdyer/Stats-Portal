@@ -77,7 +77,6 @@ const Leaderboards = ({ organizationName }) => {
   );
 };
 
-// Set prop types.
 Leaderboards.propTypes = {
   organizationName: PropTypes.string.isRequired,
 };
@@ -85,12 +84,10 @@ Leaderboards.propTypes = {
 export default Leaderboards;
 
 export const getStaticProps = async () => {
-  // Obtain the data about the organization from the backend.
   const organizationInformation = await axios.get(
     "http://localhost:5000/organization"
   );
 
-  // Passing the organization name as a prop to the page component. The name is the only information we require on this page.
   return {
     props: {
       organizationName: organizationInformation.data.organization.name,

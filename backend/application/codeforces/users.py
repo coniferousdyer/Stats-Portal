@@ -21,7 +21,7 @@ def get_user_problems(handle: str):
     url = f"{API_BASE_URL}user.status?handle={handle}"
     response = None
 
-    # Send the request to the Codeforces API and retry if it fails
+    # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
             response = requests.get(url)
@@ -42,7 +42,7 @@ def get_user_problems(handle: str):
     # submission is not counted.
     already_solved = {}
 
-    problems = []  # List of problems
+    problems = []  # List of problems.
 
     for problem in result:
         # For each problem, contest ID + index of the problem in the contest is
@@ -52,18 +52,17 @@ def get_user_problems(handle: str):
                 str(problem["problem"]["contestId"]) + problem["problem"]["index"]
             )
 
-        # If the problem was not part of a contest or was already solved before, we skip it
+        # If the problem was not part of a contest or was already solved before, we skip it.
         if "contestId" not in problem["problem"] or problem_id in already_solved:
             continue
 
-        # Else, we add it to the list of solved problems
+        # Else, we add it to the list of solved problems.
         already_solved[problem_id] = True
 
-        # Obtaining rating and tags
         rating = problem["problem"].get("rating", 0)
         tags = ";".join(problem["problem"].get("tags", []))
 
-        # Obtaining contest creation time in DateTime format
+        # Obtaining contest creation time in DateTime format.
         solved_time = convert_timestamp_to_datetime(problem["creationTimeSeconds"])
 
         problems.append(
@@ -92,14 +91,13 @@ def get_user_contests(handle: str):
     url = f"{API_BASE_URL}user.rating?handle={handle}"
     response = None
 
-    # Send the request to the Codeforces API and retry if it fails
+    # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
             response = requests.get(url)
         except requests.exceptions.RequestException:
             sleep(1)
 
-    # The information we need is in the "result" field of the response.
     result = response.json()["result"]
 
     # Before May 23, 2020, the initial rating of users was 1500, after which
@@ -110,10 +108,10 @@ def get_user_contests(handle: str):
     if date < datetime(2020, 5, 23):
         result[0]["oldRating"] = 1500
 
-    contests = []  # List of contests
+    contests = []  # List of contests.
 
     for contest in result:
-        # Obtaining contest creation time in DateTime format
+        # Obtaining contest creation time in DateTime format.
         rating_update_time = convert_timestamp_to_datetime(
             contest["ratingUpdateTimeSeconds"]
         )
@@ -143,24 +141,23 @@ def get_user_information(handle: str):
     url = f"{API_BASE_URL}user.info?handles={handle}"
     response = None
 
-    # Send the request to the Codeforces API and retry if it fails
+    # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
             response = requests.get(url)
         except requests.exceptions.RequestException:
             sleep(1)
 
-    # The information we need is in the "result" field of the response.
     # The "result" field is a list of dictionaries, where each dictionary contains information about a user.
     # We only need the first dictionary, which corresponds to the user we're looking for.
     result = response.json()["result"][0]
 
-    # If the user is unrated (i.e. has not given a contest yet), the rating is 0
+    # If the user is unrated (i.e. has not given a contest yet), the rating is 0.
     rating = result.get("rating", 0)
     max_rating = result.get("maxRating", 0)
     rank = result.get("rank", "Unrated")
 
-    # Obtaining account creation time in DateTime format
+    # Obtaining account creation time in DateTime format.
     creation_date = convert_timestamp_to_datetime(result["registrationTimeSeconds"])
 
     return {

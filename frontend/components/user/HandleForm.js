@@ -88,7 +88,6 @@ const HandleForm = ({ error }) => {
   );
 };
 
-// Set prop types.
 HandleForm.propTypes = {
   error: PropTypes.string,
 };
