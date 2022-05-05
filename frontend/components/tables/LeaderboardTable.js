@@ -1,3 +1,6 @@
+// External library components.
+import PropTypes from "prop-types";
+
 // Material UI components.
 import MUIDataTable from "mui-datatables";
 
@@ -100,7 +103,7 @@ const LeaderboardTable = ({
     searchPlaceholder: `Search by handle, rank, rating, or ${statisticName.toLowerCase()}`,
     sortOrder: {
       name: attribute,
-      direction: sortingOrder ? sortingOrder : "desc",
+      direction: sortingOrder,
     },
   };
 
@@ -115,6 +118,27 @@ const LeaderboardTable = ({
       options={options}
     />
   );
+};
+
+// Set the default values of certain props in case they are not supplied.
+LeaderboardTable.defaultProps = {
+  sortingOrder: "desc",
+};
+
+// Set prop types.
+LeaderboardTable.propTypes = {
+  title: PropTypes.string.isRequired,
+  dataList: PropTypes.arrayOf(
+    PropTypes.shape({
+      handle: PropTypes.string.isRequired,
+      rank: PropTypes.string.isRequired,
+      rating: PropTypes.number.isRequired,
+      [PropTypes.string]: PropTypes.number,
+    })
+  ).isRequired,
+  attribute: PropTypes.string.isRequired,
+  statisticName: PropTypes.string,
+  sortingOrder: PropTypes.oneOf(["asc", "desc"]),
 };
 
 export default LeaderboardTable;

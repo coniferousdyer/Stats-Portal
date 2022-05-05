@@ -1,6 +1,7 @@
 // Material UI components.
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import PropTypes from "prop-types";
 
 // CSS styles.
 import styles from "../../styles/components/common/KeyValueCard.module.css";
@@ -23,10 +24,8 @@ const KeyValueCard = ({ cardKey, cardValue, color, textColor }) => {
         className={styles.card}
         style={{
           // A gradient is composed from the given color and supplied as background to the card.
-          backgroundImage: `linear-gradient(to right, ${
-            color ? color : "#ffffff"
-          }, ${color ? color : "#ffffff"}8a)`,
-          color: textColor ? textColor : "#000000",
+          backgroundImage: `linear-gradient(to right, ${color}, ${color}8a)`,
+          color: textColor,
         }}
       >
         <CardContent>
@@ -36,6 +35,23 @@ const KeyValueCard = ({ cardKey, cardValue, color, textColor }) => {
       </Card>
     </div>
   );
+};
+
+// Set the default values of certain props in case they are not supplied.
+KeyValueCard.defaultProps = {
+  color: "#ffffff",
+  textColor: "#000000",
+};
+
+// Set prop types.
+KeyValueCard.propTypes = {
+  cardKey: PropTypes.string.isRequired,
+  cardValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
+  color: PropTypes.string,
+  textColor: PropTypes.string,
 };
 
 export default KeyValueCard;

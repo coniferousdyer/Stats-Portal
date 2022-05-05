@@ -2,6 +2,7 @@
 import Head from "next/head";
 import { useState } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Navbar from "../../components/common/Navbar";
@@ -30,40 +31,48 @@ const HighestRatingIncrease = ({ lastUpdateTime, contestsData }) => {
   const [timePeriod, setTimePeriod] = useState("all_time");
 
   return (
-    <div className="layout">
+    <>
       <Head>
         <title>Stats Portal | Highest Rating Increase</title>
       </Head>
 
       <Navbar />
 
-      <div className="container">
-        {/* Heading */}
-        <Heading
-          prefixHeading={"leaderboard for"}
-          mainHeading={"highest rating increase"}
-          suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
-        />
-
-        {/* Time Period Select Dropdown */}
-        <TimePeriodDropdown
-          timePeriod={timePeriod}
-          setTimePeriod={setTimePeriod}
-        />
-
-        {/* Leaderboard Table */}
-        <div className={styles.table_container}>
-          <LeaderboardTable
-            title={"Highest Rating Increase"}
-            dataList={contestsData[timePeriod]}
-            attribute={"highest_rating_increase"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
-            statisticName={"Highest Rating Increase"} // The column name for the statistic corresponding to the attribute.
-            sortingOrder={"desc"} // either "asc" or "desc".
+      <div className="layout">
+        <div className="container">
+          {/* Heading */}
+          <Heading
+            prefixHeading={"leaderboard for"}
+            mainHeading={"highest rating increase"}
+            suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
           />
+
+          {/* Time Period Select Dropdown */}
+          <TimePeriodDropdown
+            timePeriod={timePeriod}
+            setTimePeriod={setTimePeriod}
+          />
+
+          {/* Leaderboard Table */}
+          <div className={styles.table_container}>
+            <LeaderboardTable
+              title={"Highest Rating Increase"}
+              dataList={contestsData[timePeriod]}
+              attribute={"highest_rating_increase"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
+              statisticName={"Highest Rating Increase"} // The column name for the statistic corresponding to the attribute.
+              sortingOrder={"desc"} // either "asc" or "desc".
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
+};
+
+// Set prop types.
+HighestRatingIncrease.propTypes = {
+  lastUpdateTime: PropTypes.string.isRequired,
+  contestsData: PropTypes.object.isRequired,
 };
 
 export default HighestRatingIncrease;
@@ -96,8 +105,9 @@ export const getStaticProps = async () => {
       lastUpdateTime: usersInformation.data.last_update_time,
       contestsData: dataCountPerUser,
     },
-    // If any request is made an hour after the last one, the page will be regenerated.
-    // Only the requested page is regenerated, not the whole application.
-    revalidate: 3600,
+    // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
+    // generated, the page is regenerated. As the data in the backend remains static
+    // for some time, this is not an issue.
+    revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
   };
 };

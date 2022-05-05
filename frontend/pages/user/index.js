@@ -1,6 +1,7 @@
 // External ibrary components.
 import Head from "next/head";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Navbar from "../../components/common/Navbar";
@@ -31,7 +32,7 @@ const User = ({
   userProblems,
 }) => {
   return (
-    <div className="layout">
+    <>
       <Head>
         <title>
           Stats Portal |{" "}
@@ -41,20 +42,32 @@ const User = ({
 
       <Navbar />
 
-      {/* If a valid handle was provided, render the user statistics visualization.
+      <div className="layout">
+        {/* If a valid handle was provided, render the user statistics visualization.
           Else, render the handle input form. */}
-      {!handleProvided ? (
-        <HandleForm error={error} />
-      ) : (
-        <UserStatistics
-          lastUpdateTime={lastUpdateTime}
-          userInformation={userInformation}
-          userContests={userContests}
-          userProblems={userProblems}
-        />
-      )}
-    </div>
+        {!handleProvided ? (
+          <HandleForm error={error} />
+        ) : (
+          <UserStatistics
+            lastUpdateTime={lastUpdateTime}
+            userInformation={userInformation}
+            userContests={userContests}
+            userProblems={userProblems}
+          />
+        )}
+      </div>
+    </>
   );
+};
+
+// Set prop types.
+User.propTypes = {
+  handleProvided: PropTypes.bool.isRequired,
+  lastUpdateTime: PropTypes.string,
+  error: PropTypes.string,
+  userInformation: PropTypes.object,
+  userContests: PropTypes.object,
+  userProblems: PropTypes.object,
 };
 
 export default User;
@@ -65,7 +78,9 @@ export const getServerSideProps = async (context) => {
   // the request is made within 1 hour of the initial one.
   context.res.setHeader(
     "Cache-Control",
-    "public, s-maxage=300, stale-while-revalidate=3600"
+    `public, s-maxage=${
+      process.env.CACHE_FRESH_TIME || 300
+    }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`
   );
 
   // Extracting handle from URL.

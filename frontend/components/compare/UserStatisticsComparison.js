@@ -1,5 +1,6 @@
 // External library components.
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Heading from "../../components/common/Heading";
@@ -126,6 +127,18 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
       </div>
     </div>
   );
+};
+
+// Set prop types.
+UserStatisticsComparison.propTypes = {
+  lastUpdateTime: PropTypes.string.isRequired,
+  usersList: PropTypes.arrayOf(
+    PropTypes.shape({
+      information: PropTypes.object.isRequired,
+      contests: PropTypes.object.isRequired,
+      problems: PropTypes.object.isRequired,
+    })
+  ).isRequired,
 };
 
 export default UserStatisticsComparison;

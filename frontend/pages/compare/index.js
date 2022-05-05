@@ -1,6 +1,7 @@
 // External ibrary components.
 import Head from "next/head";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Navbar from "../../components/common/Navbar";
@@ -24,7 +25,7 @@ import { validateHandle } from "../../helpers/codeforces";
  */
 const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
   return (
-    <div className="layout">
+    <>
       <Head>
         {/* Joining all the handles together to form a comma separated string */}
         <title>
@@ -37,18 +38,34 @@ const Compare = ({ handlesProvided, lastUpdateTime, errors, usersList }) => {
 
       <Navbar />
 
-      {/* If valid handles were provided, render the user statistics comparison.
+      <div className="layout">
+        {/* If valid handles were provided, render the user statistics comparison.
           Else, render the handle input form. */}
-      {!handlesProvided ? (
-        <HandleForm errors={errors} />
-      ) : (
-        <UserStatisticsComparison
-          lastUpdateTime={lastUpdateTime}
-          usersList={usersList}
-        />
-      )}
-    </div>
+        {!handlesProvided ? (
+          <HandleForm errors={errors} />
+        ) : (
+          <UserStatisticsComparison
+            lastUpdateTime={lastUpdateTime}
+            usersList={usersList}
+          />
+        )}
+      </div>
+    </>
   );
+};
+
+// Set prop types.
+Compare.propTypes = {
+  handlesProvided: PropTypes.bool.isRequired,
+  lastUpdateTime: PropTypes.string,
+  errors: PropTypes.arrayOf(PropTypes.string),
+  usersList: PropTypes.arrayOf(
+    PropTypes.shape({
+      information: PropTypes.object.isRequired,
+      contests: PropTypes.object.isRequired,
+      problems: PropTypes.object.isRequired,
+    })
+  ),
 };
 
 export default Compare;
@@ -59,7 +76,9 @@ export const getServerSideProps = async (context) => {
   // the request is made within 1 hour of the initial one.
   context.res.setHeader(
     "Cache-Control",
-    "public, s-maxage=300, stale-while-revalidate=3600"
+    `public, s-maxage=${
+      process.env.CACHE_FRESH_TIME || 300
+    }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`
   );
 
   // Extracting handles from URL. handles would be an array of strings,

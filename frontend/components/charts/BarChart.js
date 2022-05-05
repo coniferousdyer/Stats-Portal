@@ -2,6 +2,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 // Material UI components.
 import Paper from "@mui/material/Paper";
@@ -22,7 +23,7 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
  *                                 corresponds to a single series in the chart.
  *                                 Each object must have the following properties:
  *                                 - name: The name of the data series, eg. "Problems Solved by Index".
- *                                 - series: The data series, which is an array of objects that are of the form:
+ *                                 - series: The data series, which is an object of the form:
  *                                   {"A": 10, "B": 20, "C": 30, "D": 40, "E": 50, ...} and so on. The key-value pairs
  *                                   represent the labels and the values of the data series.
  * @prop {string} color - The color of the data series. Has to be supplied as a hex code, eg. "#ff1744". If not supplied, defaults to blue.
@@ -116,6 +117,26 @@ const BarChart = ({
       )}
     </Paper>
   );
+};
+
+// Set the default values of certain props in case they are not supplied.
+BarChart.defaultProps = {
+  horizontal: false,
+};
+
+// Set prop types.
+BarChart.propTypes = {
+  title: PropTypes.string,
+  horizontal: PropTypes.bool,
+  dataList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      series: PropTypes.object,
+    })
+  ).isRequired,
+  color: PropTypes.string,
+  buttonText: PropTypes.string,
+  buttonLink: PropTypes.string,
 };
 
 export default BarChart;

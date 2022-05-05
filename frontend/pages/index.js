@@ -1,6 +1,7 @@
 // External library components.
 import Head from "next/head";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Navbar from "../components/common/Navbar";
@@ -29,26 +30,36 @@ export default function Home({
   overallProblems,
 }) {
   return (
-    <div className="layout">
+    <>
       <Head>
         <title>Stats Portal | {organizationInformation.name}</title>
       </Head>
 
       <Navbar />
 
-      {/* Organization Statistics */}
-      <OrganizationStatistics
-        lastUpdateTime={lastUpdateTime}
-        organizationInformation={organizationInformation}
-        overallContests={overallContests}
-        overallProblems={overallProblems}
-      />
+      <div className="layout">
+        {/* Organization Statistics */}
+        <OrganizationStatistics
+          lastUpdateTime={lastUpdateTime}
+          organizationInformation={organizationInformation}
+          overallContests={overallContests}
+          overallProblems={overallProblems}
+        />
 
-      {/* Section Cards */}
-      <SectionCards organizationName={organizationInformation.name} />
-    </div>
+        {/* Section Cards */}
+        <SectionCards organizationName={organizationInformation.name} />
+      </div>
+    </>
   );
 }
+
+// Set prop types.
+Home.propTypes = {
+  lastUpdateTime: PropTypes.string.isRequired,
+  organizationInformation: PropTypes.object.isRequired,
+  overallContests: PropTypes.object.isRequired,
+  overallProblems: PropTypes.object.isRequired,
+};
 
 export const getStaticProps = async () => {
   // The base URL is common to organization information ("/"), users' contests ("/users/contests-participated")
@@ -85,9 +96,9 @@ export const getStaticProps = async () => {
       overallContests: overallContestsStatistics,
       overallProblems: overallProblemsStatistics,
     },
-    // If a request is made 5 minutes after the page was last generated, the page
-    // is regenerated. As the data in the backend remains static for some time,
-    // this is not an issue.
-    revalidate: 3600,
+    // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
+    // generated, the page is regenerated. As the data in the backend remains static
+    // for some time, this is not an issue.
+    revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
   };
 };

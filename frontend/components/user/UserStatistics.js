@@ -1,5 +1,6 @@
 // External library components.
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Heading from "../../components/common/Heading";
@@ -125,6 +126,14 @@ const UserStatistics = ({
       </div>
     </div>
   );
+};
+
+// Set prop types.
+UserStatistics.propTypes = {
+  lastUpdateTime: PropTypes.string.isRequired,
+  userInformation: PropTypes.object.isRequired,
+  userContests: PropTypes.object.isRequired,
+  userProblems: PropTypes.object.isRequired,
 };
 
 export default UserStatistics;

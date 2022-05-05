@@ -1,5 +1,6 @@
 // Internal application components.
 import KeyValueCard from "../common/KeyValueCard";
+import PropTypes from "prop-types";
 
 /**
  * Component that renders the information cards for the home page.
@@ -36,6 +37,16 @@ const InformationCards = ({ organizationInformation }) => {
       />
     </div>
   );
+};
+
+// Set prop types.
+InformationCards.propTypes = {
+  organizationInformation: PropTypes.shape({
+    organization_id: PropTypes.number.isRequired,
+    global_rank: PropTypes.number.isRequired,
+    rating: PropTypes.number.isRequired,
+    number_of_users: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default InformationCards;

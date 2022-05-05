@@ -1,6 +1,7 @@
 // External library components.
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 // Material UI components.
 import Paper from "@mui/material/Paper";
@@ -81,10 +82,22 @@ const PieChart = ({ title, donut, data }) => {
 
   return (
     <Paper elevation={5} className="paper_container">
-      <h1 className={styles.title}>{title.toUpperCase()}</h1>
+      {title && <h1 className={styles.title}>{title.toUpperCase()}</h1>}
       <Chart options={options} series={series} type={donut ? "donut" : "pie"} />
     </Paper>
   );
+};
+
+// Set the default values of certain props in case they are not supplied.
+PieChart.defaultProps = {
+  donut: false,
+};
+
+// Set prop types.
+PieChart.propTypes = {
+  title: PropTypes.string,
+  donut: PropTypes.bool,
+  data: PropTypes.object.isRequired,
 };
 
 export default PieChart;

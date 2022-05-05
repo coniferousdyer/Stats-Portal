@@ -1,5 +1,6 @@
 // External library components.
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Heading from "../../components/common/Heading";
@@ -143,6 +144,11 @@ const HandleForm = ({ errors }) => {
       </div>
     </div>
   );
+};
+
+// Set prop types.
+HandleForm.propTypes = {
+  errors: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default HandleForm;

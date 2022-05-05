@@ -1,3 +1,6 @@
+// External library components.
+import PropTypes from "prop-types";
+
 // Material UI components.
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -55,6 +58,12 @@ const InformationTable = ({ title, dataList }) => {
       </Table>
     </TableContainer>
   );
+};
+
+// Set prop types.
+InformationTable.propTypes = {
+  title: PropTypes.string,
+  dataList: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default InformationTable;

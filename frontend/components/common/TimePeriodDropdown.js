@@ -1,3 +1,6 @@
+// External library components.
+import PropTypes from "prop-types";
+
 // Material UI components.
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -47,6 +50,12 @@ const TimePeriodDropdown = ({ timePeriod, setTimePeriod }) => {
       </FormControl>
     </div>
   );
+};
+
+// Set prop types.
+TimePeriodDropdown.propTypes = {
+  timePeriod: PropTypes.string.isRequired,
+  setTimePeriod: PropTypes.func.isRequired,
 };
 
 export default TimePeriodDropdown;

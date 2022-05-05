@@ -1,5 +1,6 @@
 // External library components.
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 // Material UI components.
 import Box from "@mui/material/Box";
@@ -85,6 +86,11 @@ const HandleForm = ({ error }) => {
       </div>
     </div>
   );
+};
+
+// Set prop types.
+HandleForm.propTypes = {
+  error: PropTypes.string,
 };
 
 export default HandleForm;

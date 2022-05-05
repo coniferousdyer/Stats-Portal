@@ -1,3 +1,6 @@
+// External library components.
+import PropTypes from "prop-types";
+
 // CSS styles.
 import styles from "../../styles/components/common/Heading.module.css";
 
@@ -26,6 +29,13 @@ const Heading = ({ prefixHeading, mainHeading, suffixHeading }) => {
       )}
     </div>
   );
+};
+
+// Set prop types.
+Heading.propTypes = {
+  prefixHeading: PropTypes.string,
+  mainHeading: PropTypes.string.isRequired,
+  suffixHeading: PropTypes.string,
 };
 
 export default Heading;

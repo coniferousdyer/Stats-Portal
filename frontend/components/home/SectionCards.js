@@ -1,3 +1,6 @@
+// External library components.
+import PropTypes from "prop-types";
+
 // Internal application components.
 import Heading from "../common/Heading";
 import DescriptorCard from "../common/DescriptorCard";
@@ -51,6 +54,11 @@ const SectionCards = ({ organizationName }) => {
       </div>
     </div>
   );
+};
+
+// Set prop types.
+SectionCards.propTypes = {
+  organizationName: PropTypes.string.isRequired,
 };
 
 export default SectionCards;

@@ -1,6 +1,7 @@
 // External ibrary components.
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 // Material UI components.
 import Paper from "@mui/material/Paper";
@@ -87,11 +88,27 @@ const LineChart = ({ title, dataList }) => {
 
   return (
     <Paper elevation={5} className="paper_container">
-      <h1 className={styles.title}>{title.toUpperCase()}</h1>
+      {title && <h1 className={styles.title}>{title.toUpperCase()}</h1>}
       {/* height is set to 100% here to limit the height of the chart */}
       <Chart options={options} series={series} type="line" height="100%" />
     </Paper>
   );
+};
+
+// Set prop types.
+LineChart.propTypes = {
+  title: PropTypes.string,
+  dataList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      series: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.string,
+          y: PropTypes.number,
+        })
+      ),
+    })
+  ).isRequired,
 };
 
 export default LineChart;

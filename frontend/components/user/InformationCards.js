@@ -1,3 +1,6 @@
+// External library components.
+import PropTypes from "prop-types";
+
 // Internal application components.
 import KeyValueCard from "../../components/common/KeyValueCard";
 
@@ -41,6 +44,16 @@ const InformationCards = ({ userInformation }) => {
       />
     </div>
   );
+};
+
+// Set prop types.
+InformationCards.propTypes = {
+  userInformation: PropTypes.shape({
+    creation_date: PropTypes.string.isRequired,
+    rank: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
+    max_rating: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default InformationCards;

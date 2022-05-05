@@ -1,6 +1,7 @@
 // External library components.
 import Link from "next/link";
 import Image from "next/image";
+import PropTypes from "prop-types";
 
 // Material UI components.
 import Card from "@mui/material/Card";
@@ -32,7 +33,9 @@ const DescriptorCard = ({
 }) => {
   return (
     <Card elevation={5}>
-      <CardMedia component="img" image={imageLink} alt={title} />
+      <CardMedia>
+        <Image src={imageLink} alt={title} width={"1000%"} height={500} />
+      </CardMedia>
       <CardContent>
         <Typography
           gutterBottom
@@ -61,6 +64,15 @@ const DescriptorCard = ({
       )}
     </Card>
   );
+};
+
+// Set prop types.
+DescriptorCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  imageLink: PropTypes.string.isRequired,
+  buttonText: PropTypes.string,
+  buttonLink: PropTypes.string,
 };
 
 export default DescriptorCard;

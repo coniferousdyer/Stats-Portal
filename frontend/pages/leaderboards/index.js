@@ -1,6 +1,7 @@
 // External library components.
 import Head from "next/head";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 // Internal application components.
 import Heading from "../../components/common/Heading";
@@ -15,63 +16,70 @@ import DescriptorCard from "../../components/common/DescriptorCard";
  */
 const Leaderboards = ({ organizationName }) => {
   return (
-    <div className="layout">
+    <>
       <Head>
         <title>Stats Portal | Leaderboards</title>
       </Head>
 
       <Navbar />
 
-      <div className="container">
-        {/* Heading */}
-        <Heading
-          prefixHeading={`view ${organizationName}'s`}
-          mainHeading={"leaderboards"}
-        />
+      <div className="layout">
+        <div className="container">
+          {/* Heading */}
+          <Heading
+            prefixHeading={`view ${organizationName}'s`}
+            mainHeading={"leaderboards"}
+          />
 
-        {/* Creating a descriptor card for each of the leaderboards in the leaderboards array */}
-        <div className="flex_wrap_container">
-          {/* Most Problems Solved Leaderboards Card */}
-          <div className="half_container">
-            <DescriptorCard
-              title={"MOST PROBLEMS SOLVED"}
-              description={`Leaderboard for the most problems solved by the users of ${organizationName}.`}
-              imageLink={"/images/problems_solved_img.png"}
-              buttonText={"View Leaderboard >>"}
-              buttonLink={"/leaderboards/problems-solved"}
-            />
-          </div>
-          <div className="half_container">
-            <DescriptorCard
-              title={"HIGHEST RATING INCREASE"}
-              description={`Leaderboard for the highest rating increase obtained by users of ${organizationName}.`}
-              imageLink={"/images/rating_increase_img.png"}
-              buttonText={"View Leaderboard >>"}
-              buttonLink={"/leaderboards/highest-rating-increase"}
-            />
-          </div>
-          <div className="half_container">
-            <DescriptorCard
-              title={"MOST CONTESTS PARTICIPATED"}
-              description={`Leaderboard for the most contests participated by users of ${organizationName}.`}
-              imageLink={"/images/contests_participated_img.png"}
-              buttonText={"View Leaderboard >>"}
-              buttonLink={"/leaderboards/contests-participated"}
-            />
-          </div>
-          <div className="half_container">
-            <DescriptorCard
-              title={"BEST CONTEST RANKS"}
-              description={`Leaderboard for the highest contest ranks achieved by users of ${organizationName}.`}
-              imageLink={"/images/contest_rank_img.png"}
-              buttonText={"View Leaderboard >>"}
-              buttonLink={"/leaderboards/best-contest-ranks"}
-            />
+          {/* Creating a descriptor card for each of the leaderboards in the leaderboards array */}
+          <div className="flex_wrap_container">
+            {/* Most Problems Solved Leaderboards Card */}
+            <div className="half_container">
+              <DescriptorCard
+                title={"MOST PROBLEMS SOLVED"}
+                description={`Leaderboard for the most problems solved by the users of ${organizationName}.`}
+                imageLink={"/images/problems_solved_img.png"}
+                buttonText={"View Leaderboard >>"}
+                buttonLink={"/leaderboards/problems-solved"}
+              />
+            </div>
+            <div className="half_container">
+              <DescriptorCard
+                title={"HIGHEST RATING INCREASE"}
+                description={`Leaderboard for the highest rating increase obtained by users of ${organizationName}.`}
+                imageLink={"/images/rating_increase_img.png"}
+                buttonText={"View Leaderboard >>"}
+                buttonLink={"/leaderboards/highest-rating-increase"}
+              />
+            </div>
+            <div className="half_container">
+              <DescriptorCard
+                title={"MOST CONTESTS PARTICIPATED"}
+                description={`Leaderboard for the most contests participated by users of ${organizationName}.`}
+                imageLink={"/images/contests_participated_img.png"}
+                buttonText={"View Leaderboard >>"}
+                buttonLink={"/leaderboards/contests-participated"}
+              />
+            </div>
+            <div className="half_container">
+              <DescriptorCard
+                title={"BEST CONTEST RANKS"}
+                description={`Leaderboard for the highest contest ranks achieved by users of ${organizationName}.`}
+                imageLink={"/images/contest_rank_img.png"}
+                buttonText={"View Leaderboard >>"}
+                buttonLink={"/leaderboards/best-contest-ranks"}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
+};
+
+// Set prop types.
+Leaderboards.propTypes = {
+  organizationName: PropTypes.string.isRequired,
 };
 
 export default Leaderboards;
@@ -87,5 +95,9 @@ export const getStaticProps = async () => {
     props: {
       organizationName: organizationInformation.data.organization.name,
     },
+    // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
+    // generated, the page is regenerated. As the data in the backend remains static
+    // for some time, this is not an issue.
+    revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
   };
 };
