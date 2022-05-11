@@ -183,8 +183,7 @@ def init_scheduler(app: Flask):
         func=perform_update,
         args=[app],
         trigger="interval",
-        hours=12,
-        misfire_grace_time=3600,
+        hours=int(environ.get("UPDATE_INTERVAL", "12")),
         # next_run_time=datetime.now(),
     )
     scheduler.start()

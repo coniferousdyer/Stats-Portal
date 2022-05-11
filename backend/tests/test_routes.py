@@ -48,7 +48,7 @@ class TestOrganizationRoutes:
         # Test the organization route.
         response = client.get("/organization")
         assert response.status_code == 200
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
         assert response.get_json()["organization"]["organization_id"] == int(
             environ.get("ORGANIZATION_NUMBER", "")
         )
@@ -82,7 +82,8 @@ class TestUserRoutes:
         response = client.get("/users")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["users"] is not None
 
     def test_users_routes_with_handle(self, app, client):
         """
@@ -116,7 +117,8 @@ class TestUserRoutes:
         response = client.get("/users/test_user")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["user"] is not None
 
     def test_user_contests_routes(self, app, client):
         """
@@ -159,7 +161,8 @@ class TestUserRoutes:
         response = client.get("/users/contests-participated")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["contest_statistics"] is not None
 
     def test_user_contests_routes_with_handle(self, app, client):
         """
@@ -212,7 +215,8 @@ class TestUserRoutes:
         response = client.get("/users/test_user/contests-participated")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["contest_statistics"] is not None
 
     def test_user_problems_solved_routes(self, app, client):
         """
@@ -257,7 +261,8 @@ class TestUserRoutes:
         response = client.get("/users/problems-solved")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["problem_statistics"] is not None
 
     def test_user_problems_solved_routes_with_handle(self, app, client):
         """
@@ -312,7 +317,8 @@ class TestUserRoutes:
         response = client.get("/users/test_user/problems-solved")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["problem_statistics"] is not None
 
 
 @pytest.mark.usefixtures("app", "client")
@@ -343,7 +349,8 @@ class TestContestRoutes:
         response = client.get("/contests")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["contests"] is not None
 
     def test_contests_routes_with_id(self, app, client):
         """
@@ -377,7 +384,8 @@ class TestContestRoutes:
         response = client.get("/contests/1")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["contest"] is not None
 
     def test_contest_standing_routes(self, app, client):
         """
@@ -421,7 +429,8 @@ class TestContestRoutes:
         response = client.get("/contests/1/standings")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["contest_standings"] is not None
 
 
 @pytest.mark.usefixtures("app", "client")
@@ -453,4 +462,5 @@ class TestProblemRoutes:
         response = client.get("/problems")
         assert response.status_code == 200
         assert response.get_json() is not None
-        assert "last_update_time" in response.get_json()
+        assert response.get_json()["last_update_time"] is not None
+        assert response.get_json()["problems"] is not None
