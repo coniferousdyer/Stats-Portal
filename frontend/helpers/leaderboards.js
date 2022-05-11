@@ -1,5 +1,5 @@
 /**********************************************************************************
- * This folder contains leaderboards-related helper functions, such as formatting *
+ * This file contains leaderboards-related helper functions, such as formatting   *
  * each individual user's statistics to a format suitable for the tables.         *
  *********************************************************************************/
 

@@ -1,7 +1,7 @@
 // External library components.
 import Head from "next/head";
-import axios from "axios";
 import PropTypes from "prop-types";
+import useSWR from "swr";
 
 // Internal application components.
 import Navbar from "../components/common/Navbar";
@@ -9,10 +9,7 @@ import OrganizationStatistics from "../components/home/OrganizationStatistics";
 import SectionCards from "../components/home/SectionCards";
 
 // Helper functions.
-import {
-  obtainOverallContestsStatistics,
-  obtainOverallProblemsStatistics,
-} from "../helpers/organization";
+import { getHomePageData } from "../helpers/swr";
 
 /**
  * Component that renders the home page. Corresponds to the URL:
@@ -29,10 +26,23 @@ export default function Home({
   overallContests,
   overallProblems,
 }) {
+  // The data fetched from the backend by SWR is the same as the data passed to the component as props.
+  // However, the data fetched by SWR is ensured to be up-to-date. The props act as fallback data to
+  // initially render the page as soon as possible.
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const { data } = useSWR("/api", fetcher, {
+    fallbackData: {
+      lastUpdateTime: lastUpdateTime,
+      organizationInformation: organizationInformation,
+      overallContests: overallContests,
+      overallProblems: overallProblems,
+    },
+  });
+
   return (
     <>
       <Head>
-        <title>Stats Portal | {organizationInformation.name}</title>
+        <title>Stats Portal | {data.organizationInformation.name}</title>
       </Head>
 
       <Navbar />
@@ -40,14 +50,14 @@ export default function Home({
       <div className="layout">
         {/* Organization Statistics */}
         <OrganizationStatistics
-          lastUpdateTime={lastUpdateTime}
-          organizationInformation={organizationInformation}
-          overallContests={overallContests}
-          overallProblems={overallProblems}
+          lastUpdateTime={data.lastUpdateTime}
+          organizationInformation={data.organizationInformation}
+          overallContests={data.overallContests}
+          overallProblems={data.overallProblems}
         />
 
         {/* Section Cards */}
-        <SectionCards organizationName={organizationInformation.name} />
+        <SectionCards organizationName={data.organizationInformation.name} />
       </div>
     </>
   );
@@ -61,36 +71,14 @@ Home.propTypes = {
 };
 
 export const getStaticProps = async () => {
-  // The base URL is common to organization information ("/"), users' contests ("/users/contests-participated")
-  // and users' problems solved ("/users/problems-solved").
-  const baseURL = "http://localhost:5000";
-
-  const organizationInformation = await axios.get(`${baseURL}/organization`);
-  const userContests = await axios.get(
-    `${baseURL}/users/contests-participated`
-  );
-  const userProblems = await axios.get(`${baseURL}/users/problems-solved`);
-
-  const lastUpdateTime = organizationInformation.data.last_update_time;
-  const organizationInformationData = organizationInformation.data.organization;
-  const userContestsData = userContests.data.contest_statistics;
-  const userProblemsData = userProblems.data.problem_statistics;
-
-  // Aggregate the data about contests and problems solved by each user into
-  // one object containing the overall statistics of the organization.
-  const overallContestsStatistics = await obtainOverallContestsStatistics(
-    userContestsData
-  );
-  const overallProblemsStatistics = await obtainOverallProblemsStatistics(
-    userProblemsData
-  );
+  const data = await getHomePageData();
 
   return {
     props: {
-      lastUpdateTime: lastUpdateTime,
-      organizationInformation: organizationInformationData,
-      overallContests: overallContestsStatistics,
-      overallProblems: overallProblemsStatistics,
+      lastUpdateTime: data.lastUpdateTime,
+      organizationInformation: data.organizationInformation,
+      overallContests: data.overallContests,
+      overallProblems: data.overallProblems,
     },
     // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
     // generated, the page is regenerated. As the data in the backend remains static

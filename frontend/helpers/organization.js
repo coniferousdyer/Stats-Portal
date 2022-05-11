@@ -1,5 +1,5 @@
 /*************************************************************************************
- * This folder contains organization-related and user-related helper functions, such *
+ * This file contains organization-related and user-related helper functions, such   *
  * as obtaining the overall statistics from each individual user's statistics.       *
  ************************************************************************************/
 

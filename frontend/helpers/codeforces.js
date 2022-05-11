@@ -1,5 +1,5 @@
 /**********************************************************************************
- * This folder contains Codeforces-related helper functions, such as validating a *
+ * This file contains Codeforces-related helper functions, such as validating a   *
  * Codeforces handle, mapping the rank to its corresponding color, etc.           *
  *********************************************************************************/
 

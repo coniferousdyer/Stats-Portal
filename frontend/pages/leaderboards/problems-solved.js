@@ -1,8 +1,8 @@
 // External library components.
 import Head from "next/head";
 import { useState } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
+import useSWR from "swr";
 
 // Internal application components.
 import Navbar from "../../components/common/Navbar";
@@ -14,7 +14,7 @@ import LeaderboardTable from "../../components/tables/LeaderboardTable";
 import styles from "../../styles/pages/leaderboards/Leaderboard.module.css";
 
 // Helper functions.
-import { obtainDataCountPerUser } from "../../helpers/leaderboards";
+import { getProblemsSolvedPageData } from "../../helpers/swr";
 
 /**
  * Component that renders the problems solved leaderboard page. Corresponds to the URL:
@@ -30,6 +30,17 @@ import { obtainDataCountPerUser } from "../../helpers/leaderboards";
 const ProblemsSolved = ({ lastUpdateTime, problemsData }) => {
   const [timePeriod, setTimePeriod] = useState("all_time");
 
+  // The data fetched from the backend by SWR is the same as the data passed to the component as props.
+  // However, the data fetched by SWR is ensured to be up-to-date. The props act as fallback data to
+  // initially render the page as soon as possible.
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const { data } = useSWR("/api/leaderboards/problems-solved", fetcher, {
+    fallbackData: {
+      lastUpdateTime: lastUpdateTime,
+      problemsData: problemsData,
+    },
+  });
+
   return (
     <>
       <Head>
@@ -44,7 +55,7 @@ const ProblemsSolved = ({ lastUpdateTime, problemsData }) => {
           <Heading
             prefixHeading={"leaderboard for"}
             mainHeading={"problems solved"}
-            suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
+            suffixHeading={`LAST UPDATED AT ${data.lastUpdateTime}`}
           />
 
           {/* Time Period Select Dropdown */}
@@ -57,7 +68,7 @@ const ProblemsSolved = ({ lastUpdateTime, problemsData }) => {
           <div className={styles.table_container}>
             <LeaderboardTable
               title={"Most Problems Solved"}
-              dataList={problemsData[timePeriod]}
+              dataList={data.problemsData[timePeriod]}
               attribute={"total_problems"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
               statisticName={"Problems Solved"}
               sortingOrder={"desc"}
@@ -77,26 +88,12 @@ ProblemsSolved.propTypes = {
 export default ProblemsSolved;
 
 export const getStaticProps = async () => {
-  // The base URL is common to information ("/") and users' problems ("/problems-solved").
-  const baseURL = `http://localhost:5000/users`;
-
-  const usersInformation = await axios.get(baseURL);
-  const problemsSolved = await axios.get(`${baseURL}/problems-solved`);
-
-  const usersData = usersInformation.data.users;
-  const problemsSolvedData = problemsSolved.data.problem_statistics;
-
-  // Obtain the data count per user.
-  const dataCountPerUser = await obtainDataCountPerUser(
-    usersData,
-    problemsSolvedData,
-    "total_problems"
-  );
+  const data = await getProblemsSolvedPageData();
 
   return {
     props: {
-      lastUpdateTime: usersInformation.data.last_update_time,
-      problemsData: dataCountPerUser,
+      lastUpdateTime: data.lastUpdateTime,
+      problemsData: data.problemsData,
     },
     // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
     // generated, the page is regenerated. As the data in the backend remains static
