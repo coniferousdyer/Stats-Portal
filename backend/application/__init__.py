@@ -10,7 +10,7 @@ import atexit
 from datetime import datetime
 from os import environ, path, mkdir
 from dotenv import load_dotenv
-from logging import basicConfig, INFO
+from logging import basicConfig, DEBUG, ERROR
 from logging.handlers import RotatingFileHandler
 
 from application.models.orm import db
@@ -125,7 +125,7 @@ def init_logger():
 
     # If the log path is empty, we do not log to a file (defaulting to logging instead
     # to the console). This serves 2 purposes:
-    # 1. The user can just add an empty path in the .env file to disable file logging and not have errors pop up
+    # 1. The user can just add an empty path in the .env file to disable file logging and not have errors pop up.
     # 2. File logging can easily be disabled during testing by serving an empty path. This way, a log file won't
     #    be created during testing.
     if not log_dir:
@@ -141,8 +141,10 @@ def init_logger():
                 path.join(log_dir, "status.log"), maxBytes=100000, backupCount=10
             )
         ],
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s [in %(pathname)s:%(lineno)d]",
+        level=ERROR
+        if environ.get("FLASK_ENV", "development") == "production"
+        else DEBUG,
     )
 
 

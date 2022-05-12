@@ -1,12 +1,15 @@
 // External ibrary components.
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import axios from "axios";
 import PropTypes from "prop-types";
 
 // Internal application components.
 import Navbar from "../../components/common/Navbar";
-import HandleForm from "../../components/user/HandleForm";
-import UserStatistics from "../../components/user/UserStatistics";
+const HandleForm = dynamic(() => import("../../components/user/HandleForm"));
+const UserStatistics = dynamic(() =>
+  import("../../components/user/UserStatistics"),
+);
 
 // Helper functions.
 import { validateHandle } from "../../helpers/codeforces";
@@ -77,7 +80,7 @@ export const getServerSideProps = async (context) => {
     "Cache-Control",
     `public, s-maxage=${
       process.env.CACHE_FRESH_TIME || 300
-    }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`
+    }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`,
   );
 
   let handle = context.query.handle;
@@ -101,7 +104,7 @@ export const getServerSideProps = async (context) => {
       // handle is valid. If not, we throw an error.
       if (!validateHandle(handle)) {
         throw new Error(
-          "Handle can only contain letters, digits, underscores and hyphens"
+          "Handle can only contain letters, digits, periods, underscores and hyphens",
         );
       }
 

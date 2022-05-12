@@ -42,7 +42,7 @@ const HighestRatingIncrease = ({ lastUpdateTime, contestsData }) => {
         lastUpdateTime: lastUpdateTime,
         contestsData: contestsData,
       },
-    }
+    },
   );
 
   return (

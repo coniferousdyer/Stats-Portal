@@ -1,12 +1,15 @@
 // External ibrary components.
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import axios from "axios";
 import PropTypes from "prop-types";
 
 // Internal application components.
 import Navbar from "../../components/common/Navbar";
-import HandleForm from "../../components/compare/HandleForm";
-import UserStatisticsComparison from "../../components/compare/UserStatisticsComparison";
+const HandleForm = dynamic(() => import("../../components/compare/HandleForm"));
+const UserStatisticsComparison = dynamic(() =>
+  import("../../components/compare/UserStatisticsComparison"),
+);
 
 // Helper functions.
 import { validateHandle } from "../../helpers/codeforces";
@@ -60,7 +63,7 @@ Compare.propTypes = {
       information: PropTypes.object.isRequired,
       contests: PropTypes.object.isRequired,
       problems: PropTypes.object.isRequired,
-    })
+    }),
   ),
 };
 
@@ -74,7 +77,7 @@ export const getServerSideProps = async (context) => {
     "Cache-Control",
     `public, s-maxage=${
       process.env.CACHE_FRESH_TIME || 300
-    }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`
+    }, stale-while-revalidate=${process.env.CACHE_REVALIDATE_TIME || 3600}`,
   );
 
   // Extracting handles from URL. handles would be an array of strings,
@@ -111,7 +114,7 @@ export const getServerSideProps = async (context) => {
           // handle is valid. If not, we throw an error.
           if (!validateHandle(handle)) {
             throw new Error(
-              "Handle can only contain letters, digits, underscores and hyphens"
+              "Handle can only contain letters, digits, periods, underscores and hyphens",
             );
           }
 
@@ -121,7 +124,7 @@ export const getServerSideProps = async (context) => {
 
           const userInformation = await axios.get(baseURL);
           const userContests = await axios.get(
-            `${baseURL}/contests-participated`
+            `${baseURL}/contests-participated`,
           );
           const userProblems = await axios.get(`${baseURL}/problems-solved`);
 
@@ -149,7 +152,7 @@ export const getServerSideProps = async (context) => {
             problems: null,
           };
         }
-      })
+      }),
     );
 
     // If there were no errors, we return the users data.
@@ -168,7 +171,7 @@ export const getServerSideProps = async (context) => {
         props: {
           handlesProvided: false,
           errors: handles.map((handle) =>
-            errors[handle] ? errors[handle] : ""
+            errors[handle] ? errors[handle] : "",
           ),
         },
       };

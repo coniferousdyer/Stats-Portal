@@ -1,24 +1,23 @@
 .form_container {
-    padding-top: 2.5vw;
+  padding-top: 2.5vw;
 }
 
 .handle_input {
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .button {
-    margin-top: 1vw;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
+  margin-top: 1vw;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 600px) {
-    .form_container {
-        padding-top: 10vw;
-    }
+  .form_container {
+    padding-top: 10vw;
+  }
 
-    .button {
-        margin-top: 5vw;
-    }
+  .button {
+    margin-top: 5vw;
+  }
 }
-  

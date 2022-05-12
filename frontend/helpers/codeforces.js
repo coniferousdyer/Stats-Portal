@@ -12,9 +12,9 @@
 export const validateHandle = (handle) => {
   if (handle === "") {
     return false;
-  } else if (!/^[a-zA-Z0-9_-]+$/.test(handle)) {
+  } else if (/[^a-zA-Z0-9_\-\.]/.test(handle)) {
     // If the string contains any non-alphanumeric characters other than
-    // underscores and hyphens, it is not a valid handle.
+    // underscores, dots and hyphens, it is not a valid handle.
     return false;
   } else {
     return true;

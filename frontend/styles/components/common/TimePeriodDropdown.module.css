@@ -1,15 +1,15 @@
 .time_period_select_container {
-    width: 100%;
-    display: flex;
-    justify-content: right;
+  width: 100%;
+  display: flex;
+  justify-content: right;
 }
 
 .time_period_select {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 @media screen and (max-width: 600px) {
-    .time_period_select_container {
-        margin-top: 10vw;
-    }
+  .time_period_select_container {
+    margin-top: 10vw;
+  }
 }

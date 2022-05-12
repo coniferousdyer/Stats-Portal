@@ -44,10 +44,8 @@ KeyValueCard.defaultProps = {
 
 KeyValueCard.propTypes = {
   cardKey: PropTypes.string.isRequired,
-  cardValue: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  cardValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   color: PropTypes.string,
   textColor: PropTypes.string,
 };

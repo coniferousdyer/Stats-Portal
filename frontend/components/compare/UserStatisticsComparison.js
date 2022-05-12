@@ -50,7 +50,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
         <div className="information_container">
           <InformationTable
             dataList={usersList.map((user) =>
-              formatInformationDataForTable(user.information)
+              formatInformationDataForTable(user.information),
             )}
           />
         </div>
@@ -60,7 +60,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           <InformationTable
             title={"Contest Statistics"}
             dataList={usersList.map((user) =>
-              formatContestsDataForTable(user.contests[timePeriod])
+              formatContestsDataForTable(user.contests[timePeriod]),
             )}
           />
         </div>
@@ -69,7 +69,7 @@ const UserStatisticsComparison = ({ lastUpdateTime, usersList }) => {
           <InformationTable
             title={"Problem Statistics"}
             dataList={usersList.map((user) =>
-              formatProblemsDataForTable(user.problems[timePeriod])
+              formatProblemsDataForTable(user.problems[timePeriod]),
             )}
           />
         </div>
@@ -136,7 +136,7 @@ UserStatisticsComparison.propTypes = {
       information: PropTypes.object.isRequired,
       contests: PropTypes.object.isRequired,
       problems: PropTypes.object.isRequired,
-    })
+    }),
   ).isRequired,
 };
 

@@ -103,9 +103,9 @@ LineChart.propTypes = {
         PropTypes.shape({
           x: PropTypes.string,
           y: PropTypes.number,
-        })
+        }),
       ),
-    })
+    }),
   ).isRequired,
 };
 

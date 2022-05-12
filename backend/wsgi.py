@@ -20,8 +20,4 @@ configuration_class = (
 app = create_app(configuration_class)
 
 if __name__ == "__main__":
-    app.run(
-        host=environ.get("APPLICATION_HOST", "0.0.0.0"),
-        port=int(environ.get("APPLICATION_PORT", "5000")),
-        use_reloader=False,
-    )
+    app.run(use_reloader=False)

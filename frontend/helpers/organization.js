@@ -103,7 +103,7 @@ export const obtainOverallContestsStatistics = async (userContests) => {
       // Convert the lists to an object with the user as the key and the corresponding value as key.
       // This is so that they can be fed to the bar chart component.
       overallStatistics[time].most_contests_participated = Object.fromEntries(
-        top10ContestsParticipatedList
+        top10ContestsParticipatedList,
       );
       overallStatistics[time].best_contest_ranks =
         Object.fromEntries(top10BestRanksList);
@@ -179,7 +179,7 @@ export const obtainOverallProblemsStatistics = async (userProblems) => {
       // Converting the top 10 list to an object with the user as the key and the number of problems solved as the value.
       // We do this so that it can be fed to the bar chart component.
       overallStatistics[time].most_problems_solved = Object.fromEntries(
-        top10ProblemsSolvedList
+        top10ProblemsSolvedList,
       );
     } else {
       overallStatistics[time].most_problems_solved = {};
@@ -245,28 +245,28 @@ export const formatProblemsDataForTable = (problemsData) => {
   const preferredLanguage =
     languageKeys.length > 0
       ? languageKeys.reduce((a, b) =>
-          problemsData.languages[a] > problemsData.languages[b] ? a : b
+          problemsData.languages[a] > problemsData.languages[b] ? a : b,
         )
       : "N/A";
 
   const ratingMostSolved =
     ratingKeys.length > 0
       ? ratingKeys.reduce((a, b) =>
-          problemsData.ratings[a] > problemsData.ratings[b] ? a : b
+          problemsData.ratings[a] > problemsData.ratings[b] ? a : b,
         )
       : "N/A";
 
   const tagMostSolved =
     tagKeys.length > 0
       ? tagKeys.reduce((a, b) =>
-          problemsData.tags[a] > problemsData.tags[b] ? a : b
+          problemsData.tags[a] > problemsData.tags[b] ? a : b,
         )
       : "N/A";
 
   const indexMostSolved =
     indexKeys.length > 0
       ? indexKeys.reduce((a, b) =>
-          problemsData.indexes[a] > problemsData.indexes[b] ? a : b
+          problemsData.indexes[a] > problemsData.indexes[b] ? a : b,
         )
       : "N/A";
 

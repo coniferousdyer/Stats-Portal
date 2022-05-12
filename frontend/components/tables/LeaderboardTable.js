@@ -122,7 +122,7 @@ LeaderboardTable.propTypes = {
       rank: PropTypes.string.isRequired,
       rating: PropTypes.number.isRequired,
       [PropTypes.string]: PropTypes.number,
-    })
+    }),
   ).isRequired,
   attribute: PropTypes.string.isRequired,
   statisticName: PropTypes.string,

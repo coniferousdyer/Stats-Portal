@@ -73,23 +73,25 @@ a {
 }
 
 @media screen and (min-width: 600px) and (max-width: 900px) {
-  .one_third_container, .half_container {
-      width: 100%;
+  .one_third_container,
+  .half_container {
+    width: 100%;
   }
 }
 
 @media screen and (max-width: 600px) {
   .information_container {
-      flex-wrap: wrap;
-      margin-top: 7vw;
+    flex-wrap: wrap;
+    margin-top: 7vw;
   }
 
-  .one_third_container, .half_container {
-      width: 100%;
-      margin-top: 2vw;
+  .one_third_container,
+  .half_container {
+    width: 100%;
+    margin-top: 2vw;
   }
 
   .full_container {
-      margin-top: 2vw;
+    margin-top: 2vw;
   }
 }

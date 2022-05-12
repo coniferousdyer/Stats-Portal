@@ -128,7 +128,7 @@ BarChart.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       series: PropTypes.object,
-    })
+    }),
   ).isRequired,
   color: PropTypes.string,
   buttonText: PropTypes.string,

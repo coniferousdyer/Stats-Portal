@@ -22,8 +22,6 @@ def env_setup(monkeypatch):
         "SQLALCHEMY_DATABASE_DIR": "",  # This is optional, since TestingConfig sets the database to an in-memory one.
         "SQLALCHEMY_METADATA_DIR": "",  # This is optional, since TestingConfig sets the database to an in-memory one.
         "ORGANIZATION_NUMBER": "1",
-        "APPLICATION_HOST": "0.0.0.0",
-        "APPLICATION_PORT": "5000",
         "SENTRY_DSN": "",  # We don't want to send any errors to Sentry during testing.
         "TIMEZONE": "Asia/Kolkata",
         "LOG_DIR": "",  # Supplying an empty path will disable logging to a file.

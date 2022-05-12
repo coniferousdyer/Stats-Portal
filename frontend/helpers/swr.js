@@ -25,7 +25,7 @@ export const getHomePageData = async () => {
 
   const organizationInformation = await axios.get(`${baseURL}/organization`);
   const userContests = await axios.get(
-    `${baseURL}/users/contests-participated`
+    `${baseURL}/users/contests-participated`,
   );
   const userProblems = await axios.get(`${baseURL}/users/problems-solved`);
 
@@ -37,10 +37,10 @@ export const getHomePageData = async () => {
   // Aggregate the data about contests and problems solved by each user into
   // one object containing the overall statistics of the organization.
   const overallContestsStatistics = await obtainOverallContestsStatistics(
-    userContestsData
+    userContestsData,
   );
   const overallProblemsStatistics = await obtainOverallProblemsStatistics(
-    userProblemsData
+    userProblemsData,
   );
 
   return {
@@ -58,7 +58,7 @@ export const getHomePageData = async () => {
  */
 export const getLeaderboardHomePageData = async () => {
   const organizationInformation = await axios.get(
-    "http://localhost:5000/organization"
+    "http://localhost:5000/organization",
   );
 
   return {
@@ -77,7 +77,7 @@ export const getBestContestRanksPageData = async () => {
 
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
-    `${baseURL}/contests-participated`
+    `${baseURL}/contests-participated`,
   );
 
   const usersData = usersInformation.data.users;
@@ -87,7 +87,7 @@ export const getBestContestRanksPageData = async () => {
   const dataCountPerUser = await obtainDataCountPerUser(
     usersData,
     contestsParticipatedData,
-    "best_rank"
+    "best_rank",
   );
 
   return {
@@ -107,7 +107,7 @@ export const getContestsParticipatedPageData = async () => {
 
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
-    `${baseURL}/contests-participated`
+    `${baseURL}/contests-participated`,
   );
 
   const usersData = usersInformation.data.users;
@@ -117,7 +117,7 @@ export const getContestsParticipatedPageData = async () => {
   const dataCountPerUser = await obtainDataCountPerUser(
     usersData,
     contestsParticipatedData,
-    "total_contests"
+    "total_contests",
   );
 
   return {
@@ -145,7 +145,7 @@ export const getProblemsSolvedPageData = async () => {
   const dataCountPerUser = await obtainDataCountPerUser(
     usersData,
     problemsSolvedData,
-    "total_problems"
+    "total_problems",
   );
 
   return {
@@ -165,7 +165,7 @@ export const getRatingIncreasePageData = async () => {
 
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
-    `${baseURL}/contests-participated`
+    `${baseURL}/contests-participated`,
   );
 
   const usersData = usersInformation.data.users;
@@ -175,7 +175,7 @@ export const getRatingIncreasePageData = async () => {
   const dataCountPerUser = await obtainDataCountPerUser(
     usersData,
     contestsParticipatedData,
-    "highest_rating_increase"
+    "highest_rating_increase",
   );
 
   return {

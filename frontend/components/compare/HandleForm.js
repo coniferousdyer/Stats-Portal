@@ -31,7 +31,7 @@ const HandleForm = ({ errors }) => {
   // were provided (for eg. a user was not found), we start with the number of handles provided.
   // "errors" is only supplied if there were errors for any handle.
   const [handles, setHandles] = useState(
-    errors ? Array.from(Array(errors.length), () => "") : ["", ""]
+    errors ? Array.from(Array(errors.length), () => "") : ["", ""],
   );
   // The error messages to be displayed in the fields (if errors is provided).
   const [handleErrors, setHandleErrors] = useState(errors ? errors : ["", ""]);
@@ -40,14 +40,14 @@ const HandleForm = ({ errors }) => {
   const handleChange = (event, errorIndex) => {
     if (handleErrors[errorIndex]) {
       setHandleErrors(
-        handleErrors.map((error, index) => (index === errorIndex ? "" : error))
+        handleErrors.map((error, index) => (index === errorIndex ? "" : error)),
       );
     }
 
     setHandles(
       handles.map((handle, index) =>
-        index === errorIndex ? event.target.value : handle
-      )
+        index === errorIndex ? event.target.value : handle,
+      ),
     );
   };
 
@@ -61,7 +61,7 @@ const HandleForm = ({ errors }) => {
   const removeHandleField = (index) => {
     setHandles(handles.filter((handle, handleIndex) => handleIndex !== index));
     setHandleErrors(
-      handleErrors.filter((error, errorIndex) => errorIndex !== index)
+      handleErrors.filter((error, errorIndex) => errorIndex !== index),
     );
   };
 

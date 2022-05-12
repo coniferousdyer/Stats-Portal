@@ -1,21 +1,21 @@
 .links_container {
-    justify-content: right;
+  justify-content: right;
 }
 
 .link_icon {
-    margin-right: 0.3rem;
+  margin-right: 0.3rem;
 }
 
 .menu_link {
-    display: flex;
+  display: flex;
 }
 
 .weighted_link {
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
 }
 
 .unweighted_link {
-    font-family: "Poppins", sans-serif;
-    font-weight: 200;
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
 }
