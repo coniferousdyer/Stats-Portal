@@ -25,6 +25,7 @@ def get_user_problems(handle: str):
     while not response:
         try:
             response = requests.get(url)
+            response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
 
@@ -95,6 +96,7 @@ def get_user_contests(handle: str):
     while not response:
         try:
             response = requests.get(url)
+            response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
 
@@ -145,6 +147,7 @@ def get_user_information(handle: str):
     while not response:
         try:
             response = requests.get(url)
+            response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
 

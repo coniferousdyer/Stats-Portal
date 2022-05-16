@@ -142,8 +142,7 @@ def init_logger():
             )
         ],
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s [in %(pathname)s:%(lineno)d]",
-        level=ERROR
-        if environ.get("FLASK_ENV", "development") == "production"
+        level=ERROR if environ.get("FLASK_ENV", "development") == "production"
         else DEBUG,
     )
 

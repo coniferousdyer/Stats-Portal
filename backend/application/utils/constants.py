@@ -24,5 +24,5 @@ Application-specific constants.
 # Maximum number of worker threads for making requests to the Codeforces API.
 # Used in ThreadPoolExecutor (see application/codeforces/organization.py).
 # Affects the speed of the periodic database updates. Do not increase above 5
-# as the Codeforces API allows only <= 5 requests per second. 4 is optimal.
-MAX_WORKER_THREADS = 4
+# as the Codeforces API allows only <= 5 requests per second.
+MAX_WORKER_THREADS = 3

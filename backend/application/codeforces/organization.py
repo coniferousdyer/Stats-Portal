@@ -85,6 +85,7 @@ def get_organization_user_handles():
         while not response:
             try:
                 response = requests.get(url)
+                response.raise_for_status()
             except requests.exceptions.RequestException:
                 sleep(1)
 
@@ -127,6 +128,7 @@ def get_organization_information():
     while not response:
         try:
             response = requests.get(url)
+            response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
 
