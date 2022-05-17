@@ -13,7 +13,6 @@ from application.utils.constants import (
 
 """
 Application models.
-* Stored in the database whose path is specified by SQL_DATABASE_URI.
 """
 
 
@@ -177,7 +176,6 @@ class ProblemSolved(db.Model):
 
 """
 Metadata for the application (not directly used in the application).
-* Stored in the database whose path is specified by SQL_METADATA_URI.
 """
 
 
@@ -186,7 +184,6 @@ class Metadata(db.Model):
     Model for storing the metadata of the database.
     """
 
-    __bind_key__ = "metadata"
     __tablename__ = "metadata"
 
     # Property name (eg. "version").

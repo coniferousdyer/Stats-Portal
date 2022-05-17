@@ -18,9 +18,6 @@ class Config:
     SQLALCHEMY_DATABASE_URI = environ.get(
         "SQLALCHEMY_DATABASE_URI", "sqlite:///../stats.db"
     )
-    SQLALCHEMY_BINDS = {
-        "metadata": environ.get("SQLALCHEMY_METADATA_URI", "sqlite:///../metadata.db"),
-    }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
@@ -56,8 +53,6 @@ class TestingConfig:
 
     # We use an in-memory SQLite database for the tests
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
-    SQLALCHEMY_BINDS = {"metadata": "sqlite:///:memory:"}
-
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     FLASK_ENV = "development"
     DEBUG = True
