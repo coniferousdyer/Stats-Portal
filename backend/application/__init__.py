@@ -37,39 +37,43 @@ def perform_update(app: Flask):
     * app - The Flask application.
     """
 
-    # 1. Obtain the organization information.
-    organization_information = get_organization_information()
-    app.logger.info(
-        f"ORGANIZATION INFORMATION OBTAINED: {organization_information['name']}"
-    )
+    try:
+        # 1. Obtain the organization information.
+        organization_information = get_organization_information()
+        app.logger.info(
+            f"ORGANIZATION INFORMATION OBTAINED: {organization_information['name']}"
+        )
 
-    # 2. List of handles of users of the organization.
-    handles = get_organization_user_handles()
-    app.logger.info(
-        f"{len(handles)} HANDLES FOUND IN {organization_information['name']}."
-    )
+        # 2. List of handles of users of the organization.
+        handles = get_organization_user_handles()
+        app.logger.info(
+            f"{len(handles)} HANDLES FOUND IN {organization_information['name']}."
+        )
 
-    # 3. Get the required information from the Codeforces API.
+        # 3. Get the required information from the Codeforces API.
 
-    # List of all the contests.
-    contests = get_all_contests()
-    app.logger.info(f"{len(contests)} CONTESTS RETRIEVED.")
+        # List of all the contests.
+        contests = get_all_contests()
+        app.logger.info(f"{len(contests)} CONTESTS RETRIEVED.")
 
-    # List of all the problems.
-    problems = get_all_problems()
-    app.logger.info(f"{len(problems)} PROBLEMS RETRIEVED.")
+        # List of all the problems.
+        problems = get_all_problems()
+        app.logger.info(f"{len(problems)} PROBLEMS RETRIEVED.")
 
-    # Obtain the information of the users.
-    users_information = get_organization_users_information(handles)
-    app.logger.info(f"{len(users_information)} USERS' INFORMATION RETRIEVED.")
+        # Obtain the information of the users.
+        users_information = get_organization_users_information(handles)
+        app.logger.info(f"{len(users_information)} USERS' INFORMATION RETRIEVED.")
 
-    # Obtain the contests statistics of the users.
-    users_contests = get_organization_users_contests(handles)
-    app.logger.info(f"{len(users_contests)} USERS' CONTESTS RETRIEVED.")
+        # Obtain the contests statistics of the users.
+        users_contests = get_organization_users_contests(handles)
+        app.logger.info(f"{len(users_contests)} USERS' CONTESTS RETRIEVED.")
 
-    # Obtain the problems statistics of the users.
-    users_problems = get_organization_users_problems(handles)
-    app.logger.info(f"{len(users_problems)} USERS' PROBLEMS RETRIEVED.")
+        # Obtain the problems statistics of the users.
+        users_problems = get_organization_users_problems(handles)
+        app.logger.info(f"{len(users_problems)} USERS' PROBLEMS RETRIEVED.")
+    except Exception as e:
+        app.logger.exception(f"ERROR OCCURRED DURING CODEFORCES DATA RETRIEVAL: {e}")
+        return
 
     # 4. Update the database with the retrieved data.
     update_db(
@@ -81,7 +85,6 @@ def perform_update(app: Flask):
         users_contests,
         users_problems,
     )
-    app.logger.info("UPDATED DATABASE.")
 
 
 def register_error_handlers(app: Flask):
@@ -142,7 +145,8 @@ def init_logger():
             )
         ],
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s [in %(pathname)s:%(lineno)d]",
-        level=ERROR if environ.get("FLASK_ENV", "development") == "production"
+        level=ERROR
+        if environ.get("FLASK_ENV", "development") == "production"
         else DEBUG,
     )
 

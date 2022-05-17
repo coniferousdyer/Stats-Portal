@@ -198,6 +198,7 @@ def update_db(
         # that the database state remains consistent and some data is not lost.
         try:
             db.session.commit()
+            app.logger.info("UPDATED DATABASE.")
         except Exception as e:
             app.logger.exception(f"ERROR OCCURRED DURING DATABASE UPDATION: {e}")
             db.session.rollback()
