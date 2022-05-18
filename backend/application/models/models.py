@@ -49,7 +49,7 @@ class User(db.Model):
     __tablename__ = "user"
 
     # Codeforces handle of the user.
-    handle = db.Column(db.String(50), primary_key=True)
+    handle = db.Column(db.String(100), primary_key=True)
     # Account creation date.
     creation_date = db.Column(db.DateTime, nullable=False)
     # Codeforces rating of the user.
@@ -57,7 +57,7 @@ class User(db.Model):
     # The maximum rating of the user.
     max_rating = db.Column(db.Integer, nullable=False)
     # "rank" refers to the Title of the user in official terminology.
-    rank = db.Column(db.String(50), nullable=False)
+    rank = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f"<User: {self.handle}>"
@@ -76,7 +76,7 @@ class Contest(db.Model):
     # Codeforces contest ID.
     contest_id = db.Column(db.Integer, primary_key=True)
     # Name of the contest.
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(200), nullable=False)
     # Date of the contest.
     date = db.Column(db.DateTime, nullable=False)
     # Duration of the contest.
@@ -99,11 +99,9 @@ class ContestParticipant(db.Model):
     # Unique ID assigned to the relation.
     id = db.Column(db.Integer, primary_key=True)
     # Codeforces handle of the user.
-    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), nullable=False)
+    handle = db.Column(db.String(100), nullable=False)
     # Codeforces contest ID.
-    contest_id = db.Column(
-        db.Integer, db.ForeignKey("contest.contest_id"), nullable=False
-    )
+    contest_id = db.Column(db.Integer, nullable=False)
     # Rank of the user in the contest.
     rank = db.Column(db.Integer, nullable=False)
     # Old rating (before the contest).
@@ -125,13 +123,11 @@ class Problem(db.Model):
     __tablename__ = "problem"
 
     # ID of the contest in which the problem is present.
-    contest_id = db.Column(
-        db.Integer, db.ForeignKey("contest.contest_id"), primary_key=True
-    )
+    contest_id = db.Column(db.Integer, primary_key=True)
     # Index of problem in the contest.
     index = db.Column(db.String(5), primary_key=True)
     # Problem name.
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(200), nullable=False)
     # Problem rating.
     rating = db.Column(db.Integer, nullable=False)
     # Tags of the problem (stored as a string to store in the database).
@@ -154,11 +150,9 @@ class ProblemSolved(db.Model):
     # Unique ID assigned to the relation.
     id = db.Column(db.Integer, primary_key=True)
     # Codeforces handle of the user.
-    handle = db.Column(db.String(50), db.ForeignKey("user.handle"), nullable=False)
+    handle = db.Column(db.String(100), nullable=False)
     # Codeforces contest ID.
-    contest_id = db.Column(
-        db.Integer, db.ForeignKey("contest.contest_id"), nullable=False
-    )
+    contest_id = db.Column(db.Integer, nullable=False)
     # Index of the problem in the contest.
     index = db.Column(db.String(5), nullable=False)
     # Problem rating.
@@ -166,7 +160,7 @@ class ProblemSolved(db.Model):
     # Tags of the problem (stored as a string to store in the database).
     tags = db.Column(db.String(200), nullable=False)
     # Programming language the problem was solved in.
-    language = db.Column(db.String(50), nullable=False)
+    language = db.Column(db.String(100), nullable=False)
     # Problem solved time.
     solved_time = db.Column(db.DateTime, nullable=False)
 
@@ -187,9 +181,9 @@ class Metadata(db.Model):
     __tablename__ = "metadata"
 
     # Property name (eg. "version").
-    key = db.Column(db.String(50), primary_key=True)
+    key = db.Column(db.String(100), primary_key=True)
     # Property value (eg. "1.0.0").
-    value = db.Column(db.String(50), nullable=False)
+    value = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f"<{self.key}: {self.value}>"

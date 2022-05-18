@@ -15,9 +15,7 @@ class Config:
     """
 
     SECRET_KEY = environ.get("SECRET_KEY", urandom(16).hex())
-    SQLALCHEMY_DATABASE_URI = environ.get(
-        "SQLALCHEMY_DATABASE_URI", "sqlite:///../stats.db"
-    )
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL", "sqlite:///../stats.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
