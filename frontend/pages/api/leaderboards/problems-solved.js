@@ -1,3 +1,6 @@
+// External library components.
+import { withSentry } from "@sentry/nextjs";
+
 // Helper functions.
 import { getProblemsSolvedPageData } from "../../../helpers/swr";
 
@@ -7,7 +10,9 @@ import { getProblemsSolvedPageData } from "../../../helpers/swr";
  *
  * @returns {Promise<Object>} The data required for the problems solved page, fetched by getProblemsSolvedPageData().
  */
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   const data = await getProblemsSolvedPageData();
   res.status(200).json(data);
-}
+};
+
+export default withSentry(handler);

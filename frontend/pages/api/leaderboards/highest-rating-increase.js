@@ -1,3 +1,6 @@
+// External library components.
+import { withSentry } from "@sentry/nextjs";
+
 // Helper functions.
 import { getRatingIncreasePageData } from "../../../helpers/swr";
 
@@ -7,7 +10,9 @@ import { getRatingIncreasePageData } from "../../../helpers/swr";
  *
  * @returns {Promise<Object>} The data required for the highest rating increase page, fetched by getRatingIncreasePageData().
  */
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   const data = await getRatingIncreasePageData();
   res.status(200).json(data);
-}
+};
+
+export default withSentry(handler);
