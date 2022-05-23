@@ -93,7 +93,9 @@ const LeaderboardTable = ({
 
   const options = {
     rowsPerPageOptions: [10, 25, 50, 100],
-    searchPlaceholder: `Search by handle, rank, rating, or ${statisticName.toLowerCase()}`,
+    searchPlaceholder: `Search by handle, rank, rating, or ${
+      statisticName ? statisticName.toLowerCase() : attribute
+    }`,
     sortOrder: {
       name: attribute,
       direction: sortingOrder,

@@ -1,0 +1,534 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DescriptorCard renders correctly 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 MuiCard-root css-1s8a157-MuiPaper-root-MuiCard-root"
+>
+  <div
+    className="MuiCardMedia-root css-16cvb1l-MuiCardMedia-root"
+  >
+    <span
+      style={
+        Object {
+          "background": "none",
+          "border": 0,
+          "boxSizing": "border-box",
+          "display": "inline-block",
+          "height": "initial",
+          "margin": 0,
+          "maxWidth": "100%",
+          "opacity": 1,
+          "overflow": "hidden",
+          "padding": 0,
+          "position": "relative",
+          "width": "initial",
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "background": "none",
+            "border": 0,
+            "boxSizing": "border-box",
+            "display": "block",
+            "height": "initial",
+            "margin": 0,
+            "maxWidth": "100%",
+            "opacity": 1,
+            "padding": 0,
+            "width": "initial",
+          }
+        }
+      >
+        <img
+          alt=""
+          aria-hidden={true}
+          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%271000%27%20height=%27500%27/%3e"
+          style={
+            Object {
+              "background": "none",
+              "border": 0,
+              "display": "block",
+              "height": "initial",
+              "margin": 0,
+              "maxWidth": "100%",
+              "opacity": 1,
+              "padding": 0,
+              "width": "initial",
+            }
+          }
+        />
+      </span>
+      <img
+        alt="Test Title"
+        data-nimg="intrinsic"
+        decoding="async"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        style={
+          Object {
+            "border": "none",
+            "bottom": 0,
+            "boxSizing": "border-box",
+            "display": "block",
+            "height": 0,
+            "left": 0,
+            "margin": "auto",
+            "maxHeight": "100%",
+            "maxWidth": "100%",
+            "minHeight": "100%",
+            "minWidth": "100%",
+            "objectFit": undefined,
+            "objectPosition": undefined,
+            "padding": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+            "width": 0,
+          }
+        }
+      />
+      <noscript>
+        <img
+          alt="Test Title"
+          data-nimg="intrinsic"
+          decoding="async"
+          loading="lazy"
+          src="/_next/image?url=%2Fimages%2Fuser_img.png&w=2048&q=75"
+          srcSet="/_next/image?url=%2Fimages%2Fuser_img.png&w=1080&q=75 1x, /_next/image?url=%2Fimages%2Fuser_img.png&w=2048&q=75 2x"
+          style={
+            Object {
+              "border": "none",
+              "bottom": 0,
+              "boxSizing": "border-box",
+              "display": "block",
+              "height": 0,
+              "left": 0,
+              "margin": "auto",
+              "maxHeight": "100%",
+              "maxWidth": "100%",
+              "minHeight": "100%",
+              "minWidth": "100%",
+              "objectFit": undefined,
+              "objectPosition": undefined,
+              "padding": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+              "width": 0,
+            }
+          }
+        />
+      </noscript>
+    </span>
+  </div>
+  <div
+    className="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+  >
+    <div
+      className="MuiTypography-root MuiTypography-h5 MuiTypography-gutterBottom title css-h93ljk-MuiTypography-root"
+    >
+      Test Title
+    </div>
+    <p
+      className="MuiTypography-root MuiTypography-body2 description css-r40f8v-MuiTypography-root"
+    >
+      Test Description
+    </p>
+  </div>
+  <div
+    className="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+  >
+    <a
+      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButtonBase-root button css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+      href="/"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onContextMenu={[Function]}
+      onDragLeave={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+    >
+      Test Button Text
+    </a>
+  </div>
+</div>
+`;
+
+exports[`DescriptorCard renders correctly with no button 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 MuiCard-root css-1s8a157-MuiPaper-root-MuiCard-root"
+>
+  <div
+    className="MuiCardMedia-root css-16cvb1l-MuiCardMedia-root"
+  >
+    <span
+      style={
+        Object {
+          "background": "none",
+          "border": 0,
+          "boxSizing": "border-box",
+          "display": "inline-block",
+          "height": "initial",
+          "margin": 0,
+          "maxWidth": "100%",
+          "opacity": 1,
+          "overflow": "hidden",
+          "padding": 0,
+          "position": "relative",
+          "width": "initial",
+        }
+      }
+    >
+      <span
+        style={
+          Object {
+            "background": "none",
+            "border": 0,
+            "boxSizing": "border-box",
+            "display": "block",
+            "height": "initial",
+            "margin": 0,
+            "maxWidth": "100%",
+            "opacity": 1,
+            "padding": 0,
+            "width": "initial",
+          }
+        }
+      >
+        <img
+          alt=""
+          aria-hidden={true}
+          src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%271000%27%20height=%27500%27/%3e"
+          style={
+            Object {
+              "background": "none",
+              "border": 0,
+              "display": "block",
+              "height": "initial",
+              "margin": 0,
+              "maxWidth": "100%",
+              "opacity": 1,
+              "padding": 0,
+              "width": "initial",
+            }
+          }
+        />
+      </span>
+      <img
+        alt="Test Title"
+        data-nimg="intrinsic"
+        decoding="async"
+        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        style={
+          Object {
+            "border": "none",
+            "bottom": 0,
+            "boxSizing": "border-box",
+            "display": "block",
+            "height": 0,
+            "left": 0,
+            "margin": "auto",
+            "maxHeight": "100%",
+            "maxWidth": "100%",
+            "minHeight": "100%",
+            "minWidth": "100%",
+            "objectFit": undefined,
+            "objectPosition": undefined,
+            "padding": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+            "width": 0,
+          }
+        }
+      />
+      <noscript>
+        <img
+          alt="Test Title"
+          data-nimg="intrinsic"
+          decoding="async"
+          loading="lazy"
+          src="/_next/image?url=%2Fimages%2Fuser_img.png&w=2048&q=75"
+          srcSet="/_next/image?url=%2Fimages%2Fuser_img.png&w=1080&q=75 1x, /_next/image?url=%2Fimages%2Fuser_img.png&w=2048&q=75 2x"
+          style={
+            Object {
+              "border": "none",
+              "bottom": 0,
+              "boxSizing": "border-box",
+              "display": "block",
+              "height": 0,
+              "left": 0,
+              "margin": "auto",
+              "maxHeight": "100%",
+              "maxWidth": "100%",
+              "minHeight": "100%",
+              "minWidth": "100%",
+              "objectFit": undefined,
+              "objectPosition": undefined,
+              "padding": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+              "width": 0,
+            }
+          }
+        />
+      </noscript>
+    </span>
+  </div>
+  <div
+    className="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+  >
+    <div
+      className="MuiTypography-root MuiTypography-h5 MuiTypography-gutterBottom title css-h93ljk-MuiTypography-root"
+    >
+      Test Title
+    </div>
+    <p
+      className="MuiTypography-root MuiTypography-body2 description css-r40f8v-MuiTypography-root"
+    >
+      Test Description
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Heading renders correctly 1`] = `
+<div
+  className="heading_container"
+>
+  <h1
+    align="center"
+    className="heading_prefix"
+  >
+    Test Prefix Heading
+  </h1>
+  <h1
+    align="center"
+    className="heading_name"
+  >
+    Test Main Heading
+  </h1>
+   
+  <h3
+    align="center"
+    className="heading_suffix"
+  >
+    Test Suffix Heading
+  </h3>
+</div>
+`;
+
+exports[`Heading renders correctly with no prefix heading 1`] = `
+<div
+  className="heading_container"
+>
+  <h1
+    align="center"
+    className="heading_name"
+  >
+    Test Main Heading
+  </h1>
+   
+  <h3
+    align="center"
+    className="heading_suffix"
+  >
+    Test Suffix Heading
+  </h3>
+</div>
+`;
+
+exports[`Heading renders correctly with no suffix heading 1`] = `
+<div
+  className="heading_container"
+>
+  <h1
+    align="center"
+    className="heading_prefix"
+  >
+    Test Prefix Heading
+  </h1>
+  <h1
+    align="center"
+    className="heading_name"
+  >
+    Test Main Heading
+  </h1>
+   
+</div>
+`;
+
+exports[`KeyValueCard renders correctly 1`] = `
+<div
+  className="card_container"
+>
+  <div
+    className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation3 MuiCard-root card css-9v99vz-MuiPaper-root-MuiCard-root"
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #000000, #0000008a)",
+        "color": "#ffffff",
+      }
+    }
+  >
+    <div
+      className="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+    >
+      <div
+        className="card_key"
+      >
+        Test Key
+      </div>
+      <div
+        className="card_value"
+      >
+        Test Value
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`KeyValueCard renders correctly with no background color 1`] = `
+<div
+  className="card_container"
+>
+  <div
+    className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation3 MuiCard-root card css-9v99vz-MuiPaper-root-MuiCard-root"
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #ffffff, #ffffff8a)",
+        "color": "#ffffff",
+      }
+    }
+  >
+    <div
+      className="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+    >
+      <div
+        className="card_key"
+      >
+        Test Key
+      </div>
+      <div
+        className="card_value"
+      >
+        Test Value
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`KeyValueCard renders correctly with no text color 1`] = `
+<div
+  className="card_container"
+>
+  <div
+    className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation3 MuiCard-root card css-9v99vz-MuiPaper-root-MuiCard-root"
+    style={
+      Object {
+        "backgroundImage": "linear-gradient(to right, #000000, #0000008a)",
+        "color": "#000000",
+      }
+    }
+  >
+    <div
+      className="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+    >
+      <div
+        className="card_key"
+      >
+        Test Key
+      </div>
+      <div
+        className="card_value"
+      >
+        Test Value
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TimePeriodDropdown renders correctly 1`] = `
+<div
+  className="time_period_select_container"
+>
+  <div
+    className="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+  >
+    <label
+      className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1sumxir-MuiFormLabel-root-MuiInputLabel-root"
+      data-shrink={true}
+      id="select-label"
+    >
+      Time Period
+    </label>
+    <div
+      className="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl time_period_select css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+      onClick={[Function]}
+    >
+      <div
+        aria-expanded="false"
+        aria-haspopup="listbox"
+        aria-labelledby="time-period-select-label time-period-select"
+        className="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+        id="time-period-select"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        All Time
+      </div>
+      <input
+        aria-hidden={true}
+        className="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+        disabled={false}
+        onAnimationStart={[Function]}
+        onChange={[Function]}
+        required={false}
+        tabIndex={-1}
+        value="all_time"
+      />
+      <svg
+        aria-hidden={true}
+        className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+        data-testid="ArrowDropDownIcon"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7 10l5 5 5-5z"
+        />
+      </svg>
+      <fieldset
+        aria-hidden={true}
+        className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+      >
+        <legend
+          className="css-1in441m"
+        >
+          <span>
+            Time Period
+          </span>
+        </legend>
+      </fieldset>
+    </div>
+  </div>
+</div>
+`;

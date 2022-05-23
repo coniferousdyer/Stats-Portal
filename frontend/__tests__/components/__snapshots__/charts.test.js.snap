@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BarChart renders correctly with horizontal bar chart 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <h1
+    className="title"
+  >
+    TEST TITLE
+  </h1>
+  <div />
+  <div
+    className="button_container"
+  >
+    <a
+      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root button css-sghohy-MuiButtonBase-root-MuiButton-root"
+      href="/"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onContextMenu={[Function]}
+      onDragLeave={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+    >
+      Test Button Text
+      <span
+        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </a>
+  </div>
+</div>
+`;
+
+exports[`BarChart renders correctly with no button 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <h1
+    className="title"
+  >
+    TEST TITLE
+  </h1>
+  <div />
+</div>
+`;
+
+exports[`BarChart renders correctly with no title 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <div />
+  <div
+    className="button_container"
+  >
+    <a
+      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root button css-sghohy-MuiButtonBase-root-MuiButton-root"
+      href="/"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onContextMenu={[Function]}
+      onDragLeave={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+    >
+      Test Button Text
+    </a>
+  </div>
+</div>
+`;
+
+exports[`BarChart renders correctly with vertical bar chart 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <h1
+    className="title"
+  >
+    TEST TITLE
+  </h1>
+  <div />
+  <div
+    className="button_container"
+  >
+    <a
+      className="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root button css-sghohy-MuiButtonBase-root-MuiButton-root"
+      href="/"
+      onBlur={[Function]}
+      onClick={[Function]}
+      onContextMenu={[Function]}
+      onDragLeave={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+    >
+      Test Button Text
+    </a>
+  </div>
+</div>
+`;
+
+exports[`LineChart renders correctly with timeseries 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <h1
+    className="title"
+  >
+    TEST TITLE
+  </h1>
+  <div />
+</div>
+`;
+
+exports[`PieChart renders correctly with donut chart 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <h1
+    className="title"
+  >
+    TEST TITLE
+  </h1>
+  <div />
+</div>
+`;
+
+exports[`PieChart renders correctly with pie chart 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 paper_container css-qh7kl5-MuiPaper-root"
+>
+  <h1
+    className="title"
+  >
+    TEST TITLE
+  </h1>
+  <div />
+</div>
+`;

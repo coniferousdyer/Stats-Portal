@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore ."
+    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -30,6 +31,10 @@
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.4",
     "eslint-config-prettier": "^8.5.0",
-    "prettier": "^2.6.2"
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "jest-next-dynamic": "^1.0.1",
+    "prettier": "^2.6.2",
+    "react-test-renderer": "^17.0.2"
   }
 }
