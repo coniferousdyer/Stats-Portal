@@ -30,12 +30,15 @@ export const obtainDataCountPerUser = (usersInformation, data, attribute) => {
         resultData[time] = [];
       }
 
-      resultData[time].push({
-        handle: user.handle,
-        rank: user.rank,
-        rating: user.rating,
-        [attribute]: userData[time][attribute],
-      });
+      // We ensure that the value is not undefined or null.
+      if (userData[time][attribute]) {
+        resultData[time].push({
+          handle: user.handle,
+          rank: user.rank,
+          rating: user.rating,
+          [attribute]: userData[time][attribute],
+        });
+      }
     });
   });
 

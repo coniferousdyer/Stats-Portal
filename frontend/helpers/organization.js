@@ -92,6 +92,15 @@ export const obtainOverallContestsStatistics = async (userContests) => {
       // Sort the users according to their best contest rank.
       const top10BestRanksList = Object.entries(userContests)
         .sort((a, b) => {
+          // For contest ranks, since the best or worst rank can be null, we have
+          // to sort the users taking that into account (null ranks are pushed to the end).
+          if (userContests[a[0]][time].best_rank === null) {
+            if (userContests[b[0]][time].best_rank === null) return 0;
+            else return 1;
+          }
+
+          if (userContests[b[0]][time].best_rank === null) return -1;
+
           return (
             userContests[a[0]][time].best_rank -
             userContests[b[0]][time].best_rank
