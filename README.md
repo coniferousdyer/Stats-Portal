@@ -27,7 +27,7 @@ The leaderboards provide a way of finding out where one stands among other membe
 
 ### III. Compare Users
 
-The Stats Portal lets you view the statistics of any two users in the organization side-by-side to compare them.
+The Stats Portal lets you view the statistics of any number of users in the organization side-by-side to compare them. 2 or more users can be compared at the same time.
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
@@ -65,7 +65,7 @@ source <name of virtual environment>/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the cloned directory. You can use the `.env.template` file as a template using the following command.
+4. Create a `.env` file in the `backend` directory. You can use the `.env.template` file as a template using the following command.
 
 ```bash
 cp .env.template .env
@@ -73,14 +73,42 @@ cp .env.template .env
 
 You can then fill in the required values in the `.env` file.
 
-5. The app is now ready to be run. Run the app.
+5. The app is now ready to be run. Run the app with the Gunicorn server.
 
 ```bash
-python app.py
+gunicorn -c gunicorn_config.py wsgi:app
 ```
 
-The backend should now be running on the host and port specified in the `.env` file. If no value has been specified, the default values will be used, meaning that the app will run on `localhost:5000`.
+The backend should now be running on `localhost:5000`.
 
 > <b>Note:</b> The virtual environment can be exited by running the `deactivate` command.
 
 ### II. Frontend (Next.js)
+
+1. Change the working directory to the `frontend` directory.
+
+```bash
+cd frontend
+```
+
+2. Install the required dependencies.
+
+```bash
+npm install
+```
+
+3. Create a `.env.local` file in the `frontend` directory. You can use the `.env.template` file as a template using the following command.
+
+```bash
+cp .env.template .env.local
+```
+
+You can then fill in the required values in the `.env.local` file.
+
+4. The app is now ready to be run. Run the app.
+
+```bash
+npm run dev
+```
+
+The frontend should now be running on `localhost:3000`.
