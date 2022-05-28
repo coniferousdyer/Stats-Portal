@@ -79,9 +79,10 @@ const BarChart = ({
       ...new Set(...names, ...dataList.map((data) => Object.keys(data.series))),
     ];
 
-    // Create the series from the dataList prop. We convert each data series into an array of objects,
-    // of the form: [{name: "A", value: 10}, {name: "B", value: 20}, ...] and so on. If a the key for
-    // a label is not present in the data series, we set the value to 0.
+    // Create the series from the dataList prop. We convert each data series into an array of numbers,
+    // corresponding to the unique labels obtained (the "names" array), in the following format:
+    // [{"name": "A", "data": [10, 20, 30, 40, 50]}, {"name": "B", "data": [10, 20, 30, 40, 50]}, ...]
+    // If the data series doesn't contain a value for a label, we set the value to 0.
     const dataSeries = dataList.map((data) => {
       return {
         name: data.name,
