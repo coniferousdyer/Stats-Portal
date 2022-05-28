@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from os import environ
 
 from application.models.models import Metadata, Organization
-from application.utils.common import row_to_dict, convert_datestring_to_datetime
+from application.utils.common import row_to_dict
 
 
 load_dotenv()
@@ -40,10 +40,7 @@ def get_organization_information():
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "organization": organization,
             }
         ),

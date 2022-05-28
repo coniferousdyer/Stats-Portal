@@ -14,11 +14,7 @@ from application.models.models import (
 )
 from application.helpers.contests import get_contest_statistics
 from application.helpers.problems import get_problems_statistics
-from application.utils.common import (
-    row_to_dict,
-    get_all_rows_as_dict,
-    convert_datestring_to_datetime,
-)
+from application.utils.common import row_to_dict, get_all_rows_as_dict
 
 
 users_routes = Blueprint("users_routes", __name__)
@@ -39,10 +35,7 @@ def get_all_users_information():
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "users": users,
             }
         ),
@@ -69,10 +62,7 @@ def get_user_information(handle: str):
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "user": user,
             }
         ),
@@ -109,10 +99,7 @@ def get_all_users_contests_participated():
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "contest_statistics": contest_statistics,
             }
         ),
@@ -151,10 +138,7 @@ def get_user_contests_participated(handle: str):
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "contest_statistics": contest_statistics,
             }
         ),
@@ -188,10 +172,7 @@ def get_all_users_problems_solved():
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "problem_statistics": problem_statistics,
             }
         ),
@@ -225,10 +206,7 @@ def get_user_problems_solved(handle: str):
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "problem_statistics": problem_statistics,
             }
         ),

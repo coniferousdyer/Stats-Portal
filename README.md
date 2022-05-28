@@ -103,7 +103,7 @@ npm install
 cp .env.template .env.local
 ```
 
-You can then fill in the required values in the `.env.local` file.
+You can then fill in the required values in the `.env.local` file. Also fill in the required values in `sentry.properties` to send errors to Sentry.
 
 4. The app is now ready to be run. Run the app.
 

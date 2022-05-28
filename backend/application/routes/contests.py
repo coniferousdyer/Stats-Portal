@@ -7,11 +7,7 @@ from flask import Blueprint, jsonify
 
 from application.models.models import Metadata, Contest, ContestParticipant
 from application.helpers.contests import sort_contest_participants
-from application.utils.common import (
-    get_all_rows_as_dict,
-    row_to_dict,
-    convert_datestring_to_datetime,
-)
+from application.utils.common import get_all_rows_as_dict, row_to_dict
 
 
 contests_routes = Blueprint("contests_routes", __name__)
@@ -27,10 +23,7 @@ def get_all_contests():
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "contests": contests,
             }
         ),
@@ -60,10 +53,7 @@ def get_contest(contest_id: int):
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "contest": contest,
             }
         ),
@@ -99,10 +89,7 @@ def get_contest_standings(contest_id: int):
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "contest_standings": contest_standings,
             }
         ),

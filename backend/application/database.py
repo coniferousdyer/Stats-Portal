@@ -3,7 +3,10 @@ from datetime import datetime
 from os import environ
 from pytz import timezone
 
-from application.utils.common import convert_datestring_to_datetime
+from application.utils.common import (
+    convert_datestring_to_datetime,
+    convert_datetime_to_datestring,
+)
 from application.models.orm import db
 from application.models.models import (
     Organization,
@@ -144,11 +147,15 @@ def store_last_update_time():
     if metadata_last_update_time is None:
         metadata = Metadata(
             key="last_update_time",
-            value=datetime.now(timezone(time_zone)),
+            value=convert_datetime_to_datestring(
+                datetime.now(timezone(time_zone)), "%d %B %Y, %H:%M:%S %Z"
+            ),
         )
         db.session.add(metadata)
     else:
-        metadata_last_update_time.value = datetime.now(timezone(time_zone))
+        metadata_last_update_time.value = convert_datetime_to_datestring(
+            datetime.now(timezone(time_zone)), "%d %B %Y, %H:%M:%S %Z"
+        )
 
 
 """

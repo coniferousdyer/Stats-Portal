@@ -6,10 +6,7 @@ under the /problems blueprint.
 from flask import Blueprint, jsonify
 
 from application.models.models import Metadata, Problem
-from application.utils.common import (
-    get_all_rows_as_dict,
-    convert_datestring_to_datetime,
-)
+from application.utils.common import get_all_rows_as_dict
 
 
 problems_routes = Blueprint("problems_routes", __name__)
@@ -25,10 +22,7 @@ def get_all_problems():
     return (
         jsonify(
             {
-                "last_update_time": convert_datestring_to_datetime(
-                    Metadata.query.get("last_update_time").value,
-                    "%Y-%m-%d %H:%M:%S.%f%z",
-                ),
+                "last_update_time": Metadata.query.get("last_update_time").value,
                 "problems": problems,
             }
         ),

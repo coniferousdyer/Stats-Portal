@@ -35,6 +35,20 @@ def convert_datestring_to_datetime(datestring: str, dateformat: str = "%Y-%m-%d"
     return datetime.strptime(datestring, dateformat)
 
 
+def convert_datetime_to_datestring(
+    datetimeobject: datetime, dateformat: str = "%Y-%m-%d"
+):
+    """
+    Converts a datetime object to a datestring.
+
+    Arguments:
+    * datetimeobject - The datetime object to convert.
+    * dateformat - The format of the datestring. Defaults to "%Y-%m-%d".
+    """
+
+    return datetimeobject.strftime(dateformat)
+
+
 def row_to_dict(row: db.Model):
     """
     Converts an SQLAlchemy row/object to a dictionary.
