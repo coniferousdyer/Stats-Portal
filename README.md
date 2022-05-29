@@ -13,6 +13,8 @@ Welcome to the repository of the Codeforces Stats Portal!
 
 The Stats Portal is a web application that keeps track of the Codeforces statistics of the members of a particular Codeforces organization and allows you to view the relevant analytics through means of data visualization.
 
+View a deployed demo here: https://stats-portal.vercel.app
+
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
 ## Features
