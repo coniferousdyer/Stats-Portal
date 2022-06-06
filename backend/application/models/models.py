@@ -4,7 +4,6 @@ Contains the models for the database.
 
 from application.models.orm import db
 from application.utils.constants import (
-    ORGANIZATION_BASE_URL,
     PROFILE_BASE_URL,
     CONTEST_BASE_URL,
     PROBLEM_BASE_URL,
@@ -14,31 +13,6 @@ from application.utils.constants import (
 """
 Application models.
 """
-
-
-class Organization(db.Model):
-    """
-    Codeforces organization.
-    """
-
-    __tablename__ = "organization"
-
-    # Organization ID.
-    organization_id = db.Column(db.Integer, primary_key=True)
-    # Name of the organization.
-    name = db.Column(db.String(100), nullable=False)
-    # Global rank of the organization.
-    global_rank = db.Column(db.Integer, nullable=False)
-    # Number of users of the organization.
-    number_of_users = db.Column(db.Integer, nullable=False)
-    # Rating of the organization.
-    rating = db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return f"<Organization {self.name}>"
-
-    def url(self):
-        return f"{ORGANIZATION_BASE_URL}{self.organization_id}"
 
 
 class User(db.Model):

@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 
 // Internal application components.
 import Heading from "../common/Heading";
-import InformationCards from "./InformationCards";
 import TimePeriodDropdown from "../common/TimePeriodDropdown";
 import InformationTable from "../tables/InformationTable";
 import PieChart from "../charts/PieChart";
@@ -20,13 +19,13 @@ import {
  * Component that renders the organization statistics visualization for the home page.
  *
  * @prop {string} lastUpdateTime - The string representation of the last database update time.
- * @prop {Object} organizationInformation - The object containing the organization information.
+ * @prop {string} organizationName - The name of the organization.
  * @prop {Object} overallContests - The object containing the overall contest statistics for the organization.
  * @prop {Object} overallProblems - The object containing the overall problem statistics for the organization.
  */
 const OrganizationStatistics = ({
   lastUpdateTime,
-  organizationInformation,
+  organizationName,
   overallContests,
   overallProblems,
 }) => {
@@ -38,12 +37,9 @@ const OrganizationStatistics = ({
       {/* Heading */}
       <Heading
         prefixHeading={"welcome to the stats portal for"}
-        mainHeading={organizationInformation.name}
+        mainHeading={organizationName}
         suffixHeading={`LAST UPDATED AT ${lastUpdateTime}`}
       />
-
-      {/* Organization Information Cards */}
-      <InformationCards organizationInformation={organizationInformation} />
 
       <div className="flex_wrap_container">
         {/* Time Period Select Dropdown */}
@@ -55,7 +51,7 @@ const OrganizationStatistics = ({
         {/* Problems Solved Leaderboard Bar Chart */}
         <div className="one_third_container">
           <BarChart
-            title={`Most Problems Solved in ${organizationInformation.name}`}
+            title={`Most Problems Solved in ${organizationName}`}
             horizontal={true}
             dataList={[
               {
@@ -71,7 +67,7 @@ const OrganizationStatistics = ({
         {/* Contests Given Leaderboard Bar Chart */}
         <div className="one_third_container">
           <BarChart
-            title={`Most Contests Given in ${organizationInformation.name}`}
+            title={`Most Contests Given in ${organizationName}`}
             horizontal={true}
             dataList={[
               {
@@ -87,7 +83,7 @@ const OrganizationStatistics = ({
         {/* Highest Rank Leaderboard Bar Chart */}
         <div className="one_third_container">
           <BarChart
-            title={`Best Contest Ranks in ${organizationInformation.name}`}
+            title={`Best Contest Ranks in ${organizationName}`}
             horizontal={true}
             dataList={[
               {
@@ -117,7 +113,7 @@ const OrganizationStatistics = ({
         {/* Language Distribution Chart */}
         <div className="half_container">
           <PieChart
-            title={`Languages Used by ${organizationInformation.name}`}
+            title={`Languages Used by ${organizationName}`}
             donut={true}
             data={overallProblems[timePeriod].languages}
           />
@@ -125,7 +121,7 @@ const OrganizationStatistics = ({
         {/* Tag Distribution Donut Chart */}
         <div className="half_container">
           <PieChart
-            title={`Problem Tags Solved by ${organizationInformation.name}`}
+            title={`Problem Tags Solved by ${organizationName}`}
             donut={true}
             data={overallProblems[timePeriod].tags}
           />
@@ -133,7 +129,7 @@ const OrganizationStatistics = ({
         {/* Index Distribution Bar Chart */}
         <div className="half_container">
           <BarChart
-            title={`Problem Indexes Solved by ${organizationInformation.name}`}
+            title={`Problem Indexes Solved by ${organizationName}`}
             horizontal={false}
             dataList={[
               {
@@ -147,7 +143,7 @@ const OrganizationStatistics = ({
         {/* Ratings Distribution Bar Chart */}
         <div className="half_container">
           <BarChart
-            title={`Problem Ratings Solved by ${organizationInformation.name}`}
+            title={`Problem Ratings Solved by ${organizationName}`}
             horizontal={false}
             dataList={[
               {
@@ -165,7 +161,7 @@ const OrganizationStatistics = ({
 
 OrganizationStatistics.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
-  organizationInformation: PropTypes.object.isRequired,
+  organizationName: PropTypes.string.isRequired,
   overallContests: PropTypes.object.isRequired,
   overallProblems: PropTypes.object.isRequired,
 };

@@ -19,18 +19,18 @@ import { obtainDataCountPerUser } from "./leaderboards";
  * @returns {Promise<Object>} The data required for the home page.
  */
 export const getHomePageData = async () => {
-  // The base URL is common to organization information ("/"), users' contests ("/users/contests-participated")
-  // and users' problems solved ("/users/problems-solved").
+  // The base URL is common to organization name data ("/organization/name"), users' contests
+  // ("/users/contests-participated") and users' problems solved ("/users/problems-solved").
   const baseURL = "http://localhost:5000";
 
-  const organizationInformation = await axios.get(`${baseURL}/organization`);
+  const organizationName = await axios.get(`${baseURL}/organization/name`);
   const userContests = await axios.get(
     `${baseURL}/users/contests-participated`,
   );
   const userProblems = await axios.get(`${baseURL}/users/problems-solved`);
 
-  const lastUpdateTime = organizationInformation.data.last_update_time;
-  const organizationInformationData = organizationInformation.data.organization;
+  const lastUpdateTime = organizationName.data.last_update_time;
+  const organizationNameData = organizationName.data.organization_name;
   const userContestsData = userContests.data.contest_statistics;
   const userProblemsData = userProblems.data.problem_statistics;
 
@@ -45,7 +45,7 @@ export const getHomePageData = async () => {
 
   return {
     lastUpdateTime: lastUpdateTime,
-    organizationInformation: organizationInformationData,
+    organizationName: organizationNameData,
     overallContests: overallContestsStatistics,
     overallProblems: overallProblemsStatistics,
   };
@@ -57,12 +57,12 @@ export const getHomePageData = async () => {
  * @returns {Promise<Object>} The data required for the leaderboards home page.
  */
 export const getLeaderboardHomePageData = async () => {
-  const organizationInformation = await axios.get(
-    "http://localhost:5000/organization",
+  const organizationName = await axios.get(
+    "http://localhost:5000/organization/name",
   );
 
   return {
-    organizationName: organizationInformation.data.organization.name,
+    organizationName: organizationName.data.organization_name,
   };
 };
 

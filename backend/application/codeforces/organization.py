@@ -4,20 +4,12 @@ Contains methods for obtaining information about an organization and its users.
 
 from os import environ
 import requests
-from bs4 import BeautifulSoup
 from time import sleep
 from concurrent.futures import ThreadPoolExecutor
 
-from application.utils.constants import (
-    ORGANIZATION_BASE_URL,
-    MAX_WORKER_THREADS,
-    ORGANIZATION_LIST_BASE_URL,
-)
-from application.codeforces.users import (
-    get_user_problems,
-    get_user_contests,
-    get_user_information,
-)
+from application.codeforces.users import get_user_problems, get_user_contests
+from application.utils.common import convert_timestamp_to_datetime
+from application.utils.constants import MAX_WORKER_THREADS, API_BASE_URL
 
 
 def get_organization_users_problems(handles: list[str]):
@@ -50,110 +42,62 @@ def get_organization_users_contests(handles: list[str]):
     return users_contests
 
 
-def get_organization_users_information(handles: list[str]):
-    """
-    Obtains information about an organization's users.
-
-    Arguments:
-    * handles - List of handles of the organization's users.
-    """
-
-    # Initialize the thread pool.
-    with ThreadPoolExecutor(max_workers=MAX_WORKER_THREADS) as executor:
-        users_information = list(executor.map(get_user_information, handles))
-
-    return users_information
-
-
-def get_organization_user_handles():
+def get_organization_users_information():
     """
     Obtains list of all Codeforces users of the organization and information about them.
-    This information is scraped from https://codeforces.com/ratings/organization/<ORGANIZATION_NUMBER>/page/<i>.
     """
 
-    i = 1  # Page number.
-    handles = []  # List of user handles.
-    last_handle = (
-        ""  # Handle of the first user on the last page; used to determine when to stop.
-    )
+    # We do this differently than in the other methods because the Codeforces API
+    # gives us a method to obtain all users of the organization in one go, while it
+    # does not do this for contests or problems. Therefore, we use this method to
+    # obtain all the handles in this method and use that in the other methods.
+    url = f"{API_BASE_URL}user.ratedList"
 
-    while True:
-        url = f"{ORGANIZATION_BASE_URL}{environ.get('ORGANIZATION_NUMBER', '')}/page/{str(i)}"
-        response = None
-
-        # Send the request to the Codeforces API and retry if it fails.
-        while not response:
-            try:
-                response = requests.get(url)
-                response.raise_for_status()
-            except requests.exceptions.RequestException:
-                sleep(1)
-
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        # Get the list of users.
-        users_on_page = soup.find("div", class_="ratingsDatatable").find_all(
-            "a", class_="rated-user"
-        )
-
-        # If there are no users or the page is repeated, stop.
-        if not users_on_page or users_on_page[0].text == last_handle:
-            break
-
-        # Store the handle of the first user on the last page to determine when to stop.
-        last_handle = users_on_page[0].text
-
-        # Add the users to the list. user.text is the handle of the user.
-        handles += [user.text for user in users_on_page]
-
-        i += 1
-
-    return handles
-
-
-def get_organization_information():
-    """
-    Obtains information about the organization, namely:
-    * Organization ID
-    * Global rank
-    * Organization rating
-    * Number of users
-    This information is scraped from https://codeforces.com/ratings/organizations.
-    """
-
-    url = ORGANIZATION_LIST_BASE_URL
+    # We include all-time users, not just those who have been active recently.
+    # Therefore we set the parameters "activeOnly" to false and "includeRetired" to false.
+    payload = {
+        "activeOnly": "false",
+        "includeRetired": "true",
+    }
     response = None
 
     # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
-            response = requests.get(url)
+            response = requests.get(url, params=payload)
             response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    # We filter the users belonging to the organization.
+    result = filter(
+        lambda x: "organization" in x
+        and x["organization"] == environ.get("ORGANIZATION_NAME", ""),
+        response.json()["result"],
+    )
 
-    # We find the link leading to the organization's ratings page. Since there may
-    # be multiple organizations with the same name, we find the one with the specified
-    # organization number. The parent of the div containing the link is the table row
-    # that contains the information we need in.
-    organization_row = soup.find(
-        "a",
-        href=f"/ratings/organization/{environ.get('ORGANIZATION_NUMBER', '')}",
-    ).parent.parent.find_all("td")
+    users_information = []
 
-    # First column contains global rank, second column contains organization name,
-    # third column contains number of users, and fourth column contains organization
-    # rating.
-    organization_information = {
-        "organization_id": int(environ.get("ORGANIZATION_NUMBER", "")),
-        "global_rank": organization_row[0].text,
-        "name": organization_row[1].find("a").text,
-        "number_of_users": int(
-            organization_row[2].find_all("span")[1].text.strip("()")
-        ),
-        "rating": int(organization_row[3].find_all("span")[1].text.strip("()")),
-    }
+    # The result contains a list of dictionaries containing information about the users
+    # belonging to the organization. We extract the relevant information required by the model
+    # and return it.
+    for user in result:
+        # If the user is unrated (i.e. has not given a contest yet), the rating is 0.
+        rating = user.get("rating", 0)
+        max_rating = user.get("maxRating", 0)
+        rank = user.get("rank", "Unrated")
 
-    return organization_information
+        # Obtaining account creation time in DateTime format.
+        creation_date = convert_timestamp_to_datetime(user["registrationTimeSeconds"])
+
+        users_information.append(
+            {
+                "handle": user["handle"],
+                "creation_date": creation_date,
+                "rating": rating,
+                "max_rating": max_rating,
+                "rank": rank,
+            }
+        )
+
+    return users_information

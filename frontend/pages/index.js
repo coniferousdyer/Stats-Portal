@@ -16,13 +16,13 @@ import { getHomePageData } from "../helpers/swr";
  * "/".
  *
  * @prop {string} lastUpdateTime - The string representation of the last database update time.
- * @prop {Object} organizationInformation - The object containing the organization information.
+ * @prop {string} organizationName - The name of the organization.
  * @prop {Object} overallContests - The object containing the overall contest statistics for the organization.
  * @prop {Object} overallProblems - The object containing the overall problem statistics for the organization.
  */
 export default function Home({
   lastUpdateTime,
-  organizationInformation,
+  organizationName,
   overallContests,
   overallProblems,
 }) {
@@ -33,7 +33,7 @@ export default function Home({
   const { data } = useSWR("/api", fetcher, {
     fallbackData: {
       lastUpdateTime: lastUpdateTime,
-      organizationInformation: organizationInformation,
+      organizationName: organizationName,
       overallContests: overallContests,
       overallProblems: overallProblems,
     },
@@ -42,7 +42,7 @@ export default function Home({
   return (
     <>
       <Head>
-        <title>Stats Portal | {data.organizationInformation.name}</title>
+        <title>Stats Portal | {data.organizationName}</title>
       </Head>
 
       <Navbar />
@@ -51,13 +51,13 @@ export default function Home({
         {/* Organization Statistics */}
         <OrganizationStatistics
           lastUpdateTime={data.lastUpdateTime}
-          organizationInformation={data.organizationInformation}
+          organizationName={data.organizationName}
           overallContests={data.overallContests}
           overallProblems={data.overallProblems}
         />
 
         {/* Section Cards */}
-        <SectionCards organizationName={data.organizationInformation.name} />
+        <SectionCards organizationName={data.organizationName} />
       </div>
     </>
   );
@@ -65,7 +65,7 @@ export default function Home({
 
 Home.propTypes = {
   lastUpdateTime: PropTypes.string.isRequired,
-  organizationInformation: PropTypes.object.isRequired,
+  organizationName: PropTypes.string.isRequired,
   overallContests: PropTypes.object.isRequired,
   overallProblems: PropTypes.object.isRequired,
 };
@@ -76,7 +76,7 @@ export const getStaticProps = async () => {
   return {
     props: {
       lastUpdateTime: data.lastUpdateTime,
-      organizationInformation: data.organizationInformation,
+      organizationName: data.organizationName,
       overallContests: data.overallContests,
       overallProblems: data.overallProblems,
     },

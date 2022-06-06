@@ -4,11 +4,10 @@ under the /organization blueprint.
 """
 
 from flask import Blueprint, jsonify
-from dotenv import load_dotenv
 from os import environ
+from dotenv import load_dotenv
 
-from application.models.models import Metadata, Organization
-from application.utils.common import row_to_dict
+from application.models.models import Metadata
 
 
 load_dotenv()
@@ -17,31 +16,17 @@ load_dotenv()
 organization_routes = Blueprint("organization_routes", __name__)
 
 
-@organization_routes.route("/", methods=["GET"])
-def get_organization_information():
+@organization_routes.route("/name", methods=["GET"])
+def get_organization_name():
     """
-    Returns the organization information.
+    Returns the organization name.
     """
-
-    # Check if the organization exists.
-    organization = Organization.query.get(environ.get("ORGANIZATION_NUMBER", ""))
-    if organization is None:
-        return (
-            jsonify(
-                {
-                    "error": f"Organization with id {environ.get('ORGANIZATION_NUMBER', '')} not found."
-                }
-            ),
-            404,
-        )
-    else:
-        organization = row_to_dict(organization)
 
     return (
         jsonify(
             {
                 "last_update_time": Metadata.query.get("last_update_time").value,
-                "organization": organization,
+                "organization_name": environ.get("ORGANIZATION_NAME", ""),
             }
         ),
         200,

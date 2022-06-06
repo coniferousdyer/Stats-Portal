@@ -15,11 +15,9 @@ from logging.handlers import RotatingFileHandler
 
 from application.models.orm import db
 from application.codeforces.organization import (
-    get_organization_information,
-    get_organization_user_handles,
+    get_organization_users_information,
     get_organization_users_contests,
     get_organization_users_problems,
-    get_organization_users_information,
 )
 from application.codeforces.contests import get_all_contests
 from application.codeforces.problems import get_all_problems
@@ -31,26 +29,21 @@ load_dotenv()
 
 def perform_update(app: Flask):
     """
-    Performs a scheduled update to the database.
+    Obtains the required data and performs a scheduled update to the database.
 
     Arguments:
     * app - The Flask application.
     """
 
     try:
-        # 1. Obtain the organization information.
-        organization_information = get_organization_information()
+        # 1. List of handles of users of the organization and their information.
+        users_information = get_organization_users_information()
+        handles = [user["handle"] for user in users_information]
         app.logger.info(
-            f"ORGANIZATION INFORMATION OBTAINED: {organization_information['name']}"
+            f"{len(handles)} HANDLES FOUND IN {environ.get('ORGANIZATION_NAME')} AND USERS' INFORMATION RETRIEVED."
         )
 
-        # 2. List of handles of users of the organization.
-        handles = get_organization_user_handles()
-        app.logger.info(
-            f"{len(handles)} HANDLES FOUND IN {organization_information['name']}."
-        )
-
-        # 3. Get the required information from the Codeforces API.
+        # 2. Get the required information from the Codeforces API.
 
         # List of all the contests.
         contests = get_all_contests()
@@ -59,10 +52,6 @@ def perform_update(app: Flask):
         # List of all the problems.
         problems = get_all_problems()
         app.logger.info(f"{len(problems)} PROBLEMS RETRIEVED.")
-
-        # Obtain the information of the users.
-        users_information = get_organization_users_information(handles)
-        app.logger.info(f"{len(users_information)} USERS' INFORMATION RETRIEVED.")
 
         # Obtain the contests statistics of the users.
         users_contests = get_organization_users_contests(handles)
@@ -75,10 +64,9 @@ def perform_update(app: Flask):
         app.logger.exception(f"ERROR OCCURRED DURING CODEFORCES DATA RETRIEVAL: {e}")
         return
 
-    # 4. Update the database with the retrieved data.
+    # 3. Update the database with the retrieved data.
     update_db(
         app,
-        organization_information,
         contests,
         problems,
         users_information,

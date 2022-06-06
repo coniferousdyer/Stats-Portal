@@ -18,13 +18,14 @@ def get_user_problems(handle: str):
     * handle - The handle of the user.
     """
 
-    url = f"{API_BASE_URL}user.status?handle={handle}"
+    url = f"{API_BASE_URL}user.status"
+    payload = {"handle": handle}
     response = None
 
     # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
-            response = requests.get(url)
+            response = requests.get(url, params=payload)
             response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
@@ -90,12 +91,13 @@ def get_user_contests(handle: str):
     """
 
     url = f"{API_BASE_URL}user.rating?handle={handle}"
+    payload = {"handle": handle}
     response = None
 
     # Send the request to the Codeforces API and retry if it fails.
     while not response:
         try:
-            response = requests.get(url)
+            response = requests.get(url, params=payload)
             response.raise_for_status()
         except requests.exceptions.RequestException:
             sleep(1)
@@ -130,43 +132,3 @@ def get_user_contests(handle: str):
         )
 
     return contests
-
-
-def get_user_information(handle: str):
-    """
-    Obtains information about a user.
-
-    Arguments:
-    * handle - The handle of the user.
-    """
-
-    url = f"{API_BASE_URL}user.info?handles={handle}"
-    response = None
-
-    # Send the request to the Codeforces API and retry if it fails.
-    while not response:
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-        except requests.exceptions.RequestException:
-            sleep(1)
-
-    # The "result" field is a list of dictionaries, where each dictionary contains information about a user.
-    # We only need the first dictionary, which corresponds to the user we're looking for.
-    result = response.json()["result"][0]
-
-    # If the user is unrated (i.e. has not given a contest yet), the rating is 0.
-    rating = result.get("rating", 0)
-    max_rating = result.get("maxRating", 0)
-    rank = result.get("rank", "Unrated")
-
-    # Obtaining account creation time in DateTime format.
-    creation_date = convert_timestamp_to_datetime(result["registrationTimeSeconds"])
-
-    return {
-        "handle": handle,
-        "creation_date": creation_date,
-        "rating": rating,
-        "max_rating": max_rating,
-        "rank": rank,
-    }

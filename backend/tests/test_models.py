@@ -13,7 +13,6 @@ from sqlalchemy.exc import IntegrityError
 
 from application.models.orm import db
 from application.models.models import (
-    Organization,
     User,
     Contest,
     ContestParticipant,
@@ -21,76 +20,6 @@ from application.models.models import (
     ProblemSolved,
     Metadata,
 )
-
-
-@pytest.mark.usefixtures("app")
-class TestOrganizationModel:
-    """
-    Tests for the Organization model.
-    """
-
-    def test_organization_creation(self, app):
-        """
-        * GIVEN a Flask application
-        * WHEN an Organization object is created
-        * THEN the object is stored in the database correctly
-        """
-
-        with app.app_context():
-            # Create the Organization object.
-            organization = Organization(
-                organization_id=1,
-                name="test_organization",
-                global_rank=1,
-                number_of_users=1,
-                rating=1000,
-            )
-            db.session.add(organization)
-            db.session.commit()
-
-            # Check the object was added to the database.
-            retrieved_organization = Organization.query.get(1)
-            assert retrieved_organization.organization_id == 1
-            assert retrieved_organization.name == "test_organization"
-            assert retrieved_organization.global_rank == 1
-            assert retrieved_organization.number_of_users == 1
-            assert retrieved_organization.rating == 1000
-            # Do not use ORGANIZATION_BASE_URL here, as the goal is to test the URL generation.
-            assert (
-                retrieved_organization.url()
-                == "https://codeforces.com/ratings/organization/1"
-            )
-
-    def test_duplicate_organization_addition(self, app):
-        """
-        * GIVEN a Flask application
-        * WHEN an Organization object is created with an organization_id that already exists in the database
-        * THEN the object is not stored in the database
-        """
-
-        # Create the Organization object.
-        with app.app_context():
-            organization = Organization(
-                organization_id=1,
-                name="test_organization",
-                global_rank=1,
-                number_of_users=1,
-                rating=1000,
-            )
-            db.session.add(organization)
-            db.session.commit()
-
-            # Try to create an organization with the same organization_id.
-            with pytest.raises(IntegrityError):
-                organization = Organization(
-                    organization_id=1,
-                    name="test_organization_2",
-                    global_rank=2,
-                    number_of_users=5,
-                    rating=2000,
-                )
-                db.session.add(organization)
-                db.session.commit()
 
 
 @pytest.mark.usefixtures("app")

@@ -13,7 +13,6 @@ from os import environ
 
 from application.models.orm import db
 from application.models.models import (
-    Organization,
     User,
     Contest,
     ContestParticipant,
@@ -28,29 +27,19 @@ class TestOrganizationRoutes:
     Organization-related routes.
     """
 
-    def test_organization_routes(self, app, client):
+    def test_organization_routes(self, client):
         """
-        Tests the organization-related routes.
+        * GIVEN a Flask application
+        * WHEN the '/organization/name' route is requested
+        * THEN check that the status code is 200 and the organization name matches the environment variable
         """
 
-        # Create an organization and add it to the database.
-        with app.app_context():
-            organization = Organization(
-                organization_id=int(environ.get("ORGANIZATION_NUMBER", "")),
-                name="test_organization",
-                global_rank=1,
-                number_of_users=1,
-                rating=1000,
-            )
-            db.session.add(organization)
-            db.session.commit()
-
-        # Test the organization route.
-        response = client.get("/organization")
+        # Test the organization route and check if the organization name returned is correct.
+        response = client.get("/organization/name")
         assert response.status_code == 200
         assert response.get_json()["last_update_time"] is not None
-        assert response.get_json()["organization"]["organization_id"] == int(
-            environ.get("ORGANIZATION_NUMBER", "")
+        assert response.get_json()["organization_name"] == environ.get(
+            "ORGANIZATION_NAME", ""
         )
 
 
