@@ -125,7 +125,7 @@ In order to make the application production-ready, a few changes would have to b
 
 2. In the `client` directory, ensure that `BASE_URL` in the `.env` file is set to the correct value, be it the URL of the deployed backend or `http://localhost:5000`. In addition, set the values of `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG` and `SENTRY_PROJECT` to ensure a successful build of the Next.js frontend, as well as proper error tracking during production.
 
-3. While the Flask backend is hosted, either locally or remotely, run the following command.
+3. While the Flask backend is hosted, either locally or remotely, run the following command in the `client` directory.
 
 ```bash
 npm run build
