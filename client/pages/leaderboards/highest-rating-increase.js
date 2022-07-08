@@ -72,7 +72,11 @@ const HighestRatingIncrease = ({ lastUpdateTime, contestsData }) => {
           <div className={styles.table_container}>
             <LeaderboardTable
               title={"Highest Rating Increase"}
-              dataList={data.contestsData[timePeriod]}
+              dataList={
+                timePeriod in data.contestsData
+                  ? data.contestsData[timePeriod]
+                  : []
+              }
               attribute={"highest_rating_increase"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
               statisticName={"Highest Rating Increase"}
               sortingOrder={"desc"}

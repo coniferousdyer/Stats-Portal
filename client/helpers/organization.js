@@ -227,11 +227,17 @@ export const formatInformationDataForTable = (informationData) => {
  */
 export const formatContestsDataForTable = (contestsData) => {
   return {
-    "Total Contests Participated": contestsData.total_contests,
+    "Total Contests Participated": contestsData.total_contests
+      ? contestsData.total_contests
+      : 0,
     "Best Rank": contestsData.best_rank ? contestsData.best_rank : "N/A", // If best rank is null, it is taken to be "N/A".
     "Worst Rank": contestsData.worst_rank ? contestsData.worst_rank : "N/A", // If worst rank is null, it is taken to be "N/A".
-    "Highest Rating Increase": contestsData.highest_rating_increase,
-    "Highest Rating Decrease": contestsData.highest_rating_decrease,
+    "Highest Rating Increase": contestsData.highest_rating_increase
+      ? contestsData.highest_rating_increase
+      : "N/A",
+    "Highest Rating Decrease": contestsData.highest_rating_decrease
+      ? contestsData.highest_rating_decrease
+      : "N/A",
   };
 };
 
@@ -243,10 +249,13 @@ export const formatContestsDataForTable = (contestsData) => {
  * @param {Object} - The formatted data as a dictionary to give to the problems table.
  */
 export const formatProblemsDataForTable = (problemsData) => {
-  const languageKeys = Object.keys(problemsData.languages);
-  const ratingKeys = Object.keys(problemsData.ratings);
-  const tagKeys = Object.keys(problemsData.tags);
-  const indexKeys = Object.keys(problemsData.indexes);
+  const languageKeys =
+    "languages" in problemsData ? Object.keys(problemsData.languages) : [];
+  const ratingKeys =
+    "ratings" in problemsData ? Object.keys(problemsData.ratings) : [];
+  const tagKeys = "tags" in problemsData ? Object.keys(problemsData.tags) : [];
+  const indexKeys =
+    "indexes" in problemsData ? Object.keys(problemsData.indexes) : [];
 
   // If there is no key in the dictionary, Object.keys returns an empty array on
   // which reduce() cannot be called. Therefore, we have to check if the array is empty.

@@ -20,10 +20,19 @@ def get_all_contests():
     """
 
     contests = get_all_rows_as_dict(Contest.query.all())
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "contests": contests,
             }
         ),
@@ -50,10 +59,19 @@ def get_contest(contest_id: int):
     else:
         contest = row_to_dict(contest)
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "contest": contest,
             }
         ),
@@ -86,10 +104,19 @@ def get_contest_standings(contest_id: int):
 
     contest_standings = sort_contest_participants(contest_participants)
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "contest_standings": contest_standings,
             }
         ),

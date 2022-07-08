@@ -56,7 +56,10 @@ const OrganizationStatistics = ({
             dataList={[
               {
                 name: "Problems Solved",
-                series: overallProblems[timePeriod].most_problems_solved,
+                series:
+                  timePeriod in overallProblems
+                    ? overallProblems[timePeriod].most_problems_solved
+                    : {},
               },
             ]}
             color={"#2196f3"}
@@ -72,7 +75,10 @@ const OrganizationStatistics = ({
             dataList={[
               {
                 name: "Contests Participated",
-                series: overallContests[timePeriod].most_contests_participated,
+                series:
+                  timePeriod in overallProblems
+                    ? overallContests[timePeriod].most_contests_participated
+                    : {},
               },
             ]}
             color={"#32cd32"}
@@ -88,7 +94,10 @@ const OrganizationStatistics = ({
             dataList={[
               {
                 name: "Highest Rank",
-                series: overallContests[timePeriod].best_contest_ranks,
+                series:
+                  timePeriod in overallProblems
+                    ? overallContests[timePeriod].best_contest_ranks
+                    : {},
               },
             ]}
             color={"#dc143c"}
@@ -100,14 +109,26 @@ const OrganizationStatistics = ({
         <div className="half_container">
           <InformationTable
             title={"Contest Statistics"}
-            dataList={[formatContestsDataForTable(overallContests[timePeriod])]}
+            dataList={[
+              formatContestsDataForTable(
+                timePeriod in overallProblems
+                  ? overallContests[timePeriod]
+                  : {},
+              ),
+            ]}
           />
         </div>
         {/* Problems Statistics Table */}
         <div className="half_container">
           <InformationTable
             title={"Problem Statistics"}
-            dataList={[formatProblemsDataForTable(overallProblems[timePeriod])]}
+            dataList={[
+              formatProblemsDataForTable(
+                timePeriod in overallProblems
+                  ? overallProblems[timePeriod]
+                  : {},
+              ),
+            ]}
           />
         </div>
         {/* Language Distribution Chart */}
@@ -115,7 +136,11 @@ const OrganizationStatistics = ({
           <PieChart
             title={`Languages Used by ${organizationName}`}
             donut={true}
-            data={overallProblems[timePeriod].languages}
+            data={
+              timePeriod in overallProblems
+                ? overallProblems[timePeriod].languages
+                : {}
+            }
           />
         </div>
         {/* Tag Distribution Donut Chart */}
@@ -123,7 +148,11 @@ const OrganizationStatistics = ({
           <PieChart
             title={`Problem Tags Solved by ${organizationName}`}
             donut={true}
-            data={overallProblems[timePeriod].tags}
+            data={
+              timePeriod in overallProblems
+                ? overallProblems[timePeriod].tags
+                : {}
+            }
           />
         </div>
         {/* Index Distribution Bar Chart */}
@@ -134,7 +163,10 @@ const OrganizationStatistics = ({
             dataList={[
               {
                 name: "Problems Solved",
-                series: overallProblems[timePeriod].indexes,
+                series:
+                  timePeriod in overallProblems
+                    ? overallProblems[timePeriod].indexes
+                    : {},
               },
             ]}
             color={"#ff1744"}
@@ -148,7 +180,10 @@ const OrganizationStatistics = ({
             dataList={[
               {
                 name: "Problems Solved",
-                series: overallProblems[timePeriod].ratings,
+                series:
+                  timePeriod in overallProblems
+                    ? overallProblems[timePeriod].ratings
+                    : {},
               },
             ]}
             color={"#2196f3"}

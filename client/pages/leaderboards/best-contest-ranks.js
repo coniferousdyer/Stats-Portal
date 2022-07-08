@@ -68,7 +68,11 @@ const BestContestRanks = ({ lastUpdateTime, contestsData }) => {
           <div className={styles.table_container}>
             <LeaderboardTable
               title={"Best Contest Ranks"}
-              dataList={data.contestsData[timePeriod]}
+              dataList={
+                timePeriod in data.contestsData
+                  ? data.contestsData[timePeriod]
+                  : []
+              }
               attribute={"best_rank"} // This has to be the same as that supplied to obtainDataCountPerUser in getStaticProps.
               statisticName={"Best Contest Rank"}
               sortingOrder={"asc"}

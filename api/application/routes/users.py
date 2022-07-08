@@ -32,10 +32,19 @@ def get_all_users_information():
     """
 
     users = get_all_rows_as_dict(User.query.all())
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "users": users,
             }
         ),
@@ -59,10 +68,19 @@ def get_user_information(handle: str):
     else:
         user = row_to_dict(user)
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "user": user,
             }
         ),
@@ -96,10 +114,19 @@ def get_all_users_contests_participated():
             contests, contests_participated
         )
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "contest_statistics": contest_statistics,
             }
         ),
@@ -135,10 +162,19 @@ def get_user_contests_participated(handle: str):
         contests, contests_participated, rating_history=True
     )
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "contest_statistics": contest_statistics,
             }
         ),
@@ -169,10 +205,19 @@ def get_all_users_problems_solved():
 
         problem_statistics[user["handle"]] = get_problems_statistics(problems_solved)
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "problem_statistics": problem_statistics,
             }
         ),
@@ -203,10 +248,19 @@ def get_user_problems_solved(handle: str):
 
     problem_statistics = get_problems_statistics(problems_solved)
 
+    last_update_time = Metadata.query.get("last_update_time")
+
+    # If the database was not updated, last_update_time will not be set in the database.
+    # In this case, we set it to "NONE".
+    if last_update_time is not None:
+        last_update_time = last_update_time.value
+    else:
+        last_update_time = "NONE"
+
     return (
         jsonify(
             {
-                "last_update_time": Metadata.query.get("last_update_time").value,
+                "last_update_time": last_update_time,
                 "problem_statistics": problem_statistics,
             }
         ),

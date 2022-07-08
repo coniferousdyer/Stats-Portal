@@ -33,7 +33,7 @@ The Stats Portal lets you view the statistics of any number of users in the orga
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
-## Setup
+## Setup (Development Environment)
 
 Clone the repository and change the working directory to the root directory of the repository.
 
@@ -43,10 +43,10 @@ cd Stats-Portal
 
 ### I. Backend (Flask)
 
-1. Change the working directory to the `backend` directory.
+1. Change the working directory to the `api` directory.
 
 ```bash
-cd backend
+cd api
 ```
 
 2. Set up a virtual environment. For example, if you are using the venv module, you can use the following command to create a virtual environment:
@@ -67,7 +67,7 @@ source <name of virtual environment>/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the `backend` directory. You can use the `.env.template` file as a template using the following command.
+4. Create a `.env` file in the `api` directory. You can use the `.env.template` file as a template using the following command.
 
 ```bash
 cp .env.template .env
@@ -78,7 +78,7 @@ You can then fill in the required values in the `.env` file.
 5. The app is now ready to be run. Run the app with the Gunicorn server.
 
 ```bash
-gunicorn -c gunicorn_config.py wsgi:app
+gunicorn -c gunicorn.conf.py wsgi:app
 ```
 
 The backend should now be running on `localhost:5000`.
@@ -87,10 +87,10 @@ The backend should now be running on `localhost:5000`.
 
 ### II. Frontend (Next.js)
 
-1. Change the working directory to the `frontend` directory.
+1. Change the working directory to the `client` directory.
 
 ```bash
-cd frontend
+cd client
 ```
 
 2. Install the required dependencies.
@@ -99,18 +99,42 @@ cd frontend
 npm install
 ```
 
-3. Create a `.env.local` file in the `frontend` directory. You can use the `.env.template` file as a template using the following command.
+3. Create a `.env.local` file in the `client` directory. You can use the `.env.template` file as a template using the following command.
 
 ```bash
 cp .env.template .env.local
 ```
 
-You can then fill in the required values in the `.env.local` file. Also fill in the required values in `sentry.properties` to send errors to Sentry.
+You can then fill in the required values in the `.env.local` file.
 
 4. The app is now ready to be run. Run the app.
 
 ```bash
 npm run dev
+```
+
+The frontend should now be running on `localhost:3000`.
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
+
+## Moving to Production
+
+In order to make the application production-ready, a few changes would have to be made to the environment.
+
+1. In the `api` directory, set the value of the `FLASK_ENV` environment variable in the created `.env` file to `production`. This will ensure that the Flask backend is run in production mode. In production mode, debug log statements are disabled and only error messages along with the stack trace of the error are logged.
+
+2. In the `client` directory, ensure that `BASE_URL` in the `.env` file is set to the correct value, be it the URL of the deployed backend or `http://localhost:5000`. In addition, set the values of `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG` and `SENTRY_PROJECT` to ensure a successful build of the Next.js frontend, as well as proper error tracking during production.
+
+3. While the Flask backend is hosted, either locally or remotely, run the following command.
+
+```bash
+npm run build
+```
+
+This will build the application (generating the static pages of the frontend). To start the application, run
+
+```
+npm start
 ```
 
 The frontend should now be running on `localhost:3000`.

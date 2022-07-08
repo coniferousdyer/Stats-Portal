@@ -10,7 +10,7 @@ import atexit
 from datetime import datetime
 from os import environ, path, mkdir
 from dotenv import load_dotenv
-from logging import basicConfig, DEBUG, ERROR
+from logging import basicConfig, DEBUG, ERROR, StreamHandler
 from logging.handlers import RotatingFileHandler
 
 from application.models.orm import db
@@ -120,18 +120,20 @@ def init_logger():
     # 2. File logging can easily be disabled during testing by serving an empty path. This way, a log file won't
     #    be created during testing.
     if not log_dir:
-        return
+        handlers_list = [StreamHandler()]
+    else:
+        # Creating a directory to store logs.
+        if not path.exists(log_dir):
+            mkdir(log_dir)
 
-    # Creating a directory to store logs.
-    if not path.exists(log_dir):
-        mkdir(log_dir)
-
-    basicConfig(
-        handlers=[
+        handlers_list = [
             RotatingFileHandler(
                 path.join(log_dir, "status.log"), maxBytes=100000, backupCount=10
             )
-        ],
+        ]
+
+    basicConfig(
+        handlers=handlers_list,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s [in %(pathname)s:%(lineno)d]",
         level=ERROR
         if environ.get("FLASK_ENV", "development") == "production"
