@@ -2,6 +2,7 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
 import useSWR from "swr";
+import { captureException } from "@sentry/nextjs";
 
 // Internal application components.
 import Heading from "../../components/common/Heading";
@@ -97,15 +98,27 @@ Leaderboards.propTypes = {
 export default Leaderboards;
 
 export const getStaticProps = async () => {
-  const data = await getLeaderboardHomePageData();
+  try {
+    const data = await getLeaderboardHomePageData();
 
-  return {
-    props: {
-      organizationName: data.organizationName,
-    },
-    // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
-    // generated, the page is regenerated. As the data in the backend remains static
-    // for some time, this is not an issue.
-    revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
-  };
+    return {
+      props: {
+        organizationName: data.organizationName,
+      },
+      // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
+      // generated, the page is regenerated. As the data in the backend remains static
+      // for some time, this is not an issue.
+      revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
+    };
+  } catch (error) {
+    // Log the error to Sentry.
+    captureException(error);
+
+    return {
+      props: {
+        organizationName: "",
+      },
+      revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
+    };
+  }
 };

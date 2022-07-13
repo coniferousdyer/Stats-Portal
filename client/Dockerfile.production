@@ -1,0 +1,71 @@
+# STAGE 1: Install dependencies.
+FROM node:18.1.0-alpine AS deps
+
+# Set the working directory within the image.
+WORKDIR /app
+
+# Copy the package.json and package-lock.json files to the image.
+COPY package*.json ./
+
+# Install the dependencies.
+RUN npm install
+
+#==============================================================#
+
+# STAGE 2: Build the application.
+FROM node:18.1.0-alpine AS builder
+
+# Set the working directory within the image.
+WORKDIR /app
+
+# Copy the installed dependencies from the previous stage and the application source code
+# to the image.
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Setting environment variables (they should be available at build time).
+ARG BASE_API_URL
+ARG ISR_REVALIDATE_TIME
+ARG CACHE_FRESH_TIME
+ARG CACHE_REVALIDATE_TIME
+ARG SENTRY_DSN
+ARG NEXT_PUBLIC_SENTRY_DSN
+ARG SENTRY_IGNORE_API_RESOLUTION_ERROR
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+
+ENV BASE_API_URL http://nginx:80/server
+ENV ISR_REVALIDATE_TIME 3600
+ENV CACHE_FRESH_TIME 300
+ENV CACHE_REVALIDATE_TIME 3600
+ENV SENTRY_DSN $SENTRY_DSN
+ENV NEXT_PUBLIC_SENTRY_DSN $NEXT_PUBLIC_SENTRY_DSN
+ENV SENTRY_IGNORE_API_RESOLUTION_ERROR 1
+ENV SENTRY_AUTH_TOKEN $SENTRY_AUTH_TOKEN
+ENV SENTRY_ORG $SENTRY_ORG
+ENV SENTRY_PROJECT $SENTRY_PROJECT
+
+# Build the application.
+RUN npm run build --production
+
+#==============================================================#
+
+# STAGE 3: Copy the built application from the previous stage to the final image.
+FROM node:18.1.0-alpine
+
+# Set the working directory within the image.
+WORKDIR /app
+
+# Copy the built application from the previous stage to the final image.
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+
+# Expose the application port.
+EXPOSE 3000
+
+# Run the application in production mode.
+CMD ["npm", "start"]

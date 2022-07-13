@@ -111,7 +111,7 @@ export const getServerSideProps = async (context) => {
       // The base URL is common to information ("/"), user's contests ("/contests-participated")
       // and user's problems solved ("/problems-solved").
       const baseURL = `${
-        process.env.BASE_URL || "http://localhost:5000"
+        process.env.BASE_API_URL || "http://nginx:80/server"
       }/users/${handle}`;
 
       const userInformation = await axios.get(baseURL);

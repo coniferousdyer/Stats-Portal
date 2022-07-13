@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  api:
+    container_name: stats-portal-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=$SECRET_KEY
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/stats
+      - ORGANIZATION_NAME=$ORGANIZATION_NAME
+      - TIMEZONE=$TIMEZONE
+      - LOG_DIR=$LOG_DIR
+      - UPDATE_INTERVAL=$UPDATE_INTERVAL
+      - SENTRY_DSN=$SENTRY_DSN
+    depends_on:
+      - postgres
+  client:
+    container_name: stats-portal-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.production
+      args:
+        - SENTRY_DSN=$SENTRY_DSN
+        - NEXT_PUBLIC_SENTRY_DSN=$SENTRY_DSN
+        - SENTRY_IGNORE_API_RESOLUTION_ERROR=1
+        - SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+        - SENTRY_ORG=$SENTRY_ORGANIZATION_SLUG
+        - SENTRY_PROJECT=$SENTRY_PROJECT_SLUG
+    restart: always
+    depends_on:
+      - api
+  postgres:
+    container_name: stats-portal-postgres
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - sp_postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  nginx:
+    container_name: stats-portal-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - api
+      - client
+    ports:
+      - "8080:80"
+
+volumes:
+  sp_postgres:

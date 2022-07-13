@@ -21,7 +21,7 @@ import { obtainDataCountPerUser } from "./leaderboards";
 export const getHomePageData = async () => {
   // The base URL is common to organization name data ("/organization/name"), users' contests
   // ("/users/contests-participated") and users' problems solved ("/users/problems-solved").
-  const baseURL = `${process.env.BASE_URL || "http://localhost:5000"}`;
+  const baseURL = `${process.env.BASE_API_URL || "http://nginx:80/server"}`;
 
   const organizationName = await axios.get(`${baseURL}/organization/name`);
   const userContests = await axios.get(
@@ -58,7 +58,7 @@ export const getHomePageData = async () => {
  */
 export const getLeaderboardHomePageData = async () => {
   const organizationName = await axios.get(
-    `${process.env.BASE_URL || "http://localhost:5000"}/organization/name`,
+    `${process.env.BASE_API_URL || "http://nginx:80/server"}/organization/name`,
   );
 
   return {
@@ -73,7 +73,9 @@ export const getLeaderboardHomePageData = async () => {
  */
 export const getBestContestRanksPageData = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
-  const baseURL = `${process.env.BASE_URL || "http://localhost:5000"}/users`;
+  const baseURL = `${
+    process.env.BASE_API_URL || "http://nginx:80/server"
+  }/users`;
 
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
@@ -103,7 +105,9 @@ export const getBestContestRanksPageData = async () => {
  */
 export const getContestsParticipatedPageData = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
-  const baseURL = `${process.env.BASE_URL || "http://localhost:5000"}/users`;
+  const baseURL = `${
+    process.env.BASE_API_URL || "http://nginx:80/server"
+  }/users`;
 
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(
@@ -133,7 +137,9 @@ export const getContestsParticipatedPageData = async () => {
  */
 export const getProblemsSolvedPageData = async () => {
   // The base URL is common to information ("/") and users' problems ("/problems-solved").
-  const baseURL = `${process.env.BASE_URL || "http://localhost:5000"}/users`;
+  const baseURL = `${
+    process.env.BASE_API_URL || "http://nginx:80/server"
+  }/users`;
 
   const usersInformation = await axios.get(baseURL);
   const problemsSolved = await axios.get(`${baseURL}/problems-solved`);
@@ -161,7 +167,9 @@ export const getProblemsSolvedPageData = async () => {
  */
 export const getRatingIncreasePageData = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
-  const baseURL = `${process.env.BASE_URL || "http://localhost:5000"}/users`;
+  const baseURL = `${
+    process.env.BASE_API_URL || "http://nginx:80/server"
+  }/users`;
 
   const usersInformation = await axios.get(baseURL);
   const contestsParticipated = await axios.get(

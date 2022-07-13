@@ -2,6 +2,7 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
 import useSWR from "swr";
+import { captureException } from "@sentry/nextjs";
 
 // Internal application components.
 import Navbar from "../components/common/Navbar";
@@ -71,18 +72,33 @@ Home.propTypes = {
 };
 
 export const getStaticProps = async () => {
-  const data = await getHomePageData();
+  try {
+    const data = await getHomePageData();
 
-  return {
-    props: {
-      lastUpdateTime: data.lastUpdateTime,
-      organizationName: data.organizationName,
-      overallContests: data.overallContests,
-      overallProblems: data.overallProblems,
-    },
-    // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
-    // generated, the page is regenerated. As the data in the backend remains static
-    // for some time, this is not an issue.
-    revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
-  };
+    return {
+      props: {
+        lastUpdateTime: data.lastUpdateTime,
+        organizationName: data.organizationName,
+        overallContests: data.overallContests,
+        overallProblems: data.overallProblems,
+      },
+      // If a request is made ISR_REVALIDATE_TIME seconds after the page was last
+      // generated, the page is regenerated. As the data in the backend remains static
+      // for some time, this is not an issue.
+      revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
+    };
+  } catch (error) {
+    // Log the error to Sentry.
+    captureException(error);
+
+    return {
+      props: {
+        lastUpdateTime: "",
+        organizationName: "",
+        overallContests: {},
+        overallProblems: {},
+      },
+      revalidate: parseInt(process.env.ISR_REVALIDATE_TIME) || 3600,
+    };
+  }
 };

@@ -17,6 +17,25 @@ View a deployed demo here: https://stats-portal.vercel.app
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
+## Table of Contents
+
+* [Features](#features)
+  + [I. Data Visualization](#i-data-visualization)
+  + [II. Leaderboards](#ii-leaderboards)
+  + [III. Compare Users](#iii-compare-users)
+  + [IV. Statistics over Time Periods](#iv-statistics-over-time-periods)
+* [Technologies/Frameworks Used](#technologies-frameworks-used)
+* [Setup and Usage](#setup-and-usage)
+  + [I. With Docker](#i-with-docker)
+    - [i. Development](#i-development)
+    - [ii. Production](#ii-production)
+  + [II. Without Docker](#ii-without-docker)
+    - [i. Backend](#i-backend)
+    - [ii. Frontend](#ii-frontend)
+    - [iii. Production](#iii-production)
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
+
 ## Features
 
 ### I. Data Visualization
@@ -31,9 +50,72 @@ The leaderboards provide a way of finding out where one stands among other membe
 
 The Stats Portal lets you view the statistics of any number of users in the organization side-by-side to compare them. 2 or more users can be compared at the same time.
 
+### IV. Statistics over Time Periods
+
+The Stats Portal presents statistics for 4 time periods:
+
+* All-time
+* The current month
+* The current week
+* The current day
+
+The desired time period can be toggled by the user via a dropdown provided above the charts.
+
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
-## Setup (Development Environment)
+## Technologies/Frameworks Used
+
+* Next.js (frontend)
+* Flask (backend)
+
+The Docker setup involves two additional services:
+
+* PostgreSQL
+* Nginx
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
+
+## Setup and Usage
+
+### I. With Docker
+
+#### i. Development
+
+1. Clone the repository and change the working directory to the root directory of the repository.
+
+```bash
+cd Stats-Portal
+```
+
+2. Create a `.env` file in the project directory. You can use the `.env.template` file as a template using the following command.
+
+```bash
+cp .env.template .env
+```
+
+You can then fill in the required values in the `.env` file.
+
+3. Run the following command to start the Docker containers for the services.
+
+```bash
+docker-compose up -d
+```
+
+The application should now be accessible at `localhost:8080`.
+
+> <b>Note:</b> Run `docker-compose down` to stop the containers.
+
+#### ii. Production
+
+Run the following command to run the `docker-compose` command using `docker-compose.production.yml`.
+
+```bash
+docker-compose -f docker-compose.production.yml up -d
+```
+
+The application should now be accessible at `localhost:8080`.
+
+### II. Without Docker
 
 Clone the repository and change the working directory to the root directory of the repository.
 
@@ -41,7 +123,7 @@ Clone the repository and change the working directory to the root directory of t
 cd Stats-Portal
 ```
 
-### I. Backend (Flask)
+#### i. Backend
 
 1. Change the working directory to the `api` directory.
 
@@ -85,7 +167,7 @@ The backend should now be running on `localhost:5000`.
 
 > <b>Note:</b> The virtual environment can be exited by running the `deactivate` command.
 
-### II. Frontend (Next.js)
+#### ii. Frontend
 
 1. Change the working directory to the `client` directory.
 
@@ -115,9 +197,7 @@ npm run dev
 
 The frontend should now be running on `localhost:3000`.
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
-
-## Moving to Production
+#### iii. Production
 
 In order to make the application production-ready, a few changes would have to be made to the environment.
 
