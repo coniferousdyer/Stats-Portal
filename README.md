@@ -24,7 +24,7 @@ View a deployed demo here: https://stats-portal.vercel.app
   + [II. Leaderboards](#ii-leaderboards)
   + [III. Compare Users](#iii-compare-users)
   + [IV. Statistics over Time Periods](#iv-statistics-over-time-periods)
-* [Technologies/Frameworks Used](#technologies-frameworks-used)
+* [Built With](#built-with)
 * [Setup and Usage](#setup-and-usage)
   + [I. With Docker](#i-with-docker)
     - [i. Development](#i-development)
@@ -63,7 +63,7 @@ The desired time period can be toggled by the user via a dropdown provided above
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
-## Technologies/Frameworks Used
+## Built With
 
 * Next.js (frontend)
 * Flask (backend)
@@ -218,3 +218,7 @@ npm start
 ```
 
 The frontend should now be running on `localhost:3000`.
+
+## License
+
+This software is open source, licensed under the [MIT License](https://github.com/coniferousdyer/Stats-Portal/blob/master/LICENSE).
