@@ -25,7 +25,7 @@ View a deployed demo here: https://stats-portal.vercel.app
   + [III. Compare Users](#iii-compare-users)
   + [IV. Statistics over Time Periods](#iv-statistics-over-time-periods)
 * [Built With](#built-with)
-* [Setup and Usage](#setup-and-usage)
+* [Getting Started](#getting-started)
   + [I. With Docker](#i-with-docker)
     - [i. Development](#i-development)
     - [ii. Production](#ii-production)
@@ -33,6 +33,8 @@ View a deployed demo here: https://stats-portal.vercel.app
     - [i. Backend](#i-backend)
     - [ii. Frontend](#ii-frontend)
     - [iii. Production](#iii-production)
+* [Usage](#usage)
+* [License](#license)
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
@@ -65,17 +67,17 @@ The desired time period can be toggled by the user via a dropdown provided above
 
 ## Built With
 
-* Next.js (frontend)
-* Flask (backend)
+* [Next.js](https://nextjs.org/) (frontend)
+* [Flask](https://nextjs.org/) (backend)
 
 The Docker setup involves two additional services:
 
-* PostgreSQL
-* Nginx
+* [PostgreSQL](https://www.postgresql.org/)
+* [Nginx](https://www.nginx.com/)
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/fire.png"><br>
 
-## Setup and Usage
+## Getting Started
 
 ### I. With Docker
 
@@ -218,6 +220,14 @@ npm start
 ```
 
 The frontend should now be running on `localhost:3000`.
+
+## Usage
+
+Once the setup has been completed, a scheduled task in the backend will automatically fetch data from Codeforces at regular intervals, according to the set value of `UPDATE_INTERVAL` in the `.env` file, and update the database.
+
+The frontend will present this data in the form of charts and graphs. In development mode, the data fetched from the backend will always be up-to-date. In production mode (when the Next.js application is built), the up-to-date data will be fetched from the backend thanks to SWR.
+
+For an example of what the frontend will look like once the database is populated with data, refer to the [working demo](https://stats-portal.vercel.app).
 
 ## License
 
