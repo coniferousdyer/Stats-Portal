@@ -16,7 +16,7 @@ import { obtainDataCountPerUser } from "./leaderboards";
 /**
  * This function fetches the data required for the home page from the backend and formats it.
  *
- * @returns {Promise<Object>} The data required for the home page.
+ * @returns {Object} The data required for the home page.
  */
 export const getHomePageData = async () => {
   // The base URL is common to organization name data ("/organization/name"), users' contests
@@ -54,7 +54,7 @@ export const getHomePageData = async () => {
 /**
  * This function fetches the data required for the leaderboards home page from the backend and formats it.
  *
- * @returns {Promise<Object>} The data required for the leaderboards home page.
+ * @returns {Object} The data required for the leaderboards home page.
  */
 export const getLeaderboardHomePageData = async () => {
   const organizationName = await axios.get(
@@ -69,7 +69,7 @@ export const getLeaderboardHomePageData = async () => {
 /**
  * This function fetches the data required for the contest ranks leaderboards page from the backend and formats it.
  *
- * @returns {Promise<Object>} The data required for the contest ranks leaderboards page.
+ * @returns {Object} The data required for the contest ranks leaderboards page.
  */
 export const getBestContestRanksPageData = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
@@ -101,7 +101,7 @@ export const getBestContestRanksPageData = async () => {
 /**
  * This function fetches the data required for the contests participated leaderboards page from the backend and formats it.
  *
- * @returns {Promise<Object>} The data required for the contests participated leaderboards page.
+ * @returns {Object} The data required for the contests participated leaderboards page.
  */
 export const getContestsParticipatedPageData = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
@@ -133,7 +133,7 @@ export const getContestsParticipatedPageData = async () => {
 /**
  * This function fetches the data required for the problems solved leaderboards page from the backend and formats it.
  *
- * @returns {Promise<Object>} The data required for the problems solved leaderboards page.
+ * @returns {Object} The data required for the problems solved leaderboards page.
  */
 export const getProblemsSolvedPageData = async () => {
   // The base URL is common to information ("/") and users' problems ("/problems-solved").
@@ -163,7 +163,7 @@ export const getProblemsSolvedPageData = async () => {
 /**
  * This function fetches the data required for the rating increase leaderboards page from the backend and formats it.
  *
- * @returns {Promise<Object>} The data required for the rating increase leaderboards page.
+ * @returns {Object} The data required for the rating increase leaderboards page.
  */
 export const getRatingIncreasePageData = async () => {
   // The base URL is common to information ("/") and users' contests ("/contests-participated").
